@@ -1,4 +1,4 @@
-package maze;
+package ie.gmit.sw.ai;
 
 import java.awt.*;
 
@@ -17,22 +17,22 @@ public class Player {
 		this.tileDim = tileDim;
 		
 		// stand
-		ImageIcon img = new ImageIcon("resources/hero_stand.png");
+		ImageIcon img = new ImageIcon("resources/img/hero_stand.png");
 		img = resizeImage(img);
 		player = img.getImage();
 		
 		// walk
-		img = new ImageIcon("resources/hero_walk.png");
+		img = new ImageIcon("resources/img/hero_walk.png");
 		img = resizeImage(img);
 		player_walk = img.getImage();
 		
 		// walk
-		img = new ImageIcon("resources/hero_walk_2.png");
+		img = new ImageIcon("resources/img/hero_walk_2.png");
 		img = resizeImage(img);
 		player_walk2 = img.getImage();
 		
 		// win
-		img = new ImageIcon("resources/hero_happy.png");
+		img = new ImageIcon("resources/img/hero_happy.png");
 		img = resizeImage(img);
 		player_win = img.getImage();
 		

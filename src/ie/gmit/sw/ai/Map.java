@@ -1,4 +1,4 @@
-package maze;
+package ie.gmit.sw.ai;
 
 import java.awt.*;
 import java.io.*;
@@ -19,15 +19,15 @@ public class Map {
 		this.map = new String[mazeDim];
 		
 		// load in images
-		ImageIcon img = new ImageIcon("resources/ground.png");
+		ImageIcon img = new ImageIcon("resources/img/ground.png");
 		img = resizeImage(img);
 		ground = img.getImage();
 		
-		img = new ImageIcon("resources/wall.png");
+		img = new ImageIcon("resources/img/wall.png");
 		img = resizeImage(img);
 		wall = img.getImage();
 		
-		img = new ImageIcon("resources/goal.png");
+		img = new ImageIcon("resources/img/goal.png");
 		img = resizeImage(img);
 		goal = img.getImage();
 		
@@ -47,7 +47,7 @@ public class Map {
 	// io
 	private void openFile() {
 		try {
-			input = new Scanner(new File("resources/map.txt"));
+			input = new Scanner(new File("resources/map/map.txt"));
 		} catch (FileNotFoundException e) {
 			System.out.println("Error loading map.");
 		}

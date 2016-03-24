@@ -2,7 +2,7 @@
 Maze Escape Game in Java
 
 ## Story
-You are falsey imprisoned by the evil king to endlessly wander the prison maze.  
+You are falsely imprisoned by the evil king to endlessly wander the prison maze.  
 There are myths of a wizard who once walked these lonesome halls.  
 Legend says he left behind a potion which can free you of this place.  
 
@@ -13,6 +13,10 @@ Legend says he left behind a potion which can free you of this place.
 I created all the image assets myself, hoorah for pixel art!  
 You may find various pixel art assets I created at this url:  
 https://github.com/RonanC/Pixel-Art  
+
+Sound Effects: http://www.wavsource.com/  
+Background Music:
+http://www.playonloop.com/music-loops-category/videogame/8-bit/
 
 ## References
 This video tutorial series set the framework up for me to expand upon:  

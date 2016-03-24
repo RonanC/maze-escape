@@ -1,24 +1,34 @@
-package maze;
+package ie.gmit.sw.ai;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.concurrent.TimeUnit;
+import java.io.File;
+import java.util.concurrent.*;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 
+import ie.gmit.sw.ai.audio.*;
+
+// game scene, drawing and movement
 public class Board extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
+	// basic game info
 	private int mazeDim;
 	private int tileDim;
-	private int frameRate = 1000 / 60; // 60 frames per second (every 16 Ms)
+	private int relativeDim;
+	private int frameRate;
 
+	// objects
 	private Timer timer; // needed for action performed
 	private Map map;
 	private Player player;
 
-	private String message;
-	private Font font;
+	// messages
+	private String msgWin;
+	private String msgStart;
+	private Font fontGen;
 
 	// walk
 	// private char playerLookV;
@@ -26,44 +36,76 @@ public class Board extends JPanel implements ActionListener {
 	private int setWalk;
 	private int walkDur;
 	private int stepCount;
-	private int setWin;
-	private boolean haveWon;
 
+	// game vars
+	private int setWin;
+	private int winDur;
+	private boolean haveWon;
+	private boolean startDone;
+
+	// additionals
+	private boolean zoomedOut;
+
+	// set game up
 	public Board(int mazeDim, int tileDim) {
 		this.mazeDim = mazeDim;
 		this.tileDim = tileDim;
+		relativeDim = mazeDim * tileDim;
+
 		init();
 
-		map = new Map(mazeDim, tileDim);
-		// run this action performed every 25 milliseconds
-		timer = new Timer(frameRate, this);
+		timer = new Timer(frameRate, this); // action performed every 25 Ms
 		timer.start();
 	}
 
+	// initialization variables
 	private void init() {
-		// playerLookV = 'x';
+		// game init
+		addKeyListener(new AcLis()); // get thing that listens for key press
+		setFocusable(true); // adds the key listener to our frame
+		frameRate = 1000 / 60; // 60 frames per second (every 16 Ms)
+		map = new Map(mazeDim, tileDim);
+		startDone = false;
+		haveWon = false;
+		setWin = 0; // how long you since you won
+		this.setBackground(Color.DARK_GRAY);
+
+		// player init
+		player = new Player(tileDim);
 		playerLookH = 'r';
 		setWalk = 0;
 		walkDur = 250; // quarter of a second
 		stepCount = 0;
-		setWin = 0; // how long you since you won
-		haveWon = false;
-//		message = "Look for the magic potion.";
-		message = "You found the teleportation potion!";
-		font = new Font("Serif", Font.BOLD, mazeDim * 3);
+		winDur = 8000;
 
-		player = new Player(tileDim);
-		addKeyListener(new AcLis()); // get thing that listens for key press
-		setFocusable(true); // adds the key listener to our frame
+		// message init
+		msgWin = "You found the teleportation potion!\n\n\n";
+		msgWin += "*glug glug glug*\n\n";
+		msgWin += "*POOF*\n\n\n";
+		msgWin += "With a puff of smoke you vanish from the maze...";
+		msgStart = "You are falsey imprisoned by the evil king\n";
+		msgStart += "to endlessly wander the prison maze.\n\n";
+		msgStart += "There are myths of a wizard who once walked these lonesome halls.\n\n";
+		msgStart += "Legend says he left behind a potion which can free you of this place.\n\n";
+		msgStart += "\n\nPress the 'Enter' key to begin your quest.\n\n";
+		msgStart += "\n\n\n\nControls:\tWASD";
+		fontGen = new Font("Serif", Font.BOLD, mazeDim * 2);
+
+		// additionals
+		zoomedOut = false;
+		SoundEffects.playBGLoop();
 	}
 
+	// gets called a certain frames per second
+	// check if won
 	public void actionPerformed(ActionEvent e) {
 		int timeElap = getTime() - setWin;
 
-		if (haveWon && timeElap > 5000) { // 5 seconds of winning!d
+		// resets game
+		if (haveWon && timeElap > winDur) { // n seconds of winning!
 			System.out.println("Look for the magic potion.");
-//			message = "Look for the magic potion.";
 			haveWon = false;
+			startDone = false;
 			player.setTileX(1);
 			player.setTileY(1);
 			playerLookH = 'r';
@@ -72,10 +114,11 @@ public class Board extends JPanel implements ActionListener {
 		repaint();
 	}
 
+	// paint map a certain frames per second
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		if (!haveWon) {
+		if (!haveWon && startDone) {
 			for (int y = 0; y < mazeDim; y++) {// col one
 				for (int x = 0; x < mazeDim; x++) { // fill row
 					String element = map.getMap(x, y);
@@ -88,12 +131,14 @@ public class Board extends JPanel implements ActionListener {
 					}
 				}
 			}
-		} 
-		else {
-			g.setColor(Color.BLUE);
-			g.setFont(font);
-			int relativeDim = mazeDim * tileDim;
-			g.drawString(message, (relativeDim / 6), (relativeDim / 5)); // mazeDim
+		} else if (!startDone) {
+			g.setColor(Color.CYAN);
+			g.setFont(fontGen);
+			drawString(g, msgStart, relativeDim / 2, relativeDim / 7);
+		} else if (haveWon) {
+			g.setColor(Color.CYAN);
+			g.setFont(fontGen);
+			drawString(g, msgWin, relativeDim / 2, relativeDim / 7);
 		}
 
 		int timeElap = getTime() - setWalk;
@@ -108,12 +153,21 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
+	// draws multi-line string with correct spacing
+	void drawString(Graphics g, String text, int x, int y) {
+		for (String line : text.split("\n"))
+			g.drawString(line, x - (g.getFontMetrics().stringWidth(line) / 2), y += g.getFontMetrics().getHeight());
+	}
+
+	// get time in millis
 	public int getTime() {
 		long delayNS = System.nanoTime();
 		long durationInMs = TimeUnit.MILLISECONDS.convert(delayNS, TimeUnit.NANOSECONDS);
 		return (int) durationInMs;
 	}
 
+	//// drawing player
+	// walk draw
 	public void walk(Graphics g) {
 		if (playerLookH == 'l') {
 			if (stepCount % 2 == 0) {
@@ -134,6 +188,7 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
+	// win draw
 	public void win(Graphics g) {
 		// System.out.printf("getTime: %d\t mod 1000: %d\n", getTime(),
 		// getTime() % 1000);
@@ -156,35 +211,28 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
+	// left draw
 	public void lookLeft(Graphics g) {
 		g.drawImage(player.getPlayer(), player.getTileX() * tileDim + tileDim, player.getTileY() * tileDim, -tileDim,
 				tileDim, null);
 	}
 
+	// right draw
 	public void lookRight(Graphics g) {
 		g.drawImage(player.getPlayer(), player.getTileX() * tileDim, player.getTileY() * tileDim, tileDim, tileDim,
 				null);
 	}
 
-	public void checkWin() {
-		if (map.getMap(player.getTileX(), player.getTileY()).equals("g")) {
-			System.out.println("You have found the teleportation potion!");
-			message = "You found the teleportation potion!";
-			setWin = getTime();
-			haveWon = true;
-		}
-	}
-
-	public void moveCommon() {
-		stepCount++;
-		setWalk = getTime();
-	}
-
+	// controls
 	public class AcLis extends KeyAdapter {
 		public void keyPressed(KeyEvent e) {
 			int keycode = 0;
 
-			if (!haveWon) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				startDone = true;
+			}
+
+			if (!haveWon && startDone) {
 				keycode = e.getKeyCode();
 			}
 
@@ -227,5 +275,27 @@ public class Board extends JPanel implements ActionListener {
 		// int keycode = e.getKeyCode();
 		//
 		// }
+	}
+
+	// ran every valid keypress
+	public void moveCommon() {
+		stepCount++;
+		setWalk = getTime();
+		SoundEffects.playMove();
+	}
+
+	// ran every keypress
+	public void checkWin() {
+		if (map.getMap(player.getTileX(), player.getTileY()).equals("g")) {
+			setWin = getTime();
+			haveWon = true;
+			SoundEffects.playWin();
+		}
+	}
+
+	// // additional
+	// zoom
+	public void toggleZoom() {
+		zoomedOut = !zoomedOut;
 	}
 }

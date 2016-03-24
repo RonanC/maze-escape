@@ -1,10 +1,8 @@
-package maze;
-
-import java.awt.Color;
+package ie.gmit.sw.ai;
 
 import javax.swing.*;
 
-public class Maze {
+public class GameRunner {
 	
 	private int mazeDim;
 	private int tileDim;
@@ -12,10 +10,10 @@ public class Maze {
 	private int titleHeight;
 	
 	public static void main(String[] args) {
-		new Maze();
+		new GameRunner();
 	}
 	
-	public Maze() {
+	public GameRunner() {
 		mazeDim = 14;
 		tileDim = 64;
 		screenDim = mazeDim * tileDim;
@@ -23,12 +21,11 @@ public class Maze {
 		
 		JFrame f = new JFrame();
 		f.setResizable(false);
-		f.setTitle("Maze Game");
+		f.setTitle("Maze Escape");
 		f.add(new Board(mazeDim, tileDim));
 		f.setSize(screenDim, screenDim + titleHeight);
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setBackground(Color.DARK_GRAY);
 	}
 }

@@ -2,10 +2,7 @@ package ie.gmit.sw.ai;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.util.concurrent.*;
-
-import javax.sound.sampled.*;
 import javax.swing.*;
 
 import ie.gmit.sw.ai.audio.*;
@@ -31,11 +28,8 @@ public class Board extends JPanel implements ActionListener {
 	private Font fontGen;
 
 	// walk
-	// private char playerLookV;
-	private char playerLookH;
 	private int setWalk;
 	private int walkDur;
-	private int stepCount;
 
 	// game vars
 	private int setWin;
@@ -45,6 +39,9 @@ public class Board extends JPanel implements ActionListener {
 
 	// additionals
 	private boolean zoomedOut;
+
+	// refactored
+	private PlayerDraw playerDraw;
 
 	// set game up
 	public Board(int mazeDim, int tileDim) {
@@ -60,6 +57,7 @@ public class Board extends JPanel implements ActionListener {
 
 	// initialization variables
 	private void init() {
+
 		// game init
 		addKeyListener(new AcLis()); // get thing that listens for key press
 		setFocusable(true); // adds the key listener to our frame
@@ -72,10 +70,8 @@ public class Board extends JPanel implements ActionListener {
 
 		// player init
 		player = new Player(tileDim);
-		playerLookH = 'r';
 		setWalk = 0;
 		walkDur = 250; // quarter of a second
-		stepCount = 0;
 		winDur = 8000;
 
 		// message init
@@ -94,6 +90,9 @@ public class Board extends JPanel implements ActionListener {
 		// additionals
 		zoomedOut = false;
 		SoundEffects.playBGLoop();
+
+		// refactored
+		playerDraw = new PlayerDraw(player, tileDim, 'r', 0);
 	}
 
 	// gets called a certain frames per second
@@ -108,7 +107,7 @@ public class Board extends JPanel implements ActionListener {
 			startDone = false;
 			player.setTileX(1);
 			player.setTileY(1);
-			playerLookH = 'r';
+			playerDraw.setPlayerLookH('r');
 		}
 
 		repaint();
@@ -143,13 +142,13 @@ public class Board extends JPanel implements ActionListener {
 
 		int timeElap = getTime() - setWalk;
 		if (timeElap < walkDur) {
-			walk(g);
+			playerDraw.walk(g);
 		} else if (haveWon) {
-			win(g);
-		} else if (playerLookH == 'l') {
-			lookLeft(g);
-		} else if (playerLookH == 'r') {
-			lookRight(g);
+			playerDraw.win(g);
+		} else if (playerDraw.getPlayerLookH() == 'l') {
+			playerDraw.lookLeft(g);
+		} else if (playerDraw.getPlayerLookH() == 'r') {
+			playerDraw.lookRight(g);
 		}
 	}
 
@@ -160,67 +159,10 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	// get time in millis
-	public int getTime() {
+	public static int getTime() {
 		long delayNS = System.nanoTime();
 		long durationInMs = TimeUnit.MILLISECONDS.convert(delayNS, TimeUnit.NANOSECONDS);
 		return (int) durationInMs;
-	}
-
-	//// drawing player
-	// walk draw
-	public void walk(Graphics g) {
-		if (playerLookH == 'l') {
-			if (stepCount % 2 == 0) {
-				g.drawImage(player.getPlayerWalk(), player.getTileX() * tileDim + tileDim, player.getTileY() * tileDim,
-						-tileDim, tileDim, null);
-			} else {
-				g.drawImage(player.getPlayerWalk2(), player.getTileX() * tileDim + tileDim, player.getTileY() * tileDim,
-						-tileDim, tileDim, null);
-			}
-		} else if (playerLookH == 'r') {
-			if (stepCount % 2 == 0) {
-				g.drawImage(player.getPlayerWalk(), player.getTileX() * tileDim, player.getTileY() * tileDim, tileDim,
-						tileDim, null);
-			} else {
-				g.drawImage(player.getPlayerWalk2(), player.getTileX() * tileDim, player.getTileY() * tileDim, tileDim,
-						tileDim, null);
-			}
-		}
-	}
-
-	// win draw
-	public void win(Graphics g) {
-		// System.out.printf("getTime: %d\t mod 1000: %d\n", getTime(),
-		// getTime() % 1000);
-		if (playerLookH == 'l') {
-			if (getTime() % 1000 > 0 && getTime() % 1000 < 500) {
-				g.drawImage(player.getPlayerWin(), player.getTileX() * tileDim + tileDim, player.getTileY() * tileDim,
-						-tileDim, tileDim, null);
-			} else {
-				g.drawImage(player.getPlayer(), player.getTileX() * tileDim + tileDim, player.getTileY() * tileDim,
-						-tileDim, tileDim, null);
-			}
-		} else if (playerLookH == 'r') {
-			if (getTime() % 1000 > 0 && getTime() % 1000 < 500) {
-				g.drawImage(player.getPlayerWin(), player.getTileX() * tileDim, player.getTileY() * tileDim, tileDim,
-						tileDim, null);
-			} else {
-				g.drawImage(player.getPlayer(), player.getTileX() * tileDim, player.getTileY() * tileDim, tileDim,
-						tileDim, null);
-			}
-		}
-	}
-
-	// left draw
-	public void lookLeft(Graphics g) {
-		g.drawImage(player.getPlayer(), player.getTileX() * tileDim + tileDim, player.getTileY() * tileDim, -tileDim,
-				tileDim, null);
-	}
-
-	// right draw
-	public void lookRight(Graphics g) {
-		g.drawImage(player.getPlayer(), player.getTileX() * tileDim, player.getTileY() * tileDim, tileDim, tileDim,
-				null);
 	}
 
 	// controls
@@ -249,13 +191,13 @@ public class Board extends JPanel implements ActionListener {
 					player.move(0, 1);
 				}
 			} else if (keycode == KeyEvent.VK_A) {
-				playerLookH = 'l';
+				playerDraw.setPlayerLookH('l');
 				if (!map.getMap(player.getTileX() - 1, player.getTileY()).equals("w")) {
 					moveCommon();
 					player.move(-1, 0);
 				}
 			} else if (keycode == KeyEvent.VK_D) {
-				playerLookH = 'r';
+				playerDraw.setPlayerLookH('r');
 				if (!map.getMap(player.getTileX() + 1, player.getTileY()).equals("w")) {
 					moveCommon();
 					player.move(1, 0); // 1? tileDim
@@ -279,7 +221,7 @@ public class Board extends JPanel implements ActionListener {
 
 	// ran every valid keypress
 	public void moveCommon() {
-		stepCount++;
+		playerDraw.incStepCount();
 		setWalk = getTime();
 		SoundEffects.playMove();
 	}

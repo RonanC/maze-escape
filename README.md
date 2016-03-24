@@ -1,7 +1,7 @@
 # maze-escape
 Maze Escape Game in Java
 
-## Idea/Theme
+## Story
 You are falsey imprisoned by the evil king to endlessly wander the prison maze.  
 There are myths of a wizard who once walked these lonesome halls.  
 Legend says he left behind a potion which can free you of this place.  

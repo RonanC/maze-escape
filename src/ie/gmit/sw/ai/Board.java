@@ -64,7 +64,6 @@ public class Board extends JPanel implements ActionListener {
 
 	// initialization variables
 	private void init() {
-		
 		// game init
 		addKeyListener(new AcLis()); // get thing that listens for key press
 		setFocusable(true); // adds the key listener to our frame
@@ -79,7 +78,7 @@ public class Board extends JPanel implements ActionListener {
 		player = new Player(tileDim, 1, 1);
 		setWalk = 0;
 		walkDur = 250; // quarter of a second
-		winDur = 6000;
+		winDur = 8000;
 
 		// message init
 		msgWin = "You found the teleportation potion!\n\n\n";
@@ -113,7 +112,7 @@ public class Board extends JPanel implements ActionListener {
 
 		// resets game
 		if (haveWon && timeElap > winDur) { // n seconds of winning!
-			SoundEffects.playWin();
+//			SoundEffects.playWin();
 			System.out.println("Look for the magic potion.");
 			haveWon = false;
 			startDone = false;
@@ -148,9 +147,9 @@ public class Board extends JPanel implements ActionListener {
 						g.drawImage(map.getWall(), x * tileDim, y * tileDim, null);
 					} else if (element.equals("f")) { // floor
 						// using default background color
-//						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
+						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
 					} else {
-//						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
+						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
 
 						// items
 						if (element.equals("g")) { // goal

@@ -4,8 +4,8 @@ import javax.swing.*;
 
 public class GameRunner {
 	
-	public static int mazeDim;
-	public static int tileDim;
+	public static int MAZE_DIM;
+	public static int TILE_DIM;
 	private int screenDim;;
 	private int titleHeight;
 	
@@ -14,15 +14,15 @@ public class GameRunner {
 	}
 	
 	public GameRunner() {
-		mazeDim = 14;
-		tileDim = 64;
-		screenDim = mazeDim * tileDim;
+		MAZE_DIM = 14;
+		TILE_DIM = 64;
+		screenDim = MAZE_DIM * TILE_DIM;
 		titleHeight = 22;
 		
 		JFrame f = new JFrame();
 		f.setResizable(false);
 		f.setTitle("Maze Escape");
-		f.add(new Board(mazeDim, tileDim));
+		f.add(new Board(MAZE_DIM, TILE_DIM));
 		f.setSize(screenDim, screenDim + titleHeight);
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);

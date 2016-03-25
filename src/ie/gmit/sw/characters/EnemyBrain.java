@@ -11,12 +11,14 @@ import ie.gmit.sw.ai.audio.SoundEffects;
 
 public class EnemyBrain extends Thread {
 	private ArrayList<Enemy> enemyList;
-	private int mazeDim = GameRunner.mazeDim;
+	private int mazeDim = GameRunner.MAZE_DIM;
 	private Mapper map;
 	private Timer timer;
 	private Random random;
+	private Player player;
 	
 	public EnemyBrain(Mapper map, ArrayList<Enemy> enemyList, Player player) {
+		this.player = player;
 		this.map = map;
 		this.enemyList = enemyList;
 		random = new Random();
@@ -51,7 +53,8 @@ public class EnemyBrain extends Thread {
 			x = random.nextInt(mazeDim);
 			y = random.nextInt(mazeDim);
 			System.out.printf("%d, %d\n", x, y);
-			if(!map.getPosElement(x, y).equals("w")){
+			// avoid walls and player
+			if(!map.getPosElement(x, y).equals("w") && !enemy.getPos().equals(player.getPos())){
 				System.out.println(map.getPosElement(x, y));
 				enemy.setPos(x, y);
 				notPlaced = false;
@@ -90,24 +93,46 @@ public class EnemyBrain extends Thread {
 	// Single enemy
 	public class EnemyTask extends TimerTask{
 		// this enemy has a form, is in a place and knows that there is a player.
-		Mapper map;
-		Enemy enemy;
-		Player player;
+		private Mapper map;
+		private Enemy enemy;
+		private Player player;
+		private int moveVersion;
+		private Random random;
 		
 		public EnemyTask(Mapper map, Enemy enemy, Player player) {
 			this.map = map;
 			this.enemy = enemy;
 			this.player = player;
+			random = new Random();
+			moveVersion = random.nextInt(5);
 		}
 		
 		@Override
 		public void run() {
-			move();
+			// pick a version
+			moveVersion = 1;
+			
+			switch (moveVersion) {
+			case 1:
+				v1RandomMove();
+				break;
+
+			default:
+				v1RandomMove();
+				break;
+			}
+			
 			checkFight();	// checked every move
 		}
 		
-		// random move (may even walk into a wall)
-		public void move(){
+		// V4 - depth first (need to create node graph)
+		
+		// V3 - breadth first (need to create node graph)
+		
+		// V2 - pick only a move which is not a wall
+		
+		// V1 - random move (may even walk into a wall)
+		public void v1RandomMove(){
 			Random random = new Random();
 			int choice = random.nextInt(4); //N, S, E, W
 			

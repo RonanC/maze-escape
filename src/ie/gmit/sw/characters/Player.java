@@ -2,7 +2,10 @@ package ie.gmit.sw.characters;
 
 import java.awt.*;
 
-import javax.swing.ImageIcon;
+import ie.gmit.sw.ai.GameRunner;
+import ie.gmit.sw.ai.Mapper;
+
+
 
 public class Player extends Character{
 	private Image player;
@@ -10,24 +13,40 @@ public class Player extends Character{
 	private Image player_walk2;
 	private Image player_win;
 	
-	public Player(int tileDim, int tileX, int tileY) {
-		this.tileDim = tileDim;
+	public Player(Mapper map) {
+		super(map);
+		this.tileDim = GameRunner.TILE_DIM;
+	
+		setUpImages();
 		
-		// stand
-		player = createImage("hero/hero_stand.png");
-		
-		// walk
-		player_walk = createImage("hero/hero_walk.png");
-		
-		// walk_2
-		player_walk2 = createImage("hero/hero_walk_2.png");
-		
-		// win
-		player_win = createImage("hero/hero_happy.png");
+		// // start position
+		// top left (1 in)
+		setPos(1, 1);
+	}
+	
+	public Player(int tileX, int tileY, Mapper map) {
+		super(map);
+		this.tileDim = GameRunner.TILE_DIM;
+	
+		setUpImages();
 		
 		// // start position
 		// top left (1 in)
 		setPos(tileX, tileY);
+	}
+	
+	public void setUpImages(){
+		// stand
+		player = map.getPlayer_stand();
+		
+		// walk
+		player_walk = map.getPlayer_walk();
+		
+		// walk_2
+		player_walk2 = map.getPlayer_walk2();
+		
+		// win
+		player_win = map.getPlayer_win();
 	}
 	
 	public Image getPlayer(){

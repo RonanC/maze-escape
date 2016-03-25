@@ -84,7 +84,7 @@ public class Board extends JPanel implements ActionListener {
 		this.setBackground(Color.DARK_GRAY);
 
 		// player init
-		player = new Player(tileDim, 1, 1);
+		player = new Player(map);
 		setWalk = 0;
 		walkDur = 250; // quarter of a second
 		winDur = 8000;
@@ -112,7 +112,7 @@ public class Board extends JPanel implements ActionListener {
 		// enemy
 		enemyList = new ArrayList<Enemy>();
 		for (int i = 0; i < 5; i++) {
-			enemyList.add(new Enemy());
+			enemyList.add(new Enemy(map));
 		}
 		enemyBrain = new EnemyBrain(map, enemyList, player);
 

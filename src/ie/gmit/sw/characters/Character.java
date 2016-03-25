@@ -1,24 +1,24 @@
 package ie.gmit.sw.characters;
 
-import java.awt.Image;
-
-import javax.swing.ImageIcon;
+import ie.gmit.sw.ai.Mapper;
 
 public class Character {
 	protected int tileDim;
 	private int tileX;
 	private int tileY;
+	protected Mapper map;
 
-	public Character() {
+	public Character(Mapper map) {
 		super();
+		this.map = map;
 	}
 
-	protected Image createImage(String tileName) {
-		ImageIcon img = new ImageIcon("resources/img/" + tileName); // get imageicon
-		Image image = img.getImage(); // transform it into an image
-		Image scaledImg = image.getScaledInstance(tileDim, tileDim,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-		return scaledImg;
-	}
+//	protected Image createImage(String tileName) {
+//		ImageIcon img = new ImageIcon("resources/img/" + tileName); // get imageicon
+//		Image image = img.getImage(); // transform it into an image
+//		Image scaledImg = image.getScaledInstance(tileDim, tileDim,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+//		return scaledImg;
+//	}
 
 	public void move(int dx, int dy) {
 		// x negative go left, positive go right

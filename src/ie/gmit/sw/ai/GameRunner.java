@@ -4,8 +4,8 @@ import javax.swing.*;
 
 public class GameRunner {
 	
-	private int mazeDim;
-	private int tileDim;
+	public static int mazeDim;
+	public static int tileDim;
 	private int screenDim;;
 	private int titleHeight;
 	

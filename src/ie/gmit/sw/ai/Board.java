@@ -2,13 +2,20 @@ package ie.gmit.sw.ai;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.concurrent.*;
 import javax.swing.*;
 
 import ie.gmit.sw.ai.audio.*;
 import ie.gmit.sw.characters.Enemy;
+import ie.gmit.sw.characters.EnemyBrain;
 import ie.gmit.sw.characters.Player;
 import javafx.application.Application;
+
+// the player is tied into this class, 
+// as many player variables are checked against the game state
+// it makes sense to keep the player in full focus
+// however the enemies are in there own class (with own threads each)
 
 // game scene, drawing and movement
 public class Board extends JPanel implements ActionListener {
@@ -48,7 +55,9 @@ public class Board extends JPanel implements ActionListener {
 	private PlayerDraw playerDraw;
 
 	// enemy
-	private Enemy enemy;
+	// private Enemy enemy;
+	private ArrayList<Enemy> enemyList;
+	private EnemyBrain enemyBrain;
 
 	// set game up
 	public Board(int mazeDim, int tileDim) {
@@ -101,8 +110,15 @@ public class Board extends JPanel implements ActionListener {
 		playerDraw = new PlayerDraw(player, tileDim, 'r', 0);
 
 		// enemy
-		enemy = new Enemy(tileDim, 7, 7);
+		enemyList = new ArrayList<Enemy>();
+		for (int i = 0; i < 5; i++) {
+			enemyList.add(new Enemy());
+		}
+		enemyBrain = new EnemyBrain(map, enemyList, player);
 
+		// old enemy
+		// enemy = new Enemy(tileDim, 7, 7);
+		// enemyBrain = new EnemyBrain(map, enemy, player);
 	}
 
 	// gets called a certain frames per second
@@ -112,7 +128,7 @@ public class Board extends JPanel implements ActionListener {
 
 		// resets game
 		if (haveWon && timeElap > winDur) { // n seconds of winning!
-//			SoundEffects.playWin();
+			// SoundEffects.playWin();
 			System.out.println("Look for the magic potion.");
 			haveWon = false;
 			startDone = false;
@@ -121,8 +137,13 @@ public class Board extends JPanel implements ActionListener {
 			playerDraw.setPlayerLookH('r');
 
 			// enemy
-			enemy.setTileX(7);
-			enemy.setTileY(7);
+			// TODO: change to random (let the brain reset)
+			// for (Enemy enemyItem : enemyList) {
+			// enemyItem.setPos(7, 7);
+			enemyBrain.resetAllPos();
+			// }
+			// enemy.setTileX(7);
+			// enemy.setTileY(7);
 
 			//
 			map.reset();
@@ -140,7 +161,7 @@ public class Board extends JPanel implements ActionListener {
 		if (!haveWon && startDone) {
 			for (int y = 0; y < mazeDim; y++) {// col one
 				for (int x = 0; x < mazeDim; x++) { // fill row
-					String element = map.getMap(x, y);
+					String element = map.getPosElement(x, y);
 
 					// tiles
 					if (element.equals("w")) { // wall
@@ -190,8 +211,12 @@ public class Board extends JPanel implements ActionListener {
 		}
 
 		// draw enemy
-		g.drawImage(enemy.getEnemy(), enemy.getTileX() * tileDim + tileDim, enemy.getTileY() * tileDim, -tileDim,
-				tileDim, null);
+		// TODO: brain stuff
+		for (Enemy enemyItem : enemyList) {
+			g.drawImage(enemyItem.getEnemy(), enemyItem.getTileX() * tileDim + tileDim, enemyItem.getTileY() * tileDim,
+					-tileDim, tileDim, null);
+		}
+
 	}
 
 	// draws multi-line string with correct spacing
@@ -220,26 +245,25 @@ public class Board extends JPanel implements ActionListener {
 				keycode = e.getKeyCode();
 			}
 
-			if (keycode == KeyEvent.VK_W) {
-				if (!map.getMap(player.getTileX(), player.getTileY() - 1).equals("w")) {
+			if (keycode == KeyEvent.VK_W) { // N
+				if (!map.getPosElement(player.getTileX(), player.getTileY() - 1).equals("w")) {
 					player.move(0, -1);
 					moveCommon();
 				}
-			} else if (keycode == KeyEvent.VK_S) {
-				if (!map.getMap(player.getTileX(), player.getTileY() + 1).equals("w")) {
+			} else if (keycode == KeyEvent.VK_S) { // S
+				if (!map.getPosElement(player.getTileX(), player.getTileY() + 1).equals("w")) {
 					player.move(0, 1);
 					moveCommon();
 				}
-			} else if (keycode == KeyEvent.VK_A) {
+			} else if (keycode == KeyEvent.VK_A) { // E
 				playerDraw.setPlayerLookH('l');
-				if (!map.getMap(player.getTileX() - 1, player.getTileY()).equals("w")) {
-					
+				if (!map.getPosElement(player.getTileX() - 1, player.getTileY()).equals("w")) {
 					player.move(-1, 0);
 					moveCommon();
 				}
-			} else if (keycode == KeyEvent.VK_D) {
+			} else if (keycode == KeyEvent.VK_D) { // W
 				playerDraw.setPlayerLookH('r');
-				if (!map.getMap(player.getTileX() + 1, player.getTileY()).equals("w")) {
+				if (!map.getPosElement(player.getTileX() + 1, player.getTileY()).equals("w")) {
 					player.move(1, 0); // 1? tileDim
 					moveCommon();
 				}
@@ -268,28 +292,22 @@ public class Board extends JPanel implements ActionListener {
 		checkFight(); // checked when I or the enemy moves
 	}
 
-	public void checkFight() {
-		if (player.getPos().equals(enemy.getPos())) {
-			fight();
-		}
-	}
-
 	// ran every keypress
 	public void checkTile() {
 
 		// flash items and do something
-		if (map.getMap(player.getTileX(), player.getTileY()).equals("s")) { // sword
+		if (map.getPosElement(player.getTileX(), player.getTileY()).equals("s")) { // sword
 			System.out.println("Sweet sword!");
 			SoundEffects.playFoundItem();
 			map.setTileItem(player.getTileX(), player.getTileY(), 'f');
-		} else if (map.getMap(player.getTileX(), player.getTileY()).equals("b")) { // bomb
+		} else if (map.getPosElement(player.getTileX(), player.getTileY()).equals("b")) { // bomb
 			System.out.println("Brilliant bomb!");
 			SoundEffects.playFoundItem();
 			map.setTileItem(player.getTileX(), player.getTileY(), 'f');
-		} else if (map.getMap(player.getTileX(), player.getTileY()).equals("h")) { // helper
+		} else if (map.getPosElement(player.getTileX(), player.getTileY()).equals("h")) { // helper
 			System.out.println("Happy helper!");
 			SoundEffects.playFoundHelp();
-		} else if (map.getMap(player.getTileX(), player.getTileY()).equals("g")) { // goal
+		} else if (map.getPosElement(player.getTileX(), player.getTileY()).equals("g")) { // goal
 			System.out.println("Perfect potion!");
 			map.setTileItem(player.getTileX(), player.getTileY(), 'f');
 
@@ -302,7 +320,16 @@ public class Board extends JPanel implements ActionListener {
 	// // additional
 	public void fight() {
 		System.out.println("Dual!");
-		SoundEffects.playFight();
+		SoundEffects.playPlayerAttack();
+	}
+
+	public void checkFight() {
+		for (Enemy enemyItem : enemyList) {
+			if (player.getPos().equals(enemyItem.getPos())) {
+				fight();
+			}
+		}
+
 	}
 
 	// zoom

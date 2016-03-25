@@ -102,7 +102,7 @@ public class Mapper {
 	}
 	
 	// getters
-	public String getMap(int x, int y) {
+	public String getPosElement(int x, int y) {
 		String index = map[y].substring(x, x + 1);
 		return index;
 	}

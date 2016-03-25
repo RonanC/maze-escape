@@ -91,7 +91,7 @@ public class SoundEffects {
 		playSound("move");
 	}
 
-	public static void playFight() {
+	public static void playPlayerAttack() {
 		String location = "fight/";
 
 		Random random = new Random();
@@ -136,6 +136,10 @@ public class SoundEffects {
 
 	public static void playIntro() {
 //		playSound("pacman_intro.wav");
+	}
+	
+	public static void playEnemyAttack(){
+		playSound("fight/Slime-SoundBible.com-803762203.wav");
 	}
 
 	public static String chooseBg() {

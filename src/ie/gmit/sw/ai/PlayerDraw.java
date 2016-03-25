@@ -2,6 +2,8 @@ package ie.gmit.sw.ai;
 
 import java.awt.Graphics;
 
+import ie.gmit.sw.characters.Player;
+
 // draws the player in various directions and animations.
 public class PlayerDraw {
 	private Player player;

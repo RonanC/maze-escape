@@ -1,4 +1,4 @@
-package ie.gmit.sw.ai;
+package ie.gmit.sw.characters;
 
 import java.awt.*;
 
@@ -17,24 +17,16 @@ public class Player {
 		this.tileDim = tileDim;
 		
 		// stand
-		ImageIcon img = new ImageIcon("resources/img/hero_stand.png");
-		img = resizeImage(img);
-		player = img.getImage();
+		player = createImage("hero_stand.png");
 		
 		// walk
-		img = new ImageIcon("resources/img/hero_walk.png");
-		img = resizeImage(img);
-		player_walk = img.getImage();
+		player_walk = createImage("hero_walk.png");
 		
-		// walk
-		img = new ImageIcon("resources/img/hero_walk_2.png");
-		img = resizeImage(img);
-		player_walk2 = img.getImage();
+		// walk_2
+		player_walk2 = createImage("hero_walk_2.png");
 		
 		// win
-		img = new ImageIcon("resources/img/hero_happy.png");
-		img = resizeImage(img);
-		player_win = img.getImage();
+		player_win = createImage("hero_happy.png");
 		
 		// // start position
 		// top left (1 in)
@@ -42,11 +34,11 @@ public class Player {
 		tileY = 1;
 	}
 	
-	private ImageIcon resizeImage(ImageIcon img) {
-		Image image = img.getImage(); // transform it 
-		Image newimg = image.getScaledInstance(tileDim, tileDim,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-		img = new ImageIcon(newimg);  // transform it back
-		return img;
+	private Image createImage(String tileName) {
+		ImageIcon img = new ImageIcon("resources/img/hero/" + tileName); // get imageicon
+		Image image = img.getImage(); // transform it into an image
+		Image scaledImg = image.getScaledInstance(tileDim, tileDim,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		return scaledImg;
 	}
 	
 	public Image getPlayer(){

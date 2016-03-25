@@ -6,6 +6,7 @@ import java.util.concurrent.*;
 import javax.swing.*;
 
 import ie.gmit.sw.ai.audio.*;
+import ie.gmit.sw.characters.Player;
 
 // game scene, drawing and movement
 public class Board extends JPanel implements ActionListener {
@@ -19,7 +20,7 @@ public class Board extends JPanel implements ActionListener {
 
 	// objects
 	private Timer timer; // needed for action performed
-	private Map map;
+	private Mapper map;
 	private Player player;
 
 	// messages
@@ -62,7 +63,7 @@ public class Board extends JPanel implements ActionListener {
 		addKeyListener(new AcLis()); // get thing that listens for key press
 		setFocusable(true); // adds the key listener to our frame
 		frameRate = 1000 / 60; // 60 frames per second (every 16 Ms)
-		map = new Map(mazeDim, tileDim);
+		map = new Mapper(mazeDim, tileDim);
 		startDone = false;
 		haveWon = false;
 		setWin = 0; // how long you since you won
@@ -121,13 +122,27 @@ public class Board extends JPanel implements ActionListener {
 			for (int y = 0; y < mazeDim; y++) {// col one
 				for (int x = 0; x < mazeDim; x++) { // fill row
 					String element = map.getMap(x, y);
-					if (element.equals("f")) { // floor
-						g.drawImage(map.getGround(), x * tileDim, y * tileDim, null);
-					} else if (element.equals("w")) { // wall
+
+					// tiles
+					if (element.equals("w")) { // wall
 						g.drawImage(map.getWall(), x * tileDim, y * tileDim, null);
-					} else if (element.equals("g")) { // goal
-						g.drawImage(map.getGoal(), x * tileDim, y * tileDim, null);
+					} else if (element.equals("f")) { // floor
+						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
+					} else {
+						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
+
+						// items
+						if (element.equals("g")) { // goal
+							g.drawImage(map.getGoal(), x * tileDim, y * tileDim, null);
+						} else if (element.equals("h")) { // helper
+							g.drawImage(map.getHelper(), x * tileDim, y * tileDim, null);
+						} else if (element.equals("s")) { // sword
+							g.drawImage(map.getSword(), x * tileDim, y * tileDim, null);
+						} else if (element.equals("b")) { // bomb
+							g.drawImage(map.getBomb(), x * tileDim, y * tileDim, null);
+						}
 					}
+
 				}
 			}
 		} else if (!startDone) {

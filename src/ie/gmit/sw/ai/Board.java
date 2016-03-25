@@ -61,9 +61,9 @@ public class Board extends JPanel implements ActionListener {
 	private boolean enemySpawned;
 
 	// set game up
-	public Board(int mazeDim, int tileDim) {
-		this.mazeDim = mazeDim;
-		this.tileDim = tileDim;
+	public Board() {
+		this.mazeDim = GameRunner.MAZE_DIM;
+		this.tileDim = GameRunner.TILE_DIM;
 		relativeDim = mazeDim * tileDim;
 
 		init();
@@ -92,7 +92,7 @@ public class Board extends JPanel implements ActionListener {
 		addKeyListener(new AcLis()); // get thing that listens for key press
 		setFocusable(true); // adds the key listener to our frame
 		frameRate = 1000 / 60; // 60 frames per second (every 16 Ms)
-		map = new Mapper(mazeDim, tileDim);
+		map = new Mapper();
 		startDone = false;
 		haveWon = false;
 		setWin = 0; // how long you since you won

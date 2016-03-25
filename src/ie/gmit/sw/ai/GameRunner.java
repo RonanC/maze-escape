@@ -14,7 +14,7 @@ public class GameRunner {
 	}
 	
 	public GameRunner() {
-		MAZE_DIM = 14;
+		MAZE_DIM = 15;
 		TILE_DIM = 64;
 		screenDim = MAZE_DIM * TILE_DIM;
 		titleHeight = 22;
@@ -22,7 +22,7 @@ public class GameRunner {
 		JFrame f = new JFrame();
 		f.setResizable(false);
 		f.setTitle("Maze Escape");
-		f.add(new Board(MAZE_DIM, TILE_DIM));
+		f.add(new Board());
 		f.setSize(screenDim, screenDim + titleHeight);
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);

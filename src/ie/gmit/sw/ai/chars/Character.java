@@ -1,16 +1,19 @@
 package ie.gmit.sw.ai.chars;
 
-import ie.gmit.sw.ai.Mapper;
+import ie.gmit.sw.ai.Maze;
+import ie.gmit.sw.ai.img.ImgCtrl;
 
 public class Character {
 	protected int tileDim;
 	private int tileX;
 	private int tileY;
-	protected Mapper map;
+	protected Maze map;
+	protected ImgCtrl imgCtrl;
 
-	public Character(Mapper map) {
+	public Character(Maze map, ImgCtrl imgCtrl) {
 		super();
 		this.map = map;
+		this.imgCtrl = imgCtrl;
 	}
 
 //	protected Image createImage(String tileName) {

@@ -3,7 +3,8 @@ package ie.gmit.sw.ai.chars;
 import java.awt.*;
 
 import ie.gmit.sw.ai.GameRunner;
-import ie.gmit.sw.ai.Mapper;
+import ie.gmit.sw.ai.Maze;
+import ie.gmit.sw.ai.img.ImgCtrl;
 
 
 
@@ -13,8 +14,8 @@ public class Player extends Character{
 	private Image player_walk2;
 	private Image player_win;
 	
-	public Player(Mapper map) {
-		super(map);
+	public Player(Maze map, ImgCtrl imgCtrl) {
+		super(map, imgCtrl);
 		this.tileDim = GameRunner.TILE_DIM;
 	
 		setUpImages();
@@ -24,8 +25,8 @@ public class Player extends Character{
 		setPos(1, 1);
 	}
 	
-	public Player(int tileX, int tileY, Mapper map) {
-		super(map);
+	public Player(int tileX, int tileY, Maze map, ImgCtrl imgCtrl) {
+		super(map, imgCtrl);
 		this.tileDim = GameRunner.TILE_DIM;
 	
 		setUpImages();
@@ -37,16 +38,16 @@ public class Player extends Character{
 	
 	public void setUpImages(){
 		// stand
-		player = map.getPlayer_stand();
+		player = imgCtrl.getPlayer_stand();
 		
 		// walk
-		player_walk = map.getPlayer_walk();
+		player_walk = imgCtrl.getPlayer_walk();
 		
 		// walk_2
-		player_walk2 = map.getPlayer_walk2();
+		player_walk2 = imgCtrl.getPlayer_walk2();
 		
 		// win
-		player_win = map.getPlayer_win();
+		player_win = imgCtrl.getPlayer_win();
 	}
 	
 	public Image getPlayer(){

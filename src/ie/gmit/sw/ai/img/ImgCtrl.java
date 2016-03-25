@@ -1,51 +1,34 @@
-package ie.gmit.sw.ai;
+package ie.gmit.sw.ai.img;
 
-import java.awt.*;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.*;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 
-public class Mapper {
+import ie.gmit.sw.ai.GameRunner;
 
-	private Scanner input; // map
-	private String map[];
+public class ImgCtrl {
+	// Images
 	private Image floor, wall, goal;
 	private Image helper;
 	private Image sword, bomb;
 	private Image player_stand, player_win, player_walk, player_walk2;
 	private Image enemy_down, enemy_up;
-	private int mazeDim;
-	private int tileDim;
-
-	// images
+	
+	// Image Arrays
 	private BufferedImage[] items;
 	private BufferedImage[] tiles;
 	private BufferedImage[] player;
 	private BufferedImage[] enemy;
-
-	// private static final int IMAGE_COUNT = 6;
-
-	public Mapper() {
-		this.mazeDim = GameRunner.MAZE_DIM;
-		this.tileDim = GameRunner.TILE_DIM;
-		this.map = new String[mazeDim];
-
+	
+	public ImgCtrl() {
 		try {
 			initImages();
 		} catch (Exception e) {
 			System.out.println("Error loading images.");
 			e.printStackTrace();
 		}
-
-		// read in map
-		openFile();
-		readFile();
-		closeFile();
 	}
-
 	// new image
 	private void initImages() throws Exception {
 		String url = "resources/img/";
@@ -96,71 +79,8 @@ public class Mapper {
 		image = image.getScaledInstance(GameRunner.TILE_DIM, GameRunner.TILE_DIM, java.awt.Image.SCALE_SMOOTH);
 		return image;
 	}
-
-	// io
-	private void openFile() {
-		try {
-			input = new Scanner(new File("resources/map/map.txt"));
-		} catch (FileNotFoundException e) {
-			System.out.println("Error loading map.");
-		}
-	}
-
-	private void readFile() {
-		while (input.hasNext()) {
-			for (int i = 0; i < GameRunner.MAZE_DIM; i++) {
-				StringBuilder temp = new StringBuilder();
-				try {
-					temp.append(input.next());
-				} catch (Exception e) {
-					// no input
-					for (int j = 0; j < GameRunner.MAZE_DIM; j++) {
-						temp.append('w');
-					}
-					map[i] = temp.toString();
-				}
-				
-
-				// add walls where there are missing characters
-				if (temp.length() == GameRunner.MAZE_DIM) {
-					map[i] = temp.toString();
-				} else {
-					for (int j = 0; j < GameRunner.MAZE_DIM - temp.length(); j++) {
-						temp.append('w');
-					}
-					map[i] = temp.toString();
-				}
-			}
-		}
-	}
-
-	private void closeFile() {
-		input.close();
-	}
-
-	public void reset() {
-		openFile();
-		readFile();
-		closeFile();
-	}
-
-	// set tile item
-	public void setTileItem(int x, int y, char item) {
-		StringBuilder tile = new StringBuilder(map[y]);
-		tile.setCharAt(x, item);
-		map[y] = tile.toString();
-	}
-
+	
 	// getters
-	public String getPosElement(int x, int y) {
-		String index = map[y].substring(x, x + 1);
-		return index;
-	}
-
-	public void printMap() {
-		System.out.println(map.toString());
-	}
-
 	public Image getFloor() {
 		return floor;
 	}
@@ -209,5 +129,4 @@ public class Mapper {
 	public Image getEnemy_up() {
 		return enemy_up;
 	}
-
 }

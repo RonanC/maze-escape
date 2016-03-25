@@ -10,6 +10,7 @@ import ie.gmit.sw.ai.audio.*;
 import ie.gmit.sw.ai.chars.Enemy;
 import ie.gmit.sw.ai.chars.EnemyBrain;
 import ie.gmit.sw.ai.chars.Player;
+import ie.gmit.sw.ai.img.ImgCtrl;
 import javafx.application.Application;
 
 // the player is tied into this class, 
@@ -29,7 +30,8 @@ public class Board extends JPanel implements ActionListener {
 
 	// objects
 	private Timer timer; // needed for action performed
-	private Mapper map;
+	private Maze map;
+	private ImgCtrl imgCtrl;
 	private Player player;
 
 	// messages
@@ -83,7 +85,10 @@ public class Board extends JPanel implements ActionListener {
 		msgStart += "Legend says he left behind a potion which can free you of this place.\n\n";
 		msgStart += "\n\nPress the 'Enter' key to begin your quest.\n\n";
 		msgStart += "\n\n\n\nControls:\tWASD";
-		fontGen = new Font("Serif", Font.BOLD, mazeDim * 2);
+		int fontSize = (int) (GameRunner.TILE_DIM / 1.5); // works at 64 tile size (and all maze sizes)
+		fontSize *= GameRunner.TILE_DIM / 2;
+		
+		fontGen = new Font("Serif", Font.BOLD, fontSize);
 	}
 
 	// initialization variables
@@ -92,14 +97,15 @@ public class Board extends JPanel implements ActionListener {
 		addKeyListener(new AcLis()); // get thing that listens for key press
 		setFocusable(true); // adds the key listener to our frame
 		frameRate = 1000 / 60; // 60 frames per second (every 16 Ms)
-		map = new Mapper();
+		map = new Maze();
+		imgCtrl = new ImgCtrl();
 		startDone = false;
 		haveWon = false;
 		setWin = 0; // how long you since you won
 		this.setBackground(Color.DARK_GRAY);
 
 		// player init
-		player = new Player(map);
+		player = new Player(map, imgCtrl);
 		setWalk = 0;
 		walkDur = 250; // quarter of a second
 		winDur = 8000;
@@ -130,7 +136,7 @@ public class Board extends JPanel implements ActionListener {
 		}
 
 		for (int i = 0; i < 5; i++) {
-			enemyList.add(new Enemy(map));
+			enemyList.add(new Enemy(map, imgCtrl));
 		}
 		enemySpawned = true;
 		enemyBrain.spawn();
@@ -311,38 +317,38 @@ public class Board extends JPanel implements ActionListener {
 
 						// tiles
 						if (element.equals("w")) { // wall
-							g.drawImage(map.getWall(), x * tileDim, y * tileDim, null);
+							g.drawImage(imgCtrl.getWall(), x * tileDim, y * tileDim, null);
 						} else if (element.equals("f")) { // floor
 							// using default background color
-							g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
+							g.drawImage(imgCtrl.getFloor(), x * tileDim, y * tileDim, null);
 						} else {
-							g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
+							g.drawImage(imgCtrl.getFloor(), x * tileDim, y * tileDim, null);
 
 							// items
 							// inner if is for flipping the image (basic animation)
 							if (element.equals("g")) { // goal
 								if (getTime() % animGoalDur * 2 > animGoalDur) {
-									g.drawImage(map.getGoal(), x * tileDim, y * tileDim, null);
+									g.drawImage(imgCtrl.getGoal(), x * tileDim, y * tileDim, null);
 								} else {
-									g.drawImage(map.getGoal(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+									g.drawImage(imgCtrl.getGoal(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
 								}
 							} else if (element.equals("h")) { // helper
 								if (getTime() % animHelperDur * 2 > animHelperDur) {
-									g.drawImage(map.getHelper(), x * tileDim, y * tileDim, null);
+									g.drawImage(imgCtrl.getHelper(), x * tileDim, y * tileDim, null);
 								} else {
-									g.drawImage(map.getHelper(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+									g.drawImage(imgCtrl.getHelper(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
 								}
 							} else if (element.equals("s")) { // sword
 								if (getTime() % animSwordDur * 2 > animSwordDur) {
-									g.drawImage(map.getSword(), x * tileDim, y * tileDim, null);
+									g.drawImage(imgCtrl.getSword(), x * tileDim, y * tileDim, null);
 								} else {
-									g.drawImage(map.getSword(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+									g.drawImage(imgCtrl.getSword(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
 								}
 							} else if (element.equals("b")) { // bomb
 								if (getTime() % animBombDur * 2 > animBombDur) {
-									g.drawImage(map.getBomb(), x * tileDim, y * tileDim, null);
+									g.drawImage(imgCtrl.getBomb(), x * tileDim, y * tileDim, null);
 								} else {
-									g.drawImage(map.getBomb(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+									g.drawImage(imgCtrl.getBomb(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
 								}
 							}
 						}

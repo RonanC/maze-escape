@@ -3,7 +3,6 @@ package ie.gmit.sw.ai;
 import javax.swing.*;
 
 public class GameRunner {
-	
 	public static int MAZE_DIM;
 	public static int TILE_DIM;
 	private int screenDim;;
@@ -14,7 +13,7 @@ public class GameRunner {
 	}
 	
 	public GameRunner() {
-		MAZE_DIM = 15;
+		MAZE_DIM = 5;
 		TILE_DIM = 64;
 		screenDim = MAZE_DIM * TILE_DIM;
 		titleHeight = 22;

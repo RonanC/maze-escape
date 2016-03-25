@@ -6,18 +6,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ie.gmit.sw.ai.GameRunner;
-import ie.gmit.sw.ai.Mapper;
+import ie.gmit.sw.ai.Maze;
 import ie.gmit.sw.ai.audio.SoundEffects;
 
 public class EnemyBrain extends Thread {
 	private ArrayList<Enemy> enemyList;
 	private int mazeDim = GameRunner.MAZE_DIM;
-	private Mapper map;
+	private Maze map;
 	private Timer timer;
 	private Random random;
 	private Player player;
 
-	public EnemyBrain(Mapper map, ArrayList<Enemy> enemyList, Player player) {
+	public EnemyBrain(Maze map, ArrayList<Enemy> enemyList, Player player) {
 		this.player = player;
 		this.map = map;
 		this.enemyList = enemyList;
@@ -95,13 +95,13 @@ public class EnemyBrain extends Thread {
 	public class EnemyTask extends TimerTask {
 		// this enemy has a form, is in a place and knows that there is a
 		// player.
-		private Mapper map;
+		private Maze map;
 		private Enemy enemy;
 		private Player player;
 		private int moveVersion;
 		private Random random;
 
-		public EnemyTask(Mapper map, Enemy enemy, Player player) {
+		public EnemyTask(Maze map, Enemy enemy, Player player) {
 			this.map = map;
 			this.enemy = enemy;
 			this.player = player;

@@ -7,9 +7,9 @@ import java.util.concurrent.*;
 import javax.swing.*;
 
 import ie.gmit.sw.ai.audio.*;
-import ie.gmit.sw.characters.Enemy;
-import ie.gmit.sw.characters.EnemyBrain;
-import ie.gmit.sw.characters.Player;
+import ie.gmit.sw.ai.chars.Enemy;
+import ie.gmit.sw.ai.chars.EnemyBrain;
+import ie.gmit.sw.ai.chars.Player;
 import javafx.application.Application;
 
 // the player is tied into this class, 
@@ -159,6 +159,11 @@ public class Board extends JPanel implements ActionListener {
 		// this.g = g;
 
 		if (!haveWon && startDone) {
+			int animHelperDur = 2000;
+			int animGoalDur = 1000;
+			int animSwordDur = 3000;
+			int animBombDur = 3000;
+
 			for (int y = 0; y < mazeDim; y++) {// col one
 				for (int x = 0; x < mazeDim; x++) { // fill row
 					String element = map.getPosElement(x, y);
@@ -173,14 +178,31 @@ public class Board extends JPanel implements ActionListener {
 						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
 
 						// items
+						// inner if is for flipping the image (basic animation)
 						if (element.equals("g")) { // goal
-							g.drawImage(map.getGoal(), x * tileDim, y * tileDim, null);
+							if (getTime() % animGoalDur * 2 > animGoalDur) {
+								g.drawImage(map.getGoal(), x * tileDim, y * tileDim, null);
+							} else {
+								g.drawImage(map.getGoal(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+							}
 						} else if (element.equals("h")) { // helper
-							g.drawImage(map.getHelper(), x * tileDim, y * tileDim, null);
+							if (getTime() % animHelperDur * 2 > animHelperDur) {
+								g.drawImage(map.getHelper(), x * tileDim, y * tileDim, null);
+							} else {
+								g.drawImage(map.getHelper(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+							}
 						} else if (element.equals("s")) { // sword
-							g.drawImage(map.getSword(), x * tileDim, y * tileDim, null);
+							if (getTime() % animSwordDur * 2 > animSwordDur) {
+								g.drawImage(map.getSword(), x * tileDim, y * tileDim, null);
+							} else {
+								g.drawImage(map.getSword(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+							}
 						} else if (element.equals("b")) { // bomb
-							g.drawImage(map.getBomb(), x * tileDim, y * tileDim, null);
+							if (getTime() % animBombDur * 2 > animBombDur) {
+								g.drawImage(map.getBomb(), x * tileDim, y * tileDim, null);
+							} else {
+								g.drawImage(map.getBomb(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+							}
 						}
 					}
 
@@ -212,9 +234,16 @@ public class Board extends JPanel implements ActionListener {
 
 		// draw enemy
 		// TODO: brain stuff
+		int animEnemyDur = 1000;
 		for (Enemy enemyItem : enemyList) {
-			g.drawImage(enemyItem.getEnemy(), enemyItem.getTileX() * tileDim + tileDim, enemyItem.getTileY() * tileDim,
-					-tileDim, tileDim, null);
+			if (getTime() % animEnemyDur * 2 > animEnemyDur) {
+				g.drawImage(enemyItem.getEnemy(), enemyItem.getTileX() * tileDim + tileDim,
+						enemyItem.getTileY() * tileDim, -tileDim, tileDim, null);
+			} else {
+				g.drawImage(enemyItem.getEnemy2(), (enemyItem.getTileX() * tileDim + tileDim),
+						enemyItem.getTileY() * tileDim, -tileDim, tileDim, null);
+			}
+
 		}
 
 	}

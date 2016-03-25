@@ -1,4 +1,4 @@
-package ie.gmit.sw.characters;
+package ie.gmit.sw.ai.chars;
 
 import ie.gmit.sw.ai.Mapper;
 

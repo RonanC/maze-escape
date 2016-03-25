@@ -48,7 +48,14 @@ public class Mapper {
 	private Image createImage(String tileName) {
 		ImageIcon img = new ImageIcon("resources/img/" + tileName); // get imageicon
 		Image image = img.getImage(); // transform it into an image
-		Image scaledImg = image.getScaledInstance(tileDim, tileDim,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		Image scaledImg;
+		try {
+			scaledImg = image.getScaledInstance(tileDim, tileDim, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way 
+		} catch (Exception e) {
+			System.out.println("caught.");
+			scaledImg = image.getScaledInstance(tileDim, tileDim, java.awt.Image.SCALE_DEFAULT);
+		}
+		 
 		return scaledImg;
 	}
 	

@@ -8,6 +8,7 @@ import javax.swing.*;
 import ie.gmit.sw.ai.audio.*;
 import ie.gmit.sw.characters.Enemy;
 import ie.gmit.sw.characters.Player;
+import javafx.application.Application;
 
 // game scene, drawing and movement
 public class Board extends JPanel implements ActionListener {
@@ -63,7 +64,7 @@ public class Board extends JPanel implements ActionListener {
 
 	// initialization variables
 	private void init() {
-
+		
 		// game init
 		addKeyListener(new AcLis()); // get thing that listens for key press
 		setFocusable(true); // adds the key listener to our frame

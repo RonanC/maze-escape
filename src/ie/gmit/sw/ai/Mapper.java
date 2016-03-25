@@ -73,10 +73,27 @@ public class Mapper {
 		input.close();
 	}
 	
+	public void reset(){
+		openFile();
+		readFile();
+		closeFile();
+	}
+	
+	// set tile item
+	public void setTileItem(int x, int y, char item) {
+		StringBuilder tile = new StringBuilder(map[y]);
+		tile.setCharAt(x, item);
+		map[y] = tile.toString();
+	}
+	
 	// getters
 	public String getMap(int x, int y) {
 		String index = map[y].substring(x, x + 1);
 		return index;
+	}
+	
+	public void printMap(){
+		System.out.println(map.toString());
 	}
 	
 	public Image getFloor() {

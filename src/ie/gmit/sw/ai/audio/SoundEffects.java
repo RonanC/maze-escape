@@ -1,6 +1,8 @@
 package ie.gmit.sw.ai.audio;
 
 import java.io.File;
+import java.util.Random;
+
 import javax.sound.sampled.*;
 
 public class SoundEffects {	
@@ -37,6 +39,49 @@ public class SoundEffects {
 	
 	public static void playMove(){
 		playSound("move", false);
+	}
+	
+	public static void playFight(){
+		String location = "fight/";
+
+		Random random = new Random();
+		int num = random.nextInt(2);
+		
+		switch (num) {	// add more insults
+		case 0:
+			location += "come_on.wav"; 
+			break;
+
+		case 1:
+			location += "come_on.wav"; 
+			break;
+	
+		default:
+			location += "come_on.wav"; 
+			break;
+		}
+		
+		playSound(location, false);
+	}
+	
+	public static void playWonFight(){
+		playSound("fight/terminated.wav", false);
+	}
+	
+	public static void playLostFight(){
+		playSound("fight/cry.wav", false); // ?
+	}
+	
+	public static void playFoundItem(){
+		playSound("items/lets_rock.wav", false); // ?
+	}
+	
+	public static void playFoundHelp(){
+		playSound("items/lets_rock.wav", false); // ?
+	}
+	
+	public static void playGameOver(){
+		playSound("fight/game_over.wav", false); // ?
 	}
 	
 	public static void playBGLoop(){

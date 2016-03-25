@@ -6,6 +6,7 @@ import java.util.concurrent.*;
 import javax.swing.*;
 
 import ie.gmit.sw.ai.audio.*;
+import ie.gmit.sw.characters.Enemy;
 import ie.gmit.sw.characters.Player;
 
 // game scene, drawing and movement
@@ -40,9 +41,13 @@ public class Board extends JPanel implements ActionListener {
 
 	// additionals
 	private boolean zoomedOut;
+	// private Graphics g;
 
 	// refactored
 	private PlayerDraw playerDraw;
+
+	// enemy
+	private Enemy enemy;
 
 	// set game up
 	public Board(int mazeDim, int tileDim) {
@@ -70,10 +75,10 @@ public class Board extends JPanel implements ActionListener {
 		this.setBackground(Color.DARK_GRAY);
 
 		// player init
-		player = new Player(tileDim);
+		player = new Player(tileDim, 1, 1);
 		setWalk = 0;
 		walkDur = 250; // quarter of a second
-		winDur = 8000;
+		winDur = 6000;
 
 		// message init
 		msgWin = "You found the teleportation potion!\n\n\n";
@@ -94,6 +99,10 @@ public class Board extends JPanel implements ActionListener {
 
 		// refactored
 		playerDraw = new PlayerDraw(player, tileDim, 'r', 0);
+
+		// enemy
+		enemy = new Enemy(tileDim, 7, 7);
+
 	}
 
 	// gets called a certain frames per second
@@ -103,12 +112,20 @@ public class Board extends JPanel implements ActionListener {
 
 		// resets game
 		if (haveWon && timeElap > winDur) { // n seconds of winning!
+			SoundEffects.playWin();
 			System.out.println("Look for the magic potion.");
 			haveWon = false;
 			startDone = false;
 			player.setTileX(1);
 			player.setTileY(1);
 			playerDraw.setPlayerLookH('r');
+
+			// enemy
+			enemy.setTileX(7);
+			enemy.setTileY(7);
+
+			//
+			map.reset();
 		}
 
 		repaint();
@@ -118,6 +135,8 @@ public class Board extends JPanel implements ActionListener {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
+		// this.g = g;
+
 		if (!haveWon && startDone) {
 			for (int y = 0; y < mazeDim; y++) {// col one
 				for (int x = 0; x < mazeDim; x++) { // fill row
@@ -127,9 +146,10 @@ public class Board extends JPanel implements ActionListener {
 					if (element.equals("w")) { // wall
 						g.drawImage(map.getWall(), x * tileDim, y * tileDim, null);
 					} else if (element.equals("f")) { // floor
-						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
+						// using default background color
+//						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
 					} else {
-						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
+//						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
 
 						// items
 						if (element.equals("g")) { // goal
@@ -145,6 +165,7 @@ public class Board extends JPanel implements ActionListener {
 
 				}
 			}
+			// draw strings
 		} else if (!startDone) {
 			g.setColor(Color.CYAN);
 			g.setFont(fontGen);
@@ -155,6 +176,8 @@ public class Board extends JPanel implements ActionListener {
 			drawString(g, msgWin, relativeDim / 2, relativeDim / 7);
 		}
 
+		// draw player
+		// draw below items
 		int timeElap = getTime() - setWalk;
 		if (timeElap < walkDur) {
 			playerDraw.walk(g);
@@ -165,6 +188,10 @@ public class Board extends JPanel implements ActionListener {
 		} else if (playerDraw.getPlayerLookH() == 'r') {
 			playerDraw.lookRight(g);
 		}
+
+		// draw enemy
+		g.drawImage(enemy.getEnemy(), enemy.getTileX() * tileDim + tileDim, enemy.getTileY() * tileDim, -tileDim,
+				tileDim, null);
 	}
 
 	// draws multi-line string with correct spacing
@@ -195,31 +222,30 @@ public class Board extends JPanel implements ActionListener {
 
 			if (keycode == KeyEvent.VK_W) {
 				if (!map.getMap(player.getTileX(), player.getTileY() - 1).equals("w")) {
-					moveCommon();
-					// playerLookV = 'u';
 					player.move(0, -1);
+					moveCommon();
 				}
 			} else if (keycode == KeyEvent.VK_S) {
 				if (!map.getMap(player.getTileX(), player.getTileY() + 1).equals("w")) {
-					moveCommon();
-					// playerLookV = 'd';
 					player.move(0, 1);
+					moveCommon();
 				}
 			} else if (keycode == KeyEvent.VK_A) {
 				playerDraw.setPlayerLookH('l');
 				if (!map.getMap(player.getTileX() - 1, player.getTileY()).equals("w")) {
-					moveCommon();
+					
 					player.move(-1, 0);
+					moveCommon();
 				}
 			} else if (keycode == KeyEvent.VK_D) {
 				playerDraw.setPlayerLookH('r');
 				if (!map.getMap(player.getTileX() + 1, player.getTileY()).equals("w")) {
-					moveCommon();
 					player.move(1, 0); // 1? tileDim
+					moveCommon();
 				}
 			}
 			if (!haveWon) {
-				checkWin();
+				checkTile();
 			}
 		}
 
@@ -239,18 +265,46 @@ public class Board extends JPanel implements ActionListener {
 		playerDraw.incStepCount();
 		setWalk = getTime();
 		SoundEffects.playMove();
+		checkFight(); // checked when I or the enemy moves
+	}
+
+	public void checkFight() {
+		if (player.getPos().equals(enemy.getPos())) {
+			fight();
+		}
 	}
 
 	// ran every keypress
-	public void checkWin() {
-		if (map.getMap(player.getTileX(), player.getTileY()).equals("g")) {
+	public void checkTile() {
+
+		// flash items and do something
+		if (map.getMap(player.getTileX(), player.getTileY()).equals("s")) { // sword
+			System.out.println("Sweet sword!");
+			SoundEffects.playFoundItem();
+			map.setTileItem(player.getTileX(), player.getTileY(), 'f');
+		} else if (map.getMap(player.getTileX(), player.getTileY()).equals("b")) { // bomb
+			System.out.println("Brilliant bomb!");
+			SoundEffects.playFoundItem();
+			map.setTileItem(player.getTileX(), player.getTileY(), 'f');
+		} else if (map.getMap(player.getTileX(), player.getTileY()).equals("h")) { // helper
+			System.out.println("Happy helper!");
+			SoundEffects.playFoundHelp();
+		} else if (map.getMap(player.getTileX(), player.getTileY()).equals("g")) { // goal
+			System.out.println("Perfect potion!");
+			map.setTileItem(player.getTileX(), player.getTileY(), 'f');
+
 			setWin = getTime();
 			haveWon = true;
-			SoundEffects.playWin();
+			SoundEffects.playGameOver();
 		}
 	}
 
 	// // additional
+	public void fight() {
+		System.out.println("Dual!");
+		SoundEffects.playFight();
+	}
+
 	// zoom
 	public void toggleZoom() {
 		zoomedOut = !zoomedOut;

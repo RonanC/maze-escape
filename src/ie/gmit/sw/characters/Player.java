@@ -4,41 +4,30 @@ import java.awt.*;
 
 import javax.swing.ImageIcon;
 
-public class Player {
-	private int tileDim;
-	private int tileX, tileY;
-
+public class Player extends Character{
 	private Image player;
 	private Image player_walk;
 	private Image player_walk2;
 	private Image player_win;
 	
-	public Player(int tileDim) {
+	public Player(int tileDim, int tileX, int tileY) {
 		this.tileDim = tileDim;
 		
 		// stand
-		player = createImage("hero_stand.png");
+		player = createImage("hero/hero_stand.png");
 		
 		// walk
-		player_walk = createImage("hero_walk.png");
+		player_walk = createImage("hero/hero_walk.png");
 		
 		// walk_2
-		player_walk2 = createImage("hero_walk_2.png");
+		player_walk2 = createImage("hero/hero_walk_2.png");
 		
 		// win
-		player_win = createImage("hero_happy.png");
+		player_win = createImage("hero/hero_happy.png");
 		
 		// // start position
 		// top left (1 in)
-		tileX = 1;
-		tileY = 1;
-	}
-	
-	private Image createImage(String tileName) {
-		ImageIcon img = new ImageIcon("resources/img/hero/" + tileName); // get imageicon
-		Image image = img.getImage(); // transform it into an image
-		Image scaledImg = image.getScaledInstance(tileDim, tileDim,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-		return scaledImg;
+		setPos(tileX, tileY);
 	}
 	
 	public Image getPlayer(){
@@ -55,32 +44,5 @@ public class Player {
 	
 	public Image getPlayerWin(){
 		return player_win;
-	}
-	
-	public void move(int dx, int dy){
-		// x negative go left, positive go right
-		// bigger number means you move faster
-		// it will move tile by tile
-		
-		tileX += dx;
-		tileY += dy;
-	}
-	
-	// getters
-	public int getTileX() {
-		return tileX;
-	}
-
-	public int getTileY() {
-		return tileY;
-	}
-	
-	// setters
-	public void setTileX(int tileX) {
-		this.tileX = tileX;
-	}
-
-	public void setTileY(int tileY) {
-		this.tileY = tileY;
 	}
 }

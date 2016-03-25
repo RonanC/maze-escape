@@ -58,6 +58,7 @@ public class Board extends JPanel implements ActionListener {
 	// private Enemy enemy;
 	private ArrayList<Enemy> enemyList;
 	private EnemyBrain enemyBrain;
+	private boolean enemySpawned;
 
 	// set game up
 	public Board(int mazeDim, int tileDim) {
@@ -69,6 +70,20 @@ public class Board extends JPanel implements ActionListener {
 
 		timer = new Timer(frameRate, this); // action performed every 25 Ms
 		timer.start();
+	}
+	
+	public void messageInit(){
+		msgWin = "You found the teleportation potion!\n\n\n";
+		msgWin += "*glug glug glug*\n\n";
+		msgWin += "*POOF*\n\n\n";
+		msgWin += "With a puff of smoke you vanish from the maze...";
+		msgStart = "You are falsey imprisoned by the evil king\n";
+		msgStart += "to endlessly wander the prison maze.\n\n";
+		msgStart += "There are myths of a wizard who once walked these lonesome halls.\n\n";
+		msgStart += "Legend says he left behind a potion which can free you of this place.\n\n";
+		msgStart += "\n\nPress the 'Enter' key to begin your quest.\n\n";
+		msgStart += "\n\n\n\nControls:\tWASD";
+		fontGen = new Font("Serif", Font.BOLD, mazeDim * 2);
 	}
 
 	// initialization variables
@@ -90,17 +105,7 @@ public class Board extends JPanel implements ActionListener {
 		winDur = 8000;
 
 		// message init
-		msgWin = "You found the teleportation potion!\n\n\n";
-		msgWin += "*glug glug glug*\n\n";
-		msgWin += "*POOF*\n\n\n";
-		msgWin += "With a puff of smoke you vanish from the maze...";
-		msgStart = "You are falsey imprisoned by the evil king\n";
-		msgStart += "to endlessly wander the prison maze.\n\n";
-		msgStart += "There are myths of a wizard who once walked these lonesome halls.\n\n";
-		msgStart += "Legend says he left behind a potion which can free you of this place.\n\n";
-		msgStart += "\n\nPress the 'Enter' key to begin your quest.\n\n";
-		msgStart += "\n\n\n\nControls:\tWASD";
-		fontGen = new Font("Serif", Font.BOLD, mazeDim * 2);
+		messageInit();
 
 		// additionals
 		zoomedOut = false;
@@ -111,148 +116,26 @@ public class Board extends JPanel implements ActionListener {
 
 		// enemy
 		enemyList = new ArrayList<Enemy>();
-		for (int i = 0; i < 5; i++) {
-			enemyList.add(new Enemy(map));
-		}
+//		spawnEnemies(false);
 		enemyBrain = new EnemyBrain(map, enemyList, player);
-
+		enemySpawned = false;
 		// old enemy
 		// enemy = new Enemy(tileDim, 7, 7);
 		// enemyBrain = new EnemyBrain(map, enemy, player);
 	}
-
-	// gets called a certain frames per second
-	// check if won
-	public void actionPerformed(ActionEvent e) {
-		int timeElap = getTime() - setWin;
-
-		// resets game
-		if (haveWon && timeElap > winDur) { // n seconds of winning!
-			// SoundEffects.playWin();
-			System.out.println("Look for the magic potion.");
-			haveWon = false;
-			startDone = false;
-			player.setTileX(1);
-			player.setTileY(1);
-			playerDraw.setPlayerLookH('r');
-
-			// enemy
-			// TODO: change to random (let the brain reset)
-			// for (Enemy enemyItem : enemyList) {
-			// enemyItem.setPos(7, 7);
-			enemyBrain.resetAllPos();
-			// }
-			// enemy.setTileX(7);
-			// enemy.setTileY(7);
-
-			//
-			map.reset();
+	
+	public void spawnEnemies(boolean kill){
+		if(kill){
+			enemyList.clear();
 		}
 
-		repaint();
+		for (int i = 0; i < 5; i++) {
+			enemyList.add(new Enemy(map));
+		}
+		enemySpawned = true;
+		enemyBrain.spawn();
 	}
 
-	// paint map a certain frames per second
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		// this.g = g;
-
-		if (!haveWon && startDone) {
-			int animHelperDur = 2000;
-			int animGoalDur = 1000;
-			int animSwordDur = 3000;
-			int animBombDur = 3000;
-
-			for (int y = 0; y < mazeDim; y++) {// col one
-				for (int x = 0; x < mazeDim; x++) { // fill row
-					String element = map.getPosElement(x, y);
-
-					// tiles
-					if (element.equals("w")) { // wall
-						g.drawImage(map.getWall(), x * tileDim, y * tileDim, null);
-					} else if (element.equals("f")) { // floor
-						// using default background color
-						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
-					} else {
-						g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
-
-						// items
-						// inner if is for flipping the image (basic animation)
-						if (element.equals("g")) { // goal
-							if (getTime() % animGoalDur * 2 > animGoalDur) {
-								g.drawImage(map.getGoal(), x * tileDim, y * tileDim, null);
-							} else {
-								g.drawImage(map.getGoal(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
-							}
-						} else if (element.equals("h")) { // helper
-							if (getTime() % animHelperDur * 2 > animHelperDur) {
-								g.drawImage(map.getHelper(), x * tileDim, y * tileDim, null);
-							} else {
-								g.drawImage(map.getHelper(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
-							}
-						} else if (element.equals("s")) { // sword
-							if (getTime() % animSwordDur * 2 > animSwordDur) {
-								g.drawImage(map.getSword(), x * tileDim, y * tileDim, null);
-							} else {
-								g.drawImage(map.getSword(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
-							}
-						} else if (element.equals("b")) { // bomb
-							if (getTime() % animBombDur * 2 > animBombDur) {
-								g.drawImage(map.getBomb(), x * tileDim, y * tileDim, null);
-							} else {
-								g.drawImage(map.getBomb(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
-							}
-						}
-					}
-
-				}
-			}
-			// draw strings
-		} else if (!startDone) {
-			g.setColor(Color.CYAN);
-			g.setFont(fontGen);
-			drawString(g, msgStart, relativeDim / 2, relativeDim / 7);
-		} else if (haveWon) {
-			g.setColor(Color.CYAN);
-			g.setFont(fontGen);
-			drawString(g, msgWin, relativeDim / 2, relativeDim / 7);
-		}
-
-		// draw player
-		// draw below items
-		int timeElap = getTime() - setWalk;
-		if (timeElap < walkDur) {
-			playerDraw.walk(g);
-		} else if (haveWon) {
-			playerDraw.win(g);
-		} else if (playerDraw.getPlayerLookH() == 'l') {
-			playerDraw.lookLeft(g);
-		} else if (playerDraw.getPlayerLookH() == 'r') {
-			playerDraw.lookRight(g);
-		}
-
-		// draw enemy
-		// TODO: brain stuff
-		int animEnemyDur = 1000;
-		for (Enemy enemyItem : enemyList) {
-			if (getTime() % animEnemyDur * 2 > animEnemyDur) {
-				g.drawImage(enemyItem.getEnemy(), enemyItem.getTileX() * tileDim + tileDim,
-						enemyItem.getTileY() * tileDim, -tileDim, tileDim, null);
-			} else {
-				g.drawImage(enemyItem.getEnemy2(), (enemyItem.getTileX() * tileDim + tileDim),
-						enemyItem.getTileY() * tileDim, -tileDim, tileDim, null);
-			}
-
-		}
-
-	}
-
-	// draws multi-line string with correct spacing
-	void drawString(Graphics g, String text, int x, int y) {
-		for (String line : text.split("\n"))
-			g.drawString(line, x - (g.getFontMetrics().stringWidth(line) / 2), y += g.getFontMetrics().getHeight());
-	}
 
 	// get time in millis
 	public static int getTime() {
@@ -260,7 +143,28 @@ public class Board extends JPanel implements ActionListener {
 		long durationInMs = TimeUnit.MILLISECONDS.convert(delayNS, TimeUnit.NANOSECONDS);
 		return (int) durationInMs;
 	}
+	
+	// // additional
+	public void fight() {
+		System.out.println("Dual!");
+		SoundEffects.playPlayerAttack();
+	}
 
+	public void checkFight() {
+		for (Enemy enemyItem : enemyList) {
+			if (player.getPos().equals(enemyItem.getPos())) {
+				fight();
+			}
+		}
+
+	}
+
+	// zoom
+	public void toggleZoom() {
+		zoomedOut = !zoomedOut;
+	}
+
+	// KEY PRESS
 	// controls
 	public class AcLis extends KeyAdapter {
 		public void keyPressed(KeyEvent e) {
@@ -268,6 +172,7 @@ public class Board extends JPanel implements ActionListener {
 
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				startDone = true;
+				spawnEnemies(false);
 			}
 
 			if (!haveWon && startDone) {
@@ -343,26 +248,150 @@ public class Board extends JPanel implements ActionListener {
 			setWin = getTime();
 			haveWon = true;
 			SoundEffects.playGameOver();
+			enemyList.clear();
 		}
 	}
+	
+	// // ACTION PERFORMED
+	// gets called a certain frames per second
+		// check if won
+		public void actionPerformed(ActionEvent e) {
+//			
+//			if(startDone && !enemySpawned){
+////				enemyBrain = new EnemyBrain(map, enemyList, player);
+//				enemySpawned = true;
+//			}
+			
+			int timeElap = getTime() - setWin;
 
-	// // additional
-	public void fight() {
-		System.out.println("Dual!");
-		SoundEffects.playPlayerAttack();
-	}
+			// resets game
+			if (haveWon && timeElap > winDur) { // n seconds of winning!
+				// SoundEffects.playWin();
+				System.out.println("Look for the magic potion.");
+				haveWon = false;
+				startDone = false;
+				player.setTileX(1);
+				player.setTileY(1);
+				playerDraw.setPlayerLookH('r');
+				
+				// enemy
+				// TODO: change to random (let the brain reset)
+				// for (Enemy enemyItem : enemyList) {
+				// enemyItem.setPos(7, 7);
+			
+				enemySpawned = false;
+				enemyBrain.resetAllPos();
+				// }
+				// enemy.setTileX(7);
+				// enemy.setTileY(7);
 
-	public void checkFight() {
-		for (Enemy enemyItem : enemyList) {
-			if (player.getPos().equals(enemyItem.getPos())) {
-				fight();
+				//
+				map.reset();
+			}
+
+			repaint();
+		}
+	
+	// // DRAWING
+	// paint map a certain frames per second
+		@Override
+		public void paint(Graphics g) {
+			super.paint(g);
+			// this.g = g;
+
+			if (!haveWon && startDone) {
+				int animHelperDur = 2000;
+				int animGoalDur = 1000;
+				int animSwordDur = 3000;
+				int animBombDur = 3000;
+
+				for (int y = 0; y < mazeDim; y++) {// col one
+					for (int x = 0; x < mazeDim; x++) { // fill row
+						String element = map.getPosElement(x, y);
+
+						// tiles
+						if (element.equals("w")) { // wall
+							g.drawImage(map.getWall(), x * tileDim, y * tileDim, null);
+						} else if (element.equals("f")) { // floor
+							// using default background color
+							g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
+						} else {
+							g.drawImage(map.getFloor(), x * tileDim, y * tileDim, null);
+
+							// items
+							// inner if is for flipping the image (basic animation)
+							if (element.equals("g")) { // goal
+								if (getTime() % animGoalDur * 2 > animGoalDur) {
+									g.drawImage(map.getGoal(), x * tileDim, y * tileDim, null);
+								} else {
+									g.drawImage(map.getGoal(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+								}
+							} else if (element.equals("h")) { // helper
+								if (getTime() % animHelperDur * 2 > animHelperDur) {
+									g.drawImage(map.getHelper(), x * tileDim, y * tileDim, null);
+								} else {
+									g.drawImage(map.getHelper(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+								}
+							} else if (element.equals("s")) { // sword
+								if (getTime() % animSwordDur * 2 > animSwordDur) {
+									g.drawImage(map.getSword(), x * tileDim, y * tileDim, null);
+								} else {
+									g.drawImage(map.getSword(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+								}
+							} else if (element.equals("b")) { // bomb
+								if (getTime() % animBombDur * 2 > animBombDur) {
+									g.drawImage(map.getBomb(), x * tileDim, y * tileDim, null);
+								} else {
+									g.drawImage(map.getBomb(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+								}
+							}
+						}
+
+					}
+				}
+				// draw strings
+			} else if (!startDone) {
+				g.setColor(Color.CYAN);
+				g.setFont(fontGen);
+				drawString(g, msgStart, relativeDim / 2, relativeDim / 7);
+			} else if (haveWon) {
+				g.setColor(Color.CYAN);
+				g.setFont(fontGen);
+				drawString(g, msgWin, relativeDim / 2, relativeDim / 7);
+			}
+
+			// draw player
+			// draw below items
+			int timeElap = getTime() - setWalk;
+			if (timeElap < walkDur) {
+				playerDraw.walk(g);
+			} else if (haveWon) {
+				playerDraw.win(g);
+			} else if (playerDraw.getPlayerLookH() == 'l') {
+				playerDraw.lookLeft(g);
+			} else if (playerDraw.getPlayerLookH() == 'r') {
+				playerDraw.lookRight(g);
+			}
+
+			// draw enemy
+			if (startDone) {
+				int animEnemyDur = 1000;
+				for (Enemy enemyItem : enemyList) {
+					if (getTime() % animEnemyDur * 2 > animEnemyDur) {
+						g.drawImage(enemyItem.getEnemy(), enemyItem.getTileX() * tileDim + tileDim,
+								enemyItem.getTileY() * tileDim, -tileDim, tileDim, null);
+					} else {
+						g.drawImage(enemyItem.getEnemy2(), (enemyItem.getTileX() * tileDim + tileDim),
+								enemyItem.getTileY() * tileDim, -tileDim, tileDim, null);
+					}
+
+				}
 			}
 		}
 
-	}
-
-	// zoom
-	public void toggleZoom() {
-		zoomedOut = !zoomedOut;
-	}
+		// draws multi-line string with correct spacing
+		void drawString(Graphics g, String text, int x, int y) {
+			for (String line : text.split("\n"))
+				g.drawString(line, x - (g.getFontMetrics().stringWidth(line) / 2), y += g.getFontMetrics().getHeight());
+		}
 }

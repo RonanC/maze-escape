@@ -20,6 +20,7 @@ public class SoundEffects {
 			public void run() {
 				try {
 					Clip clip = AudioSystem.getClip();
+					
 					AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
 					clip.open(inputStream);
 					clip.start();

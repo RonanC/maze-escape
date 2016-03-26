@@ -22,6 +22,15 @@ public class Maze {
 
 		reset();
 	}
+	
+	public void reset() {
+		// readInMap();
+		genRandomMaze();
+		placeOuterWalls();
+		
+		System.out.println(toString());
+		printMap();
+	}
 
 	private void initMaze(char element) {
 		System.out.println(maze.length);
@@ -131,31 +140,13 @@ public class Maze {
 			for (int col = 0; col < maze[row].length - 1; col++) {
 				// with this turned on there is a chance the goal can not be found,
 				// NB
-				if (col % 2 == 0) { // every second
 					// chooses a random number less then 10
 					int num = (int) (Math.random() * 10);
 
 					// half the time this happens
 					// changes the next column to a floor
 					if (num >= 5 && col + 1 < maze[row].length - 1) { // Change
-																		// West
-						// changes X to floor
-						maze[row][col + 1] = 'f';
-						// continue; // use else instead of continue
-					} else
-					// next we check if to the south is
-					if (row + 1 < maze.length) { // Change south
-						// changes x to floor
-						maze[row + 1][col] = 'f';
-					}
-				}else{
-					// chooses a random number less then 10
-					int num = (int) (Math.random() * 10);
-
-					// half the time this happens
-					// changes the next column to a floor
-					if (num >= 5 && col + 1 < maze[row].length - 1) { // Change
-																		// West
+																		// West (break wall)
 						// changes X to floor
 						maze[row][col + 1] = 'f';
 						// continue; // use else instead of continue
@@ -166,7 +157,6 @@ public class Maze {
 						maze[row + 1][col] = 'f';
 					}
 				}
-			}
 		}
 	}
 
@@ -254,11 +244,7 @@ public class Maze {
 		input.close();
 	}
 
-	public void reset() {
-		// readInMap();
-		genRandomMaze();
-		placeOuterWalls();
-	}
+
 
 	public void setTileItem(int x, int y, char item) {
 		// row by col

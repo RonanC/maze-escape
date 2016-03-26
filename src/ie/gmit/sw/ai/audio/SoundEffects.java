@@ -7,7 +7,7 @@ import java.util.Timer;
 
 import javax.sound.sampled.*;
 
-import ie.gmit.sw.ai.Board;
+import ie.gmit.sw.ai.GameCtrl;
 
 public class SoundEffects {
 	public static synchronized void playSound(final String audioName) {
@@ -63,7 +63,7 @@ public class SoundEffects {
 
 					while (true) {
 //						System.out.println(Board.getTime() % 100000);
-						if (Board.getTime() % 100000 > 99950) {	// song change every 100 seconds
+						if (GameCtrl.getTime() % 100000 > 99950) {	// song change every 100 seconds
 							String url = "resources/audio/" + chooseBg();
 							System.out.println(url);
 							File file = new File(url);

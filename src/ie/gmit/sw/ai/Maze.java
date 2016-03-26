@@ -22,7 +22,6 @@ public class Maze {
 
 		// readInMap();
 		genRandomMaze();
-		System.out.println(toString());
 		placeOuterWalls();
 	}
 
@@ -78,19 +77,19 @@ public class Maze {
 
 		int itemNum = random.nextInt(GameRunner.MAZE_DIM / 5); // 10
 		int helperNum = random.nextInt(GameRunner.MAZE_DIM / 10); // 5
-		int goalNum = random.nextInt(GameRunner.MAZE_DIM / 25); // 2
+		int goalNum = random.nextInt(GameRunner.MAZE_DIM / 50); // 2
 		
-		// 21 items (46x46 maze = 2116 squares)
+		if (goalNum < 1) {
+			goalNum = 1;
+		}
 
 		// items
 		int swordNumber = itemNum; // 10
 		int bombNumber = itemNum; // 10
 
 		// quest items
-		int goalNumber = itemNum; // 4
-		int helperNumber = itemNum; // 12
-
-		System.out.println(toString());
+		int goalNumber = goalNum; // 4
+		int helperNumber = helperNum; // 12
 
 		// items
 		addFeature('s', 'x', itemNum);
@@ -104,7 +103,6 @@ public class Maze {
 		addWalls();
 
 		System.out.println(toString());
-
 	}
 
 	private void addWalls() {

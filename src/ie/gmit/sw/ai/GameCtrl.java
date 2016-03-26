@@ -10,6 +10,7 @@ import ie.gmit.sw.ai.audio.*;
 import ie.gmit.sw.ai.chars.Enemy;
 import ie.gmit.sw.ai.chars.EnemyBrain;
 import ie.gmit.sw.ai.chars.Player;
+import ie.gmit.sw.ai.chars.PlayerImgPainter;
 import ie.gmit.sw.ai.img.ImgCtrl;
 import javafx.application.Application;
 
@@ -19,7 +20,7 @@ import javafx.application.Application;
 // however the enemies are in there own class (with own threads each)
 
 // game scene, drawing and movement
-public class Board extends JPanel implements ActionListener {
+public class GameCtrl extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	// basic game info
@@ -54,7 +55,7 @@ public class Board extends JPanel implements ActionListener {
 	// private Graphics g;
 
 	// refactored
-	private PlayerDraw playerDraw;
+	private PlayerImgPainter playerDraw;
 
 	// enemy
 	// private Enemy enemy;
@@ -77,7 +78,7 @@ public class Board extends JPanel implements ActionListener {
 	private int playerPosYmax;
 
 	// set game up
-	public Board() {
+	public GameCtrl() {
 		this.mazeDim = GameRunner.MAZE_DIM;
 		this.tileDim = GameRunner.TILE_DIM;
 		relativeDim = mazeDim * tileDim;
@@ -134,7 +135,7 @@ public class Board extends JPanel implements ActionListener {
 		SoundEffects.playBGLoop();
 
 		// refactored
-		playerDraw = new PlayerDraw(player, tileDim, 'r', 0);
+		playerDraw = new PlayerImgPainter(player, tileDim, 'r', 0);
 
 		// enemy
 		enemyList = new ArrayList<Enemy>();

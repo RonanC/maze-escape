@@ -1,18 +1,18 @@
-package ie.gmit.sw.ai;
+package ie.gmit.sw.ai.chars;
 
 import java.awt.Graphics;
 
-import ie.gmit.sw.ai.chars.Player;
+import ie.gmit.sw.ai.GameCtrl;
 
 // draws the player in various directions and animations.
-public class PlayerDraw {
+public class PlayerImgPainter {
 	private Player player;
 	private int tileDim;
 	private char playerLookH;
 	private int stepCount;
 	private int zoomInPos;
 
-	public PlayerDraw(Player player, int tileDim, char playerLookH, int stepCount) {
+	public PlayerImgPainter(Player player, int tileDim, char playerLookH, int stepCount) {
 		this.player = player;
 		this.tileDim = tileDim;
 		this.playerLookH = playerLookH;
@@ -89,13 +89,13 @@ public class PlayerDraw {
 	// win draw
 	public void win(Graphics g) {
 		if (getPlayerLookH() == 'l') {
-			if (Board.getTime() % 1000 > 0 && Board.getTime() % 1000 < 500) {
+			if (GameCtrl.getTime() % 1000 > 0 && GameCtrl.getTime() % 1000 < 500) {
 				g.drawImage(player.getPlayerWin(), zoomInPos + tileDim, zoomInPos, -tileDim, tileDim, null);
 			} else {
 				g.drawImage(player.getPlayer(), zoomInPos + tileDim, zoomInPos, -tileDim, tileDim, null);
 			}
 		} else if (getPlayerLookH() == 'r') {
-			if (Board.getTime() % 1000 > 0 && Board.getTime() % 1000 < 500) {
+			if (GameCtrl.getTime() % 1000 > 0 && GameCtrl.getTime() % 1000 < 500) {
 				g.drawImage(player.getPlayerWin(), zoomInPos, zoomInPos, tileDim, tileDim, null);
 			} else {
 				g.drawImage(player.getPlayer(), zoomInPos, zoomInPos, tileDim, tileDim, null);

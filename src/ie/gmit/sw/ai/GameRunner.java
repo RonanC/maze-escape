@@ -29,7 +29,7 @@ public class GameRunner {
 		JFrame f = new JFrame();
 		f.setResizable(false);
 		f.setTitle("Maze Escape");
-		f.add(new Board());
+		f.add(new GameCtrl());
 		f.setSize(SCREEN_DIM, SCREEN_DIM + titleHeight + infoBar);	//  + infoBar
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);

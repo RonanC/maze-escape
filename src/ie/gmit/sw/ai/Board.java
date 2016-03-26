@@ -92,19 +92,25 @@ public class Board extends JPanel implements ActionListener {
 		msgWin = "You found the teleportation potion!\n\n\n";
 		msgWin += "*glug glug glug*\n\n";
 		msgWin += "*POOF*\n\n\n";
-		msgWin += "With a puff of smoke you vanish from the maze...";
+		msgWin += "\n\n\n\n\n\nWith a puff of smoke\nyou vanish from the maze...";
+		
 		msgStart = "You are falsey imprisoned by the evil king\n";
 		msgStart += "to endlessly wander the prison maze.\n\n";
-		msgStart += "There are myths of a wizard who once walked these lonesome halls.\n\n";
-		msgStart += "Legend says he left behind a potion which can free you of this place.\n\n";
-		msgStart += "\n\nPress the 'Enter' key to begin your quest.\n\n";
-		msgStart += "\n\n\n\nMovement:\tWASD";
-		msgStart += "\n\nZoom:\tZ";
-		int fontSize = (int) (GameRunner.TILE_DIM / 1.5); // works at 64 tile
-															// size (and all
-															// maze sizes)
-		fontSize *= GameRunner.TILE_DIM / 2;
+		msgStart += "There are myths of a wizard\nwho once walked these lonesome halls.\n\n";
+		msgStart += "Legend says he left behind a potion\nwhich can free you of this place.\n\n";
+		msgStart += "\n\n\nPress the 'Enter' key to begin your quest.\n\n";
+		msgStart += "\n\nMovement:\tWASD";
+		msgStart += "\nZoom:\tZ";
+		// int fontSize = (int) (GameRunner.TILE_DIM / 1.5); // works at 64 tile
+		// // size (and all
+		// // maze sizes)
+		// fontSize *= GameRunner.TILE_DIM / 2;
 
+		// zoomed in:
+//		int fontSize = (int) (GameRunner.TILE_DIM / 1.5);
+//		fontSize *= GameRunner.TILE_DIM / 2; // suppose to be MAZE_DIM
+		
+		int fontSize = 16;
 		fontGen = new Font("Serif", Font.BOLD, fontSize);
 	}
 
@@ -207,7 +213,7 @@ public class Board extends JPanel implements ActionListener {
 				toggleZoom();
 			}
 
-			if (!haveWon && startDone) {
+			if (!haveWon && startDone && !zoomedOut) {
 				keycode = e.getKeyCode();
 			}
 
@@ -366,15 +372,15 @@ public class Board extends JPanel implements ActionListener {
 					playerPosYmax = GameRunner.MAZE_DIM;
 				}
 
-//				System.out.print("playerPosX: " + playerPosX + "\t");
-//				System.out.println("playerPosY: " + playerPosY);
-//
-//				System.out.print("playerPosXmin: " + playerPosXmin + "\t");
-//				System.out.println("playerPosYmin: " + playerPosYmin);
-//
-//				System.out.print("playerPosXmax: " + playerPosXmax + "\t");
-//				System.out.println("playerPosYmax: " + playerPosYmax);
-				
+				// System.out.print("playerPosX: " + playerPosX + "\t");
+				// System.out.println("playerPosY: " + playerPosY);
+				//
+				// System.out.print("playerPosXmin: " + playerPosXmin + "\t");
+				// System.out.println("playerPosYmin: " + playerPosYmin);
+				//
+				// System.out.print("playerPosXmax: " + playerPosXmax + "\t");
+				// System.out.println("playerPosYmax: " + playerPosYmax);
+
 				int yCount = -1;
 				// this will run 5 times
 				for (int y = playerPosYmin; y < playerPosYmax; y++) {// col one
@@ -383,12 +389,12 @@ public class Board extends JPanel implements ActionListener {
 					// this will run 5 times
 					for (int x = playerPosXmin; x < playerPosXmax; x++) { // fill
 						xCount++;
-						// get element													// row
+						// get element // row
 						String element = map.getPosElement(x, y);
 
 						// now we need to draw it relative to the view window.
 						// always have the center
-						
+
 						drawTiles(g, yCount, xCount, element);
 
 						drawEnemiesInView(g);
@@ -400,11 +406,14 @@ public class Board extends JPanel implements ActionListener {
 			} else if (!startDone) {
 				g.setColor(Color.CYAN);
 				g.setFont(fontGen);
-				drawString(g, msgStart, relativeDim / 2, relativeDim / 7);
+				drawString(g, msgStart, GameRunner.SCREEN_DIM / 2, GameRunner.SCREEN_DIM / 30); // was relative dim
+
+//				drawString(g, msgStart, (GameRunner.VIEW_DIM * GameRunner.TILE_DIM) / 2, (GameRunner.VIEW_DIM * GameRunner.TILE_DIM) / 7); // was relative dim
 			} else if (haveWon) {
 				g.setColor(Color.CYAN);
 				g.setFont(fontGen);
-				drawString(g, msgWin, relativeDim / 2, relativeDim / 7);
+				drawString(g, msgWin, GameRunner.SCREEN_DIM / 2, GameRunner.SCREEN_DIM / 30);
+//				drawString(g, msgWin, (GameRunner.VIEW_DIM * GameRunner.TILE_DIM) / 2, (GameRunner.VIEW_DIM * GameRunner.TILE_DIM) / 7);
 			}
 
 			drawPlayer(g);
@@ -417,7 +426,7 @@ public class Board extends JPanel implements ActionListener {
 					String element = map.getPosElement(x, y);
 
 					int zoomDim = GameRunner.ZOOM_DIM;
-					
+
 					// tiles
 					if (element.equals("w")) { // wall
 						g.setColor(Color.DARK_GRAY);
@@ -452,16 +461,18 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
-//	private void drawEnemy(Graphics g, int animEnemyDur, Enemy enemy) {
-//		if (getTime() % animEnemyDur * 2 > animEnemyDur) {
-//			g.drawImage(enemy.getEnemy(), enemy.getTileX() * tileDim + tileDim, enemy.getTileY() * tileDim, -tileDim,
-//					tileDim, null);
-//		} else {
-//			g.drawImage(enemy.getEnemy2(), (enemy.getTileX() * tileDim + tileDim), enemy.getTileY() * tileDim, -tileDim,
-//					tileDim, null);
-//		}
-//	}
-	
+	// private void drawEnemy(Graphics g, int animEnemyDur, Enemy enemy) {
+	// if (getTime() % animEnemyDur * 2 > animEnemyDur) {
+	// g.drawImage(enemy.getEnemy(), enemy.getTileX() * tileDim + tileDim,
+	// enemy.getTileY() * tileDim, -tileDim,
+	// tileDim, null);
+	// } else {
+	// g.drawImage(enemy.getEnemy2(), (enemy.getTileX() * tileDim + tileDim),
+	// enemy.getTileY() * tileDim, -tileDim,
+	// tileDim, null);
+	// }
+	// }
+
 	// relative to the player
 	// we know this guy is visible to the player
 	// if we take his x away from the players we will have the offset
@@ -470,28 +481,26 @@ public class Board extends JPanel implements ActionListener {
 		int playerY = player.getTileY();
 		int enemyX = enemy.getTileX();
 		int enemyY = enemy.getTileY();
-		
+
 		// if player at 8 and spider at 10 then we want spider at +2
 		// if player at 8 and spider at 6 then we want spider at -2
 		// therefore spider - player = offset
-		
+
 		int playerZoomed = 2; // center (out of 5, with index 0)
-		
+
 		int offsetX = enemyX - playerX;
 		int offsetY = enemyY - playerY;
-		
+
 		int newEnX = playerZoomed + offsetX;
 		int newEnY = playerZoomed + offsetY;
-		
+
 		newEnX *= tileDim; // resize
 		newEnY *= tileDim;
-		
+
 		if (getTime() % animEnemyDur * 2 > animEnemyDur) {
-			g.drawImage(enemy.getEnemy(), newEnX + tileDim, newEnY, -tileDim,
-					tileDim, null);
+			g.drawImage(enemy.getEnemy(), newEnX + tileDim, newEnY, -tileDim, tileDim, null);
 		} else {
-			g.drawImage(enemy.getEnemy2(), newEnX + tileDim, newEnY, -tileDim,
-					tileDim, null);
+			g.drawImage(enemy.getEnemy2(), newEnX + tileDim, newEnY, -tileDim, tileDim, null);
 		}
 	}
 

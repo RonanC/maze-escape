@@ -7,7 +7,7 @@ public class GameRunner {
 	public static int TILE_DIM;
 	public static int VIEW_DIM;
 	public static int ZOOM_DIM;
-	private int screenDim;
+	public static int SCREEN_DIM;
 	private int titleHeight;
 	private int infoBar;
 	
@@ -22,7 +22,7 @@ public class GameRunner {
 		ZOOM_DIM = 16;
 //		screenDim = MAZE_DIM * TILE_DIM;// full screen
 		// plus an info bar
-		screenDim = TILE_DIM * VIEW_DIM;
+		SCREEN_DIM = TILE_DIM * VIEW_DIM;
 		infoBar = TILE_DIM;
 		titleHeight = 22;
 		
@@ -30,7 +30,7 @@ public class GameRunner {
 		f.setResizable(false);
 		f.setTitle("Maze Escape");
 		f.add(new Board());
-		f.setSize(screenDim, screenDim + titleHeight);	//  + infoBar
+		f.setSize(SCREEN_DIM, SCREEN_DIM + titleHeight + infoBar);	//  + infoBar
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

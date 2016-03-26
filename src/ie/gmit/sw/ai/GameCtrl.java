@@ -61,7 +61,6 @@ public class GameCtrl extends JPanel implements ActionListener {
 	// private Enemy enemy;
 	private ArrayList<Enemy> enemyList;
 	private EnemyBrain enemyBrain;
-	private boolean enemySpawned;
 	private int enemyNum;
 
 	// animations
@@ -125,6 +124,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		msgStart += "\n\nMovement:\tWASD";
 		msgStart += "\nMap:\tM";
 		msgStart += "\nReset:\tR";
+		msgStart += "\nQuit:\tESC";
 
 		int fontSize = 16;
 		fontSize = GameRunner.TILE_DIM / 4; // doesn't scale when you change
@@ -166,8 +166,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		// enemy
 		enemyList = new ArrayList<Enemy>();
 		// spawnEnemies(false);
-		enemyBrain = new EnemyBrain(maze, enemyList, player);
-		enemySpawned = false;
+		enemyBrain = new EnemyBrain(maze, enemyList, player, imgCtrl);
 		enemyNum = GameRunner.MAZE_DIM / 2;
 
 		// animations
@@ -187,17 +186,17 @@ public class GameCtrl extends JPanel implements ActionListener {
 		keyDown = false;
 	}
 
-	public void spawnEnemies(boolean kill) {
-		if (kill) {
-			enemyList.clear();
-		}
-
-		for (int i = 0; i < enemyNum; i++) {
-			enemyList.add(new Enemy(maze, imgCtrl));
-		}
-		enemySpawned = true;
-		enemyBrain.spawn();
-	}
+//	public void spawnEnemies(boolean kill) {
+//		if (kill) {
+//			enemyList.clear();
+//		}
+//
+//		for (int i = 0; i < enemyNum; i++) {
+//			enemyList.add(new Enemy(maze, imgCtrl));
+//		}
+//		enemySpawned = true;
+//		enemyBrain.spawn();
+//	}
 
 	// get time in millis
 	public static int getTime() {
@@ -234,7 +233,6 @@ public class GameCtrl extends JPanel implements ActionListener {
 		startDone = false;
 
 		// clear enemies
-		enemySpawned = false;
 		enemyBrain.killAllEnemies();
 
 		// config options
@@ -263,7 +261,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 				if (e.getKeyCode() == KeyEvent.VK_ENTER && startDone == false) {
 					startDone = true;
-					spawnEnemies(false);
+					enemyBrain.createEnemies(enemyNum);
+					enemyBrain.spawn();
 				}
 
 				if (e.getKeyCode() == KeyEvent.VK_M) { // zoom into MAP
@@ -272,6 +271,10 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 				if (e.getKeyCode() == KeyEvent.VK_R) { // reset
 					fullReset();
+				}
+				
+				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) { // reset
+					System.exit(0);
 				}
 
 				// NB

@@ -11,24 +11,40 @@ public class Enemy extends Character {
 	private Image enemy;
 	private Image enemy_2;
 	
-	public Enemy(int tileX, int tileY, Maze map, ImgCtrl imgCtrl) {
-		super(map, imgCtrl);
-		this.tileDim = GameRunner.TILE_DIM;
-		
-		setUpImages();
-		
-		// // start position
-		setPos(tileX, tileY);
-	}
+	// stats
+	private int intelLvl;
+	// nohealth, they either live or die due to a fight
+//	
+//	public Enemy(int tileX, int tileY, Maze map, ImgCtrl imgCtrl, int intelLvl) {
+//		super(map, imgCtrl);
+//		this.tileDim = GameRunner.TILE_DIM;
+//		this.intelLvl = intelLvl;
+//		
+//		setUpImages();
+//		
+//		// // start position
+//		setPos(tileX, tileY);
+//	}
 	
 	public Enemy(Maze map, ImgCtrl imgCtrl) {
 		super(map, imgCtrl);
 		this.tileDim = GameRunner.TILE_DIM;
+		
+		// set intel level at 1
+		this.intelLvl = 1;
 
 		setUpImages();
 		
 		// // start position
 		setPos(7,7);
+	}
+	
+	public void setIntelLvl(int intelLvl){
+		if (intelLvl > 0 && intelLvl <=2) {
+			this.intelLvl = intelLvl;
+		}else{
+			System.out.println("increase max intel level in enemy class");
+		}
 	}
 	
 	public void setUpImages(){

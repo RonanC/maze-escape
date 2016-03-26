@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.Maze;
 import ie.gmit.sw.ai.audio.SoundEffects;
+import ie.gmit.sw.ai.img.ImgCtrl;
 
 public class EnemyBrain extends Thread {
 	private ArrayList<Enemy> enemyList;
@@ -16,13 +17,19 @@ public class EnemyBrain extends Thread {
 	private Timer timer;
 	private Random random;
 	private Player player;
+	private ImgCtrl imgCtrl;
 
-	public EnemyBrain(Maze map, ArrayList<Enemy> enemyList, Player player) {
+	private boolean enemySpawned;
+	
+	public EnemyBrain(Maze map, ArrayList<Enemy> enemyList, Player player, ImgCtrl imgCtrl) {
+		this.imgCtrl = imgCtrl;
 		this.player = player;
 		this.map = map;
 		this.enemyList = enemyList;
 		random = new Random();
 		timer = new Timer();
+		
+		enemySpawned = false;
 	}
 
 	public void spawn() {
@@ -38,6 +45,24 @@ public class EnemyBrain extends Thread {
 			timer.schedule(enemyTask, 0, 1000);
 		}
 	}
+	
+	public void createEnemies(int enemyNum) {
+		killAllEnemies();
+
+		for (int i = 0; i < enemyNum; i++) {
+			enemyList.add(new Enemy(map, imgCtrl));
+		}
+		enemySpawned = true;
+		spawn();
+	}
+	
+	public boolean getEnemySpawned(){
+		return enemySpawned;
+	}
+	
+	public void setEnemySpawned(boolean spawned){
+		enemySpawned = spawned;
+	}
 
 	public void resetAllPos() {
 		for (Enemy enemy : enemyList) {
@@ -47,6 +72,7 @@ public class EnemyBrain extends Thread {
 	
 	public void killAllEnemies(){
 		enemyList.clear();
+		setEnemySpawned(false);
 	}
 
 	public void randomPos(Enemy enemy) {
@@ -67,33 +93,6 @@ public class EnemyBrain extends Thread {
 			}
 		}
 	}
-
-	// public EnemyBrain(Mapper map, Enemy enemy, Player player) {
-	// timer = new Timer();
-	//
-	// // lvl1 enemy
-	// // placed somewhere random
-	// Random random = new Random();
-	// int x = random.nextInt(mazeDim);
-	// int y = random.nextInt(mazeDim);
-	// boolean notPlaced = true;
-	// while (notPlaced) {
-	// x = random.nextInt(mazeDim);
-	// y = random.nextInt(mazeDim);
-	// if(map.getPosElement(x, y) != "w"){
-	// enemy.setPos(x, y);
-	// notPlaced = false;
-	// System.out.println("placing");
-	// }
-	// }
-	// // create enemy tasks
-	// for (Enemy enemyItem : enemyList) {
-	//
-	// }
-	// EnemyTask enemyTask = new EnemyTask(map, enemy, player);
-	// // schedule the start for every second
-	// timer.schedule(enemyTask, 0, 1000);
-	// }
 
 	// Single enemy
 	public class EnemyTask extends TimerTask {

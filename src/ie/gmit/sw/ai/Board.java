@@ -62,6 +62,20 @@ public class Board extends JPanel implements ActionListener {
 	private EnemyBrain enemyBrain;
 	private boolean enemySpawned;
 
+	// animations
+	private int animHelperDur;
+	private int animGoalDur;
+	private int animSwordDur;
+	private int animBombDur;
+
+	// player pos
+	private int playerPosX;
+	private int playerPosY;
+	private int playerPosXmin;
+	private int playerPosXmax;
+	private int playerPosYmin;
+	private int playerPosYmax;
+
 	// set game up
 	public Board() {
 		this.mazeDim = GameRunner.MAZE_DIM;
@@ -131,6 +145,12 @@ public class Board extends JPanel implements ActionListener {
 		// old enemy
 		// enemy = new Enemy(tileDim, 7, 7);
 		// enemyBrain = new EnemyBrain(map, enemy, player);
+
+		// animations
+		animHelperDur = 2000;
+		animGoalDur = 1000;
+		animSwordDur = 3000;
+		animBombDur = 3000;
 	}
 
 	public void spawnEnemies(boolean kill) {
@@ -182,7 +202,7 @@ public class Board extends JPanel implements ActionListener {
 				startDone = true;
 				spawnEnemies(false);
 			}
-			
+
 			if (e.getKeyCode() == KeyEvent.VK_Z) {
 				toggleZoom();
 			}
@@ -313,60 +333,59 @@ public class Board extends JPanel implements ActionListener {
 
 		if (!zoomedOut) {
 			if (!haveWon && startDone) {
-				int animHelperDur = 2000;
-				int animGoalDur = 1000;
-				int animSwordDur = 3000;
-				int animBombDur = 3000;
 
-				for (int y = 0; y < mazeDim; y++) {// col one
-					for (int x = 0; x < mazeDim; x++) { // fill row
+				// this draws all
+				// we only want to draw the tiles 2 either side of our player
+				// for (int y = 0; y < mazeDim; y++) {// col one
+				// for (int x = 0; x < mazeDim; x++) { // fill row
+				// String element = map.getPosElement(x, y);
+				//
+				// drawTiles(g, y, x, element);
+				// }
+				// }
+
+				// this draw around player
+				playerPosX = player.getTileX();
+				playerPosY = player.getTileY();
+
+				playerPosXmin = playerPosX - 2;
+				playerPosXmax = playerPosX + 3;
+
+				playerPosYmin = playerPosY - 2;
+				playerPosYmax = playerPosY + 3;
+
+				if (playerPosXmin < 0) {
+					playerPosXmin = 0;
+				} else if (playerPosXmax > GameRunner.MAZE_DIM) {
+					playerPosXmax = GameRunner.MAZE_DIM;
+				}
+
+				if (playerPosYmin < 0) {
+					playerPosYmin = 0;
+				} else if (playerPosYmax > GameRunner.MAZE_DIM) {
+					playerPosYmax = GameRunner.MAZE_DIM;
+				}
+
+//				System.out.print("playerPosX: " + playerPosX + "\t");
+//				System.out.println("playerPosY: " + playerPosY);
+//
+//				System.out.print("playerPosXmin: " + playerPosXmin + "\t");
+//				System.out.println("playerPosYmin: " + playerPosYmin);
+//
+//				System.out.print("playerPosXmax: " + playerPosXmax + "\t");
+//				System.out.println("playerPosYmax: " + playerPosYmax);
+				for (int y = playerPosYmin; y < playerPosYmax; y++) {// col one
+					for (int x = playerPosXmin; x < playerPosXmax; x++) { // fill
+																			// row
 						String element = map.getPosElement(x, y);
 
-						// tiles
-						if (element.equals("w")) { // wall
-							g.drawImage(imgCtrl.getWall(), x * tileDim, y * tileDim, null);
-						} else if (element.equals("f")) { // floor
-							// using default background color
-							g.drawImage(imgCtrl.getFloor(), x * tileDim, y * tileDim, null);
-						} else {
-							g.drawImage(imgCtrl.getFloor(), x * tileDim, y * tileDim, null);
+						drawTiles(g, y, x, element);
 
-							// items
-							// inner if is for flipping the image (basic
-							// animation)
-							if (element.equals("g")) { // goal
-								if (getTime() % animGoalDur * 2 > animGoalDur) {
-									g.drawImage(imgCtrl.getGoal(), x * tileDim, y * tileDim, null);
-								} else {
-									g.drawImage(imgCtrl.getGoal(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim,
-											null);
-								}
-							} else if (element.equals("h")) { // helper
-								if (getTime() % animHelperDur * 2 > animHelperDur) {
-									g.drawImage(imgCtrl.getHelper(), x * tileDim, y * tileDim, null);
-								} else {
-									g.drawImage(imgCtrl.getHelper(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim,
-											null);
-								}
-							} else if (element.equals("s")) { // sword
-								if (getTime() % animSwordDur * 2 > animSwordDur) {
-									g.drawImage(imgCtrl.getSword(), x * tileDim, y * tileDim, null);
-								} else {
-									g.drawImage(imgCtrl.getSword(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim,
-											null);
-								}
-							} else if (element.equals("b")) { // bomb
-								if (getTime() % animBombDur * 2 > animBombDur) {
-									g.drawImage(imgCtrl.getBomb(), x * tileDim, y * tileDim, null);
-								} else {
-									g.drawImage(imgCtrl.getBomb(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim,
-											null);
-								}
-							}
-						}
+						drawEnemiesInView(g);
 
 					}
 				}
+
 				// draw strings
 			} else if (!startDone) {
 				g.setColor(Color.CYAN);
@@ -378,33 +397,9 @@ public class Board extends JPanel implements ActionListener {
 				drawString(g, msgWin, relativeDim / 2, relativeDim / 7);
 			}
 
-			// draw player
-			// draw below items
-			int timeElap = getTime() - setWalk;
-			if (timeElap < walkDur) {
-				playerDraw.walk(g);
-			} else if (haveWon) {
-				playerDraw.win(g);
-			} else if (playerDraw.getPlayerLookH() == 'l') {
-				playerDraw.lookLeft(g);
-			} else if (playerDraw.getPlayerLookH() == 'r') {
-				playerDraw.lookRight(g);
-			}
+			drawPlayer(g);
 
-			// draw enemy
-			if (startDone) {
-				int animEnemyDur = 1000;
-				for (Enemy enemyItem : enemyList) {
-					if (getTime() % animEnemyDur * 2 > animEnemyDur) {
-						g.drawImage(enemyItem.getEnemy(), enemyItem.getTileX() * tileDim + tileDim,
-								enemyItem.getTileY() * tileDim, -tileDim, tileDim, null);
-					} else {
-						g.drawImage(enemyItem.getEnemy2(), (enemyItem.getTileX() * tileDim + tileDim),
-								enemyItem.getTileY() * tileDim, -tileDim, tileDim, null);
-					}
-
-				}
-			}
+			// drawEnemy(g);
 		} // not zoomed out
 		else { // zoomed out
 			for (int y = 0; y < mazeDim; y++) {// col one
@@ -422,14 +417,93 @@ public class Board extends JPanel implements ActionListener {
 						g.setColor(Color.ORANGE);
 						g.fillRect(x * tileDim, y * tileDim, tileDim, tileDim);
 					} else { // floor (with items or whatever)
-//						System.out.print(String.format("%s, %s\t", x, y));
-//						System.out.println(player.getPos());
+						// System.out.print(String.format("%s, %s\t", x, y));
+						// System.out.println(player.getPos());
 						g.setColor(Color.LIGHT_GRAY);
 						g.fillRect(x * tileDim, y * tileDim, tileDim, tileDim);
 					}
 				}
 			}
 		}
+	}
+
+	private void drawEnemiesInView(Graphics g) {
+		// draw enemy if inside view
+		int animEnemyDur = 1000;
+		for (Enemy enemy : enemyList) {
+			int enX = enemy.getTileX();
+			int enY = enemy.getTileY();
+
+			if (enX > playerPosXmin && enX < playerPosXmax && enY > playerPosYmin && enY < playerPosYmax) {
+				drawEnemy(g, animEnemyDur, enemy);
+			}
+		}
+	}
+
+	private void drawEnemy(Graphics g, int animEnemyDur, Enemy enemy) {
+		if (getTime() % animEnemyDur * 2 > animEnemyDur) {
+			g.drawImage(enemy.getEnemy(), enemy.getTileX() * tileDim + tileDim, enemy.getTileY() * tileDim, -tileDim,
+					tileDim, null);
+		} else {
+			g.drawImage(enemy.getEnemy2(), (enemy.getTileX() * tileDim + tileDim), enemy.getTileY() * tileDim, -tileDim,
+					tileDim, null);
+		}
+	}
+
+	private void drawPlayer(Graphics g) {
+		// draw player
+		// draw below items
+		int timeElap = getTime() - setWalk;
+		if (timeElap < walkDur) {
+			playerDraw.walk(g);
+		} else if (haveWon) {
+			playerDraw.win(g);
+		} else if (playerDraw.getPlayerLookH() == 'l') {
+			playerDraw.lookLeft(g);
+		} else if (playerDraw.getPlayerLookH() == 'r') {
+			playerDraw.lookRight(g);
+		}
+	}
+
+	private void drawTiles(Graphics g, int y, int x, String element) {
+		// tiles
+		if (element.equals("w")) { // wall
+			g.drawImage(imgCtrl.getWall(), x * tileDim, y * tileDim, null);
+		} else if (element.equals("f")) { // floor
+			// using default background color
+			g.drawImage(imgCtrl.getFloor(), x * tileDim, y * tileDim, null);
+		} else {
+			g.drawImage(imgCtrl.getFloor(), x * tileDim, y * tileDim, null);
+
+			// items
+			// inner if is for flipping the image (basic
+			// animation)
+			if (element.equals("g")) { // goal
+				if (getTime() % animGoalDur * 2 > animGoalDur) {
+					g.drawImage(imgCtrl.getGoal(), x * tileDim, y * tileDim, null);
+				} else {
+					g.drawImage(imgCtrl.getGoal(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+				}
+			} else if (element.equals("h")) { // helper
+				if (getTime() % animHelperDur * 2 > animHelperDur) {
+					g.drawImage(imgCtrl.getHelper(), x * tileDim, y * tileDim, null);
+				} else {
+					g.drawImage(imgCtrl.getHelper(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+				}
+			} else if (element.equals("s")) { // sword
+				if (getTime() % animSwordDur * 2 > animSwordDur) {
+					g.drawImage(imgCtrl.getSword(), x * tileDim, y * tileDim, null);
+				} else {
+					g.drawImage(imgCtrl.getSword(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+				}
+			} else if (element.equals("b")) { // bomb
+				if (getTime() % animBombDur * 2 > animBombDur) {
+					g.drawImage(imgCtrl.getBomb(), x * tileDim, y * tileDim, null);
+				} else {
+					g.drawImage(imgCtrl.getBomb(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+				}
+			}
+		} // end of if
 	}
 
 	// draws multi-line string with correct spacing

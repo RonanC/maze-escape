@@ -86,7 +86,7 @@ public class Maze {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out.println("x: " + x + ", y:" + y);
-			printMap();
+//			printMap();
 		}
 
 		return index;

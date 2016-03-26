@@ -101,17 +101,9 @@ public class Board extends JPanel implements ActionListener {
 		msgStart += "\n\n\nPress the 'Enter' key to begin your quest.\n\n";
 		msgStart += "\n\nMovement:\tWASD";
 		msgStart += "\nZoom:\tZ";
-		// int fontSize = (int) (GameRunner.TILE_DIM / 1.5); // works at 64 tile
-		// // size (and all
-		// // maze sizes)
-		// fontSize *= GameRunner.TILE_DIM / 2;
 
-		// zoomed in:
-//		int fontSize = (int) (GameRunner.TILE_DIM / 1.5);
-//		fontSize *= GameRunner.TILE_DIM / 2; // suppose to be MAZE_DIM
-		
 		int fontSize = 16;
-		fontSize = GameRunner.TILE_DIM / 4;
+		fontSize = GameRunner.TILE_DIM / 4;	// doesn't scale when you change maze dimensions
 		fontGen = new Font("Serif", Font.BOLD, fontSize);
 	}
 
@@ -309,8 +301,7 @@ public class Board extends JPanel implements ActionListener {
 			System.out.println("Look for the magic potion.");
 			haveWon = false;
 			startDone = false;
-			player.setTileX(1);
-			player.setTileY(1);
+			player.resetPos();
 			playerDraw.setPlayerLookH('r');
 
 			// enemy
@@ -340,17 +331,6 @@ public class Board extends JPanel implements ActionListener {
 
 		if (!zoomedOut) {
 			if (!haveWon && startDone) {
-
-				// this draws all
-				// we only want to draw the tiles 2 either side of our player
-				// for (int y = 0; y < mazeDim; y++) {// col one
-				// for (int x = 0; x < mazeDim; x++) { // fill row
-				// String element = map.getPosElement(x, y);
-				//
-				// drawTiles(g, y, x, element);
-				// }
-				// }
-
 				// this draw around player
 				playerPosX = player.getTileX();
 				playerPosY = player.getTileY();
@@ -372,15 +352,6 @@ public class Board extends JPanel implements ActionListener {
 				} else if (playerPosYmax > GameRunner.MAZE_DIM) {
 					playerPosYmax = GameRunner.MAZE_DIM;
 				}
-
-				// System.out.print("playerPosX: " + playerPosX + "\t");
-				// System.out.println("playerPosY: " + playerPosY);
-				//
-				// System.out.print("playerPosXmin: " + playerPosXmin + "\t");
-				// System.out.println("playerPosYmin: " + playerPosYmin);
-				//
-				// System.out.print("playerPosXmax: " + playerPosXmax + "\t");
-				// System.out.println("playerPosYmax: " + playerPosYmax);
 
 				int yCount = -1;
 				// this will run 5 times
@@ -469,18 +440,6 @@ public class Board extends JPanel implements ActionListener {
 			}
 		}
 	}
-
-	// private void drawEnemy(Graphics g, int animEnemyDur, Enemy enemy) {
-	// if (getTime() % animEnemyDur * 2 > animEnemyDur) {
-	// g.drawImage(enemy.getEnemy(), enemy.getTileX() * tileDim + tileDim,
-	// enemy.getTileY() * tileDim, -tileDim,
-	// tileDim, null);
-	// } else {
-	// g.drawImage(enemy.getEnemy2(), (enemy.getTileX() * tileDim + tileDim),
-	// enemy.getTileY() * tileDim, -tileDim,
-	// tileDim, null);
-	// }
-	// }
 
 	// relative to the player
 	// we know this guy is visible to the player

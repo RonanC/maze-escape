@@ -6,8 +6,6 @@ import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.Maze;
 import ie.gmit.sw.ai.img.ImgCtrl;
 
-
-
 public class Player extends Character{
 	private Image player;
 	private Image player_walk;
@@ -20,8 +18,11 @@ public class Player extends Character{
 	
 		setUpImages();
 		
-		// // start position
-		// top left (1 in)
+		// start position
+		resetPos();
+	}
+	
+	public void resetPos(){
 		setPos(2, 2);
 	}
 	

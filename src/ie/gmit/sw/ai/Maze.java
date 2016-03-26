@@ -11,11 +11,13 @@ import javax.swing.*;
 public class Maze {
 
 	private Scanner input;
-	private String maze[];
+	private char[][] maze;
 
 	public Maze() {
-		this.maze = new String[GameRunner.MAZE_DIM];
 
+		maze = new char[GameRunner.MAZE_DIM][GameRunner.MAZE_DIM];
+		initMaze();
+		
 		// read in map
 		openFile();
 		readFile();
@@ -31,34 +33,31 @@ public class Maze {
 		}
 	}
 
-	private void readFile() {
-
-		for (int y = 0; y < GameRunner.MAZE_DIM; y++) { // goes through each (14
-														// times)
-			StringBuilder temp = new StringBuilder();
-			try {
-				temp.append(input.next());
-			} catch (Exception e) {
-				// no input
-				for (int j = 0; j < GameRunner.MAZE_DIM; j++) {
-					temp.append('w');
-				}
-				maze[y] = temp.toString();
-			}
-
-			// add walls where there are missing characters
-			if (temp.length() == GameRunner.MAZE_DIM) {
-				maze[y] = temp.toString();
-			} else {
-				int extras = GameRunner.MAZE_DIM - (temp.length());
-//				System.out.println("extras: " + extras);
-				for (int j = 0; j < extras; j++) {
-					temp.append('w');
-				}
-				maze[y] = temp.toString();
-//				printMap();
+	private void initMaze() {
+		System.out.println(maze.length);
+		for (int row = 0; row < maze.length; row++) {
+			for (int col = 0; col < maze[row].length; col++) {
+				maze[row][col] = 'w';
 			}
 		}
+		
+		printMap();
+	}
+
+	private void readFile() {
+
+		// get row first
+		int row = -1;
+		while (input.hasNext()) {
+			row++;
+				String rowStr = input.next();
+
+				// go through each col
+				for (int col = 0; col < rowStr.length(); col++) {
+					char element = rowStr.charAt(col);
+					maze[row][col] = element;
+				}
+			}
 	}
 
 	private void closeFile() {
@@ -71,32 +70,36 @@ public class Maze {
 		closeFile();
 	}
 
-	// set tile item
-	public void setTileItem(int x, int y, char item) {
-		StringBuilder tile = new StringBuilder(maze[y]);
-		tile.setCharAt(x, item);
-		maze[y] = tile.toString();
+	public void setTileItem(int x, int y, char item) {		
+		// row by col
+		maze[y][x] = item;
 	}
 
-	// getters
 	public String getPosElement(int x, int y) {
-		String index = null;
+		char index = 0;
 		try {
-			index = maze[y].substring(x, x + 1);
+			index = maze[y][x];
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out.println("x: " + x + ", y:" + y);
-//			printMap();
+			// printMap();
 		}
-
-		return index;
+		
+		StringBuilder temp = new StringBuilder();
+		temp.append(index);
+		
+		return temp.toString();
 	}
 
 	public void printMap() {
 		StringBuilder strMap = new StringBuilder();
-		for (int i = 0; i < maze.length; i++) {
-			strMap.append(maze[i] + "\n");
+		for (int row = 0; row < maze.length; row++) {
+			for (int col = 0; col < maze[row].length; col++) {
+				strMap.append(maze[row][col]);
+			}
+			strMap.append("\n");
 		}
+		
 		System.out.println(strMap.toString());
 	}
 }

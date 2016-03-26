@@ -16,7 +16,7 @@ public class GameRunner {
 	}
 	
 	public GameRunner() {
-		MAZE_DIM = 20;
+		MAZE_DIM = 50;
 		TILE_DIM = 64 * 2;
 		VIEW_DIM = 5; // 5 * 5
 		ZOOM_DIM = 16;

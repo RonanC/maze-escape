@@ -26,23 +26,18 @@ public class GameRunner {
 
 	public static void init() {
 		f = new JFrame();
+		
 		chooseMazeSize();
 		chooseBGMusicOn();
-
-		// scale of tiles (may throw off font)
-		TILE_DIM = 64 * 2;
-		// others
-		VIEW_DIM = 5; // 5 * 5
-
 		chooseZoomScale();
 		chooseZoomMove();
-
-		// screenDim = MAZE_DIM * TILE_DIM;// full screen
-		// plus an info bar
-		SCREEN_DIM = TILE_DIM * VIEW_DIM;
-		infoBar = TILE_DIM;
+		
+		TILE_DIM = 64 * 2;	// scale of tiles
+		VIEW_DIM = 5; // 5 * 5
+		SCREEN_DIM = TILE_DIM * VIEW_DIM;		// real co-ordinates
+		infoBar = TILE_DIM;// plus an info bar
 		titleHeight = 22;
-
+		
 		frameConfig(f);
 	}
 

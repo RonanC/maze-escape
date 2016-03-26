@@ -28,8 +28,8 @@ public class Maze {
 		genRandomMaze();
 		placeOuterWalls();
 
-		System.out.println(toString());
-		printMap();
+//		System.out.println(toString());
+//		printMap();
 	}
 
 	private void initMaze(char element) {

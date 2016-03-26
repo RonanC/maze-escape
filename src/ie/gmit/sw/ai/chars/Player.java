@@ -13,6 +13,12 @@ public class Player extends Character{
 	private Image player_walk2;
 	private Image player_win;
 	private Random random;
+	private int stepCount;
+	
+	// items
+	private boolean hasSword;
+	private boolean hasBomb;
+	private int health;
 	
 	public Player(Maze map, ImgCtrl imgCtrl) {
 		super(map, imgCtrl);
@@ -24,7 +30,51 @@ public class Player extends Character{
 		
 		// start position
 		resetPos();
+		
+		// set info
+		hasSword = false;
+		hasBomb = false;
+		health = 100;
 	}
+	
+	
+	// health mutators
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
+	}
+	
+	public void incHealth(int incAmount){
+		health += incAmount;
+	}
+	
+	public void decHealth(int decAmount){
+		health -= decAmount;
+	}
+
+
+	// get items
+	public boolean getSwordStatus(){
+		return hasSword;
+	}
+	
+	public boolean getBombStatus(){
+		return hasBomb;
+	}
+	
+	// set items
+	public void setSwordStatus(boolean equip){
+		hasSword = equip;
+	}
+	
+	public void setBombStatus(boolean equip){
+		hasBomb = equip;
+	}
+	
+	
 	
 	public void resetPos(){
 //		setPos(2, 2);
@@ -90,4 +140,15 @@ public class Player extends Character{
 	public Image getPlayerWin(){
 		return player_win;
 	}
+
+	// other mutators
+	public int getStepCount() {
+		return stepCount;
+	}
+	
+	public void incStepCount(){
+		stepCount++;
+	}
+
+	
 }

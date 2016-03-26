@@ -9,14 +9,12 @@ public class PlayerImgPainter {
 	private Player player;
 	private int tileDim;
 	private char playerLookH;
-	private int stepCount;
 	private int zoomInPos;
 
 	public PlayerImgPainter(Player player, int tileDim, char playerLookH, int stepCount) {
 		this.player = player;
 		this.tileDim = tileDim;
 		this.playerLookH = playerLookH;
-		this.stepCount = stepCount;
 		zoomInPos = 2 * tileDim;
 	}
 
@@ -47,13 +45,13 @@ public class PlayerImgPainter {
 	// walk draw
 	public void walk(Graphics g) {
 		if (getPlayerLookH() == 'l') {
-			if (stepCount % 2 == 0) {
+			if (player.getStepCount() % 2 == 0) {
 				g.drawImage(player.getPlayerWalk(), zoomInPos + tileDim, zoomInPos, -tileDim, tileDim, null);
 			} else {
 				g.drawImage(player.getPlayerWalk2(), zoomInPos + tileDim, zoomInPos, -tileDim, tileDim, null);
 			}
 		} else if (getPlayerLookH() == 'r') {
-			if (stepCount % 2 == 0) {
+			if (player.getStepCount() % 2 == 0) {
 				g.drawImage(player.getPlayerWalk(), zoomInPos, zoomInPos, tileDim, tileDim, null);
 			} else {
 				g.drawImage(player.getPlayerWalk2(), zoomInPos, zoomInPos, tileDim, tileDim, null);
@@ -130,7 +128,7 @@ public class PlayerImgPainter {
 
 	// misc
 	public void incStepCount() {
-		stepCount++;
+		player.incStepCount();
 	}
 
 	// mutators

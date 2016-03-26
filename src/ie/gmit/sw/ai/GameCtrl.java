@@ -89,6 +89,15 @@ public class GameCtrl extends JPanel implements ActionListener {
 	// zoomed out view
 	private int zoomDim;
 
+	// colors
+	private Color brown;
+
+	// bag stuff
+	private int gameStartTime;
+	
+	// one key press at a time
+	private boolean keyDown;
+
 	// set game up
 	public GameCtrl() {
 		this.mazeDim = GameRunner.MAZE_DIM;
@@ -114,7 +123,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 		msgStart += "Legend says he left behind a potion\nwhich can free you of this place.\n\n";
 		msgStart += "\n\n\nPress the 'Enter' key to begin your quest.\n\n";
 		msgStart += "\n\nMovement:\tWASD";
-		msgStart += "\nZoom:\tZ";
+		msgStart += "\nMap:\tM";
+		msgStart += "\nReset:\tR";
 
 		int fontSize = 16;
 		fontSize = GameRunner.TILE_DIM / 4; // doesn't scale when you change
@@ -133,7 +143,6 @@ public class GameCtrl extends JPanel implements ActionListener {
 		startDone = false;
 		haveWon = false;
 		setWin = 0; // how long you since you won
-		this.setBackground(Color.BLACK);
 
 		// player init
 		player = new Player(maze, imgCtrl);
@@ -166,6 +175,16 @@ public class GameCtrl extends JPanel implements ActionListener {
 		animGoalDur = 1000;
 		animSwordDur = 3000;
 		animBombDur = 3000;
+
+		// colors
+		// brown = new Color(161,120,41);
+		brown = new Color(99, 66, 19);
+
+		// bag stuff
+		gameStartTime = getTime();
+		
+		// key down
+		keyDown = false;
 	}
 
 	public void spawnEnemies(boolean kill) {
@@ -199,7 +218,6 @@ public class GameCtrl extends JPanel implements ActionListener {
 				fight();
 			}
 		}
-
 	}
 
 	// zoom
@@ -210,83 +228,86 @@ public class GameCtrl extends JPanel implements ActionListener {
 	}
 
 	// full reset
-	public void fullReset(){	
-		
+	public void fullReset() {
+
 		// go to start screen
 		startDone = false;
-		
 
 		// clear enemies
 		enemySpawned = false;
 		enemyBrain.killAllEnemies();
-		
+
 		// config options
-//		GameRunner.chooseBGMusicOn();
-//		GameRunner.chooseMazeSize();
-//		GameRunner.chooseZoomScale();
-//		GameRunner.chooseZoomMove();
-//		
-//		// reset maze
-//		maze.reset();
-//		
-//		// reset player
-//		player.resetPos();
-//		playerDraw.setPlayerLookH('r');
-		
+		// GameRunner.chooseBGMusicOn();
+		// GameRunner.chooseMazeSize();
+		// GameRunner.chooseZoomScale();
+		// GameRunner.chooseZoomMove();
+		//
+		// // reset maze
+		// maze.reset();
+		//
+		// // reset player
+		// player.resetPos();
+		// playerDraw.setPlayerLookH('r');
+
 		GameRunner.init();
 	}
-	
+
 	// KEY PRESS
 	// controls
 	public class AcLis extends KeyAdapter {
-		public void keyPressed(KeyEvent e) {
-			int keycode = 0;
+		public void keyPressed(KeyEvent e) { // keyPressed
+			if (!keyDown) {
+				keyDown = true;
+				int keycode = 0;
 
-			if (e.getKeyCode() == KeyEvent.VK_ENTER && startDone == false) {
-				startDone = true;
-				spawnEnemies(false);
-			}
+				if (e.getKeyCode() == KeyEvent.VK_ENTER && startDone == false) {
+					startDone = true;
+					spawnEnemies(false);
+				}
 
-			if (e.getKeyCode() == KeyEvent.VK_Z) { // zoom
-				toggleZoom();
-			}
-			
-			if (e.getKeyCode() == KeyEvent.VK_R) {	// reset
-				fullReset();
-			}
+				if (e.getKeyCode() == KeyEvent.VK_M) { // zoom into MAP
+					toggleZoom();
+				}
 
-			// NB
-			if (!haveWon && startDone) { 
-//				if (!zoomedOut)// turn off to test maze
+				if (e.getKeyCode() == KeyEvent.VK_R) { // reset
+					fullReset();
+				}
+
+				// NB
+				if (!haveWon && startDone) {
+					// if (!zoomedOut)// turn off to test maze
 					keycode = e.getKeyCode();
-			}
+				}
 
-			if (keycode == KeyEvent.VK_W) { // N
-				if (!maze.getPosElement(player.getTileX(), player.getTileY() - 1).equals("w")) {
-					player.move(0, -1);
-					moveCommon();
+				if (keycode == KeyEvent.VK_W) { // N
+					if (!maze.getPosElement(player.getTileX(), player.getTileY() - 1).equals("w")) {
+						player.move(0, -1);
+						moveCommon();
+					}
+				} else if (keycode == KeyEvent.VK_S) { // S
+					if (!maze.getPosElement(player.getTileX(), player.getTileY() + 1).equals("w")) {
+						player.move(0, 1);
+						moveCommon();
+					}
+				} else if (keycode == KeyEvent.VK_A) { // E
+					playerDraw.setPlayerLookH('l');
+					if (!maze.getPosElement(player.getTileX() - 1, player.getTileY()).equals("w")) {
+						player.move(-1, 0);
+						moveCommon();
+					}
+				} else if (keycode == KeyEvent.VK_D) { // W
+					playerDraw.setPlayerLookH('r');
+					if (!maze.getPosElement(player.getTileX() + 1, player.getTileY()).equals("w")) {
+						player.move(1, 0); // 1? tileDim
+						moveCommon();
+					}
 				}
-			} else if (keycode == KeyEvent.VK_S) { // S
-				if (!maze.getPosElement(player.getTileX(), player.getTileY() + 1).equals("w")) {
-					player.move(0, 1);
-					moveCommon();
-				}
-			} else if (keycode == KeyEvent.VK_A) { // E
-				playerDraw.setPlayerLookH('l');
-				if (!maze.getPosElement(player.getTileX() - 1, player.getTileY()).equals("w")) {
-					player.move(-1, 0);
-					moveCommon();
-				}
-			} else if (keycode == KeyEvent.VK_D) { // W
-				playerDraw.setPlayerLookH('r');
-				if (!maze.getPosElement(player.getTileX() + 1, player.getTileY()).equals("w")) {
-					player.move(1, 0); // 1? tileDim
-					moveCommon();
-				}
+				// if (!haveWon) {
+				// checkTile();
+				// }
+				keyDown = false;
 			}
-//			if (!haveWon) {
-//				checkTile();
-//			}
 		}
 
 		// public void keyTyped(KeyEvent e) {
@@ -306,7 +327,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		setWalk = getTime();
 		SoundEffects.playMove();
 		checkFight(); // checked when I or the enemy moves
-		
+
 		checkTile();
 	}
 
@@ -315,13 +336,23 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 		// flash items and do something
 		if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("s")) { // sword
+			if (!player.getSwordStatus()) {
+				player.setSwordStatus(true);
+				maze.setTileItem(player.getTileX(), player.getTileY(), 'f');
+				SoundEffects.playFoundItem();
+			} else {// unneeded
+				SoundEffects.playFoundItemNoPickup();
+			}
 			System.out.println("Sweet sword!");
-			SoundEffects.playFoundItem();
-			maze.setTileItem(player.getTileX(), player.getTileY(), 'f');
 		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("b")) { // bomb
+			if (!player.getBombStatus()) {
+				player.setBombStatus(true);
+				maze.setTileItem(player.getTileX(), player.getTileY(), 'f');
+				SoundEffects.playFoundItem();
+			} else {// unneeded
+				SoundEffects.playFoundItemNoPickup();
+			}
 			System.out.println("Brilliant bomb!");
-			SoundEffects.playFoundItem();
-			maze.setTileItem(player.getTileX(), player.getTileY(), 'f');
 		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("h")) { // helper
 			System.out.println("Happy helper!");
 			SoundEffects.playFoundHelp();
@@ -340,12 +371,6 @@ public class GameCtrl extends JPanel implements ActionListener {
 	// gets called a certain frames per second
 	// check if won
 	public void actionPerformed(ActionEvent e) {
-		//
-		// if(startDone && !enemySpawned){
-		//// enemyBrain = new EnemyBrain(map, enemyList, player);
-		// enemySpawned = true;
-		// }
-
 		int timeElap = getTime() - setWin;
 
 		// NB resets game
@@ -353,14 +378,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 			// SoundEffects.playWin();
 			System.out.println("Look for the magic potion.");
 			haveWon = false;
-				
-//			startDone = false;
-//			player.resetPos();
-//			playerDraw.setPlayerLookH('r');
-//			enemySpawned = false;
-//			enemyBrain.resetAllPos();
-//			maze.reset();
-			
+
 			fullReset();
 		}
 
@@ -372,7 +390,19 @@ public class GameCtrl extends JPanel implements ActionListener {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		// this.g = g;
+
+		// // BG color
+		if (!startDone || haveWon) {
+			// dialog view (dark gray)
+			this.setBackground(Color.DARK_GRAY);
+		} else if (zoomedOut) {
+			// zoomed view (black)
+			this.setBackground(Color.BLACK);
+		} else {
+			// normal view (brown)
+			this.setBackground(brown);
+			paintBagContents(g);
+		}
 
 		if (!zoomedOut) {
 			if (!haveWon && startDone) {
@@ -398,6 +428,94 @@ public class GameCtrl extends JPanel implements ActionListener {
 		}
 	}
 
+	private void paintBagContents(Graphics g) {
+		// // paint bag contents
+		// paint sword (strength)
+		if (player.getSwordStatus()) {
+			paintBagItem(g, imgCtrl.getSword(), 3000, 1);
+		}
+
+		// paint bomb (search algorithm that destroys enemies/walls)
+		if (player.getBombStatus()) {
+			paintBagItem(g, imgCtrl.getBomb(), 4500, 2);
+		}
+
+		// paint step count (info, effects strength, makes you smarter as you
+		// know the maze better)
+		String bagStr = "Steps:\n" + player.getStepCount();
+		paintStepCount(g, bagStr, 3000, 5);
+
+		// paint health (goes down over time and from attacking enemies, need to
+		// find food/potion/med kit to increase) [kind of like a timer]
+		bagStr = "Health:\n" + player.getHealth();
+		paintStepCount(g, bagStr, 3000, 4);
+
+		// time elapsed.
+		bagStr = "Time:\n" + getGameTime();
+		paintStepCount(g, bagStr, 3000, 3);
+	}
+
+	public int getGameTime() {
+		int gameTime = getTime() - gameStartTime;
+		gameTime /= 1000;
+
+		return gameTime;
+	}
+
+	private void paintStepCount(Graphics g, String bagStr, int animItemDur, int slot) {
+		// paint sword (strength)
+		int itemX = (GameRunner.TILE_DIM * slot) - (GameRunner.TILE_DIM / 2);
+		int itemY = GameRunner.SCREEN_DIM;
+
+		// minus half of object against it
+		int fontMetrics = g.getFontMetrics(fontGen).getHeight();
+		itemY -= fontMetrics; // font height
+
+		itemY += GameRunner.TILE_DIM / 2;
+
+		g.setFont(fontGen);
+
+		switch (slot) {
+		case 3: // time
+			Color color = Color.BLACK;
+			g.setColor(color);
+			drawString(g, bagStr, itemX, itemY);
+			break;
+
+		case 4: // health
+			color = Color.PINK;
+			g.setColor(color);
+			drawString(g, bagStr, itemX, itemY);
+			break;
+
+		case 5: // steps
+			color = Color.LIGHT_GRAY;
+			g.setColor(color);
+			drawString(g, bagStr, itemX, itemY);
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+	private void paintBagItem(Graphics g, Image itemImg, int animItemDur, int slot) {
+		int itemX = (GameRunner.TILE_DIM * slot) - (GameRunner.TILE_DIM / 2);
+		int itemY = GameRunner.SCREEN_DIM;
+
+		// minus half of object against it
+		itemX -= itemImg.getWidth(null) / 2;
+		itemY -= itemImg.getHeight(null) / 2;
+		itemY += GameRunner.TILE_DIM / 2; // same as info bar
+
+		if (getTime() % animItemDur * 2 > animItemDur) {
+			g.drawImage(itemImg, itemX, itemY, null);
+		} else {
+			g.drawImage(itemImg, (itemX + GameRunner.TILE_DIM), itemY, -tileDim, tileDim, null);
+		}
+	}
+
 	private void drawViewZoomed(Graphics g) {
 		// draw only within this around player (and focus on player with offset)
 		zoomedPosX = player.getTileX() - 1;
@@ -411,7 +529,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		zoomedPosYmax = zoomedPosY + 3 * GameRunner.ZOOM_MULT;
 
 		// remove index errors
-		
+
 		// need to add negative to positive
 		// -1,9 becomes 0,10
 		int offset;
@@ -465,6 +583,9 @@ public class GameCtrl extends JPanel implements ActionListener {
 		if (element.equals("w")) { // wall
 			g.setColor(Color.DARK_GRAY);
 			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
+		} else if (String.format("%s,%s", x, y).equals(player.getPos())) {
+			g.setColor(Color.ORANGE);
+			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
 		} else if (element.equals("g")) { // goal
 			g.setColor(Color.YELLOW);
 			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
@@ -474,26 +595,19 @@ public class GameCtrl extends JPanel implements ActionListener {
 		} else if (element.equals("h")) { // helper
 			g.setColor(Color.GREEN);
 			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
-		} else if (String.format("%s,%s", x, y).equals(player.getPos())) {
-			g.setColor(Color.ORANGE);
-			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
-		} else { // floor
+		}  else { // floor
 			g.setColor(Color.LIGHT_GRAY);
 			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
 		} // end of if
 
 		// enemy
 		for (Enemy enemy : enemyList) {
-			int enX = enemy.getTileX();
-			int enY = enemy.getTileY();
-
 			// checks if in view
 			if (String.format("%s,%s", x, y).equals(enemy.getPos()))
 				if (String.format("%s,%s", x, y).equals(enemy.getPos())) {
 					g.setColor(Color.RED);
 					g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
 				}
-
 		}
 	}
 

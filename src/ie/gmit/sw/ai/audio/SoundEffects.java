@@ -124,7 +124,48 @@ public class SoundEffects {
 	}
 
 	public static void playFoundItem() {
-		playSound("items/excellent3.wav");
+		String location = "items/pickup/";
+
+		Random random = new Random();
+		int num = random.nextInt(1);
+
+		switch (num) { // add more insults
+		case 0:
+			location += "excellent3.wav";
+			break;
+
+		default:
+			location += "excellent3.wav";
+			break;
+		}
+		try {
+			playSound(location);
+		} catch (Exception e) {
+			System.out.println("unable to load: " + location);
+		}
+	}
+	
+	public static void playFoundItemNoPickup() {
+//		String location = "items/noPickup/";
+//
+//		Random random = new Random();
+//		int num = random.nextInt(1);
+//
+//		switch (num) { // add more insults
+//		case 0:
+//			location += "boring.wav";
+//			break;
+//
+//		default:
+//			location += "boring.wav";
+//			break;
+//		}
+//		try {
+//			playSound(location);
+//		} catch (Exception e) {
+//			System.out.println("unable to load: " + location);
+//		}
+		System.out.println("no sound");
 	}
 
 	public static void playFoundHelp() {
@@ -159,7 +200,7 @@ public class SoundEffects {
 	}
 
 	public static void playGameOver() {
-		playSound("items/Brave5.wav");
+		playSound("win/Brave5.wav");
 	}
 
 	public static void playIntro() {

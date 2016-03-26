@@ -22,12 +22,12 @@ public class Maze {
 
 		reset();
 	}
-	
+
 	public void reset() {
 		// readInMap();
 		genRandomMaze();
 		placeOuterWalls();
-		
+
 		System.out.println(toString());
 		printMap();
 	}
@@ -40,7 +40,7 @@ public class Maze {
 			}
 		}
 
-//		System.out.println(toString());
+		// System.out.println(toString());
 	}
 
 	private void readInMap() {
@@ -84,18 +84,17 @@ public class Maze {
 
 		int itemNum = random.nextInt(GameRunner.MAZE_DIM / 5); // 10
 		int helperNum = random.nextInt(GameRunner.MAZE_DIM / 10); // 5
-		
+
 		int goalNum;
 		try {
 			goalNum = random.nextInt(GameRunner.MAZE_DIM / 50); // 2
 		} catch (Exception e) {
 			goalNum = 1;
 		}
-		
+
 		if (goalNum < 1) {
 			goalNum = 1;
 		}
-
 
 		// items
 		int swordNumber = itemNum; // 10
@@ -106,17 +105,17 @@ public class Maze {
 		int helperNumber = helperNum; // 12
 
 		// items
-		addFeature('s', 'x', itemNum);
-		addFeature('b', 'x', itemNum);
+		addFeature('s', 'f', itemNum);
+		addFeature('b', 'f', itemNum);
 
 		// quest items
-		addFeature('h', 'x', itemNum);
-		addFeature('g', 'x', 1);
+		addFeature('h', 'f', itemNum);
+		addFeature('g', 'f', 1);
 
 		// rest of x's should be walls
 		addWalls();
 
-//		System.out.println(toString());
+		// System.out.println(toString());
 	}
 
 	private void addWalls() {
@@ -128,7 +127,7 @@ public class Maze {
 			}
 		}
 	}
-	
+
 	// https://www.youtube.com/watch?v=IjLmUT_is8g
 	private void buildMaze() {
 		// spaces work as well as f (floor)
@@ -138,25 +137,28 @@ public class Maze {
 		for (int row = 0; row < maze.length; row++) {
 			// goes through each column
 			for (int col = 0; col < maze[row].length - 1; col++) {
-				// with this turned on there is a chance the goal can not be found,
+				// with this turned on there is a chance the goal can not be
+				// found,
 				// NB
-					// chooses a random number less then 10
-					int num = (int) (Math.random() * 10);
+				// chooses a random number less then 10
+				int num = (int) (Math.random() * 10);
 
-					// half the time this happens
-					// changes the next column to a floor
-					if (num >= 5 && col + 1 < maze[row].length - 1) { // Change
-																		// West (break wall)
-						// changes X to floor
-						maze[row][col + 1] = 'f';
-						// continue; // use else instead of continue
-					} else
-					// next we check if to the south is
-					if (row + 1 < maze.length) { // Change south
-						// changes x to floor
-						maze[row + 1][col] = 'f';
-					}
+				// half the time this happens
+				// changes the next column to a floor
+				if (num >= 5 && col + 1 < maze[row].length - 1) { // Change
+																	// West
+																	// (break
+																	// wall)
+					// changes X to floor
+					maze[row][col + 1] = 'f';
+					// continue; // use else instead of continue
+				} else
+				// next we check if to the south is
+				if (row + 1 < maze.length) { // Change south
+					// changes x to floor
+					maze[row + 1][col] = 'f';
 				}
+			}
 		}
 	}
 
@@ -168,7 +170,8 @@ public class Maze {
 		for (int row = 0; row < maze.length; row++) {
 			// goes through each column
 			for (int col = 0; col < maze[row].length - 1; col++) {
-				// with this turned on there is a chance the goal can not be found,
+				// with this turned on there is a chance the goal can not be
+				// found,
 				// NB
 				if (random.nextInt(10) >= 2) {
 					// chooses a random number less then 10
@@ -204,9 +207,6 @@ public class Maze {
 
 			int row = (int) ((insideNum) * Math.random()) + 2;
 			int col = (int) ((insideNum) * Math.random()) + 2;
-
-			// System.out.print("row: " + row + ", col: " + col);
-			// System.out.println("\tmaze[row][col]: " + maze[row][col]);
 
 			if (maze[row][col] == replace) {
 				maze[row][col] = feature;
@@ -244,8 +244,6 @@ public class Maze {
 		input.close();
 	}
 
-
-
 	public void setTileItem(int x, int y, char item) {
 		// row by col
 		maze[y][x] = item;
@@ -256,9 +254,9 @@ public class Maze {
 		try {
 			index = maze[y][x];
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.print("Error in Maze getPostElement(): "  + e.getMessage() + "\t");
 			System.out.println("x: " + x + ", y:" + y);
-			// printMap();
+//			index = 'w'; // default to wall
 		}
 
 		StringBuilder temp = new StringBuilder();

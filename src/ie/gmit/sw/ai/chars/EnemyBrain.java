@@ -44,6 +44,10 @@ public class EnemyBrain extends Thread {
 			randomPos(enemy);
 		}
 	}
+	
+	public void killAllEnemies(){
+		enemyList.clear();
+	}
 
 	public void randomPos(Enemy enemy) {
 		// placed somewhere random

@@ -133,7 +133,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		startDone = false;
 		haveWon = false;
 		setWin = 0; // how long you since you won
-		this.setBackground(Color.DARK_GRAY);
+		this.setBackground(Color.BLACK);
 
 		// player init
 		player = new Player(maze, imgCtrl);
@@ -204,9 +204,38 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 	// zoom
 	public void toggleZoom() {
-		zoomedOut = !zoomedOut;
+		if (startDone && !haveWon) {
+			zoomedOut = !zoomedOut;
+		}
 	}
 
+	// full reset
+	public void fullReset(){	
+		
+		// go to start screen
+		startDone = false;
+		
+
+		// clear enemies
+		enemySpawned = false;
+		enemyBrain.killAllEnemies();
+		
+		// config options
+//		GameRunner.chooseBGMusicOn();
+//		GameRunner.chooseMazeSize();
+//		GameRunner.chooseZoomScale();
+//		GameRunner.chooseZoomMove();
+//		
+//		// reset maze
+//		maze.reset();
+//		
+//		// reset player
+//		player.resetPos();
+//		playerDraw.setPlayerLookH('r');
+		
+		GameRunner.init();
+	}
+	
 	// KEY PRESS
 	// controls
 	public class AcLis extends KeyAdapter {
@@ -218,12 +247,18 @@ public class GameCtrl extends JPanel implements ActionListener {
 				spawnEnemies(false);
 			}
 
-			if (e.getKeyCode() == KeyEvent.VK_Z) {
+			if (e.getKeyCode() == KeyEvent.VK_Z) { // zoom
 				toggleZoom();
 			}
+			
+			if (e.getKeyCode() == KeyEvent.VK_R) {	// reset
+				fullReset();
+			}
 
-			if (!haveWon && startDone && !zoomedOut) {
-				keycode = e.getKeyCode();
+			// NB
+			if (!haveWon && startDone) { 
+//				if (!zoomedOut)// turn off to test maze
+					keycode = e.getKeyCode();
 			}
 
 			if (keycode == KeyEvent.VK_W) { // N
@@ -249,9 +284,9 @@ public class GameCtrl extends JPanel implements ActionListener {
 					moveCommon();
 				}
 			}
-			if (!haveWon) {
-				checkTile();
-			}
+//			if (!haveWon) {
+//				checkTile();
+//			}
 		}
 
 		// public void keyTyped(KeyEvent e) {
@@ -271,6 +306,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 		setWalk = getTime();
 		SoundEffects.playMove();
 		checkFight(); // checked when I or the enemy moves
+		
+		checkTile();
 	}
 
 	// ran every keypress
@@ -316,23 +353,15 @@ public class GameCtrl extends JPanel implements ActionListener {
 			// SoundEffects.playWin();
 			System.out.println("Look for the magic potion.");
 			haveWon = false;
-			startDone = false;
-			player.resetPos();
-			playerDraw.setPlayerLookH('r');
-
-			// enemy
-			// TODO: change to random (let the brain reset)
-			// for (Enemy enemyItem : enemyList) {
-			// enemyItem.setPos(7, 7);
-
-			enemySpawned = false;
-			enemyBrain.resetAllPos();
-			// }
-			// enemy.setTileX(7);
-			// enemy.setTileY(7);
-
-			//
-			maze.reset();
+				
+//			startDone = false;
+//			player.resetPos();
+//			playerDraw.setPlayerLookH('r');
+//			enemySpawned = false;
+//			enemyBrain.resetAllPos();
+//			maze.reset();
+			
+			fullReset();
 		}
 
 		repaint();
@@ -354,62 +383,60 @@ public class GameCtrl extends JPanel implements ActionListener {
 				g.setColor(Color.CYAN);
 				g.setFont(fontGen);
 				drawString(g, msgStart, GameRunner.SCREEN_DIM / 2, GameRunner.SCREEN_DIM / 30); // was
-																								// relative
-																								// dim
 
-				// drawString(g, msgStart, (GameRunner.VIEW_DIM *
-				// GameRunner.TILE_DIM) / 2, (GameRunner.VIEW_DIM *
-				// GameRunner.TILE_DIM) / 7); // was relative dim
 			} else if (haveWon) {
 				g.setColor(Color.CYAN);
 				g.setFont(fontGen);
 				drawString(g, msgWin, GameRunner.SCREEN_DIM / 2, GameRunner.SCREEN_DIM / 30);
-				// drawString(g, msgWin, (GameRunner.VIEW_DIM *
-				// GameRunner.TILE_DIM) / 2, (GameRunner.VIEW_DIM *
-				// GameRunner.TILE_DIM) / 7);
 			}
 
 			drawPlayer(g);
 
-			// drawEnemy(g);
 		} // not zoomed out
 		else { // zoomed out
 			drawViewZoomed(g);
-			// for (int y = 0; y < mazeDim; y++) {// col one
-			// for (int x = 0; x < mazeDim; x++) { // fill row
-			// String element = maze.getPosElement(x, y);
-			//
-			//// drawTilesZoomed(g, y, x, element);
-			//// drawEnemiesZoomed(g, y, x);
-			// drawViewZoomed(g);
-			// }
-			// }
 		}
 	}
 
 	private void drawViewZoomed(Graphics g) {
 		// draw only within this around player (and focus on player with offset)
-		zoomedPosX = player.getTileX();
-		zoomedPosY = player.getTileY();
+		zoomedPosX = player.getTileX() - 1;
+		zoomedPosY = player.getTileY() - 1;
 
 		// 5 sqaured
-		zoomedPosXmin = playerPosX - 2 * GameRunner.ZOOM_MULT;
-		zoomedPosXmax = playerPosX + 3 * GameRunner.ZOOM_MULT;
+		zoomedPosXmin = zoomedPosX - 2 * GameRunner.ZOOM_MULT;
+		zoomedPosXmax = zoomedPosX + 3 * GameRunner.ZOOM_MULT;
 
-		zoomedPosYmin = playerPosY - 2 * GameRunner.ZOOM_MULT;
-		zoomedPosYmax = playerPosY + 3 * GameRunner.ZOOM_MULT;
+		zoomedPosYmin = zoomedPosY - 2 * GameRunner.ZOOM_MULT;
+		zoomedPosYmax = zoomedPosY + 3 * GameRunner.ZOOM_MULT;
 
 		// remove index errors
+		
+		// need to add negative to positive
+		// -1,9 becomes 0,10
+		int offset;
 		if (zoomedPosXmin < 0) {
+			offset = zoomedPosXmin; // now 2
+			offset *= -1;
 			zoomedPosXmin = 0;
-		} else if (playerPosXmax > GameRunner.MAZE_DIM) {
+			zoomedPosXmax += offset;
+		} else if (zoomedPosXmax > GameRunner.MAZE_DIM) {
+			offset = zoomedPosXmax - GameRunner.MAZE_DIM;
+			offset *= -1;
 			zoomedPosXmax = GameRunner.MAZE_DIM;
+			zoomedPosXmin += offset + 2; // +2 for outer walls
 		}
 
 		if (zoomedPosYmin < 0) {
+			offset = zoomedPosYmin; // now 2
+			offset *= -1;
 			zoomedPosYmin = 0;
-		} else if (playerPosYmax > GameRunner.MAZE_DIM) {
+			zoomedPosYmax += offset;
+		} else if (zoomedPosYmax > GameRunner.MAZE_DIM) {
+			offset = zoomedPosYmax - GameRunner.MAZE_DIM;
+			offset *= -1;
 			zoomedPosYmax = GameRunner.MAZE_DIM;
+			zoomedPosYmin += offset;
 		}
 
 		// draw 5 items
@@ -440,6 +467,12 @@ public class GameCtrl extends JPanel implements ActionListener {
 			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
 		} else if (element.equals("g")) { // goal
 			g.setColor(Color.YELLOW);
+			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
+		} else if (element.equals("b") || element.equals("s")) { // item
+			g.setColor(Color.CYAN);
+			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
+		} else if (element.equals("h")) { // helper
+			g.setColor(Color.GREEN);
 			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
 		} else if (String.format("%s,%s", x, y).equals(player.getPos())) {
 			g.setColor(Color.ORANGE);

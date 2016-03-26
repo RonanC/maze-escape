@@ -20,7 +20,7 @@ public class SoundEffects {
 			public void run() {
 				try {
 					Clip clip = AudioSystem.getClip();
-					
+
 					AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
 					clip.open(inputStream);
 					clip.start();
@@ -48,28 +48,27 @@ public class SoundEffects {
 					int count = 0;
 					Clip clip = AudioSystem.getClip();
 
-					
 					AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
 					clip.open(inputStream);
-					
-					// volume
-					FloatControl gainControl = 
-						    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-						gainControl.setValue(-10.0f); // Reduce volume by 10 decibels.
-						
-						
-					clip.loop(Clip.LOOP_CONTINUOUSLY);
-					
 
+					// volume
+					FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+					gainControl.setValue(-10.0f); // Reduce volume by 10
+													// decibels.
+
+					clip.loop(Clip.LOOP_CONTINUOUSLY);
 
 					while (true) {
-//						System.out.println(Board.getTime() % 100000);
-						if (GameCtrl.getTime() % 100000 > 99950) {	// song change every 100 seconds
+						// System.out.println(Board.getTime() % 100000);
+						if (GameCtrl.getTime() % 100000 > 99950) { // song
+																	// change
+																	// every 100
+																	// seconds
 							String url = "resources/audio/" + chooseBg();
 							System.out.println(url);
 							File file = new File(url);
 							inputStream = AudioSystem.getAudioInputStream(file);
-							
+
 							clip.close();
 							clip.open(inputStream);
 							clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -77,7 +76,8 @@ public class SoundEffects {
 					}
 
 				} catch (Exception e) {
-					System.out.println("url: " + url);
+					System.out.print("Sound Effects: \t");
+					System.out.print("url: " + url + "\t");
 					System.err.println(e.getMessage());
 				}
 			}
@@ -128,7 +128,34 @@ public class SoundEffects {
 	}
 
 	public static void playFoundHelp() {
-		playSound("items/lets_rock.wav");
+		String location = "helper/";
+
+		Random random = new Random();
+		int num = random.nextInt(3);
+
+		switch (num) { // add more insults
+		case 0:
+			location += "bugs_answer.wav";
+			break;
+
+		case 1:
+			location += "bugs_you_again.wav";
+			break;
+
+		case 2:
+			location += "daffy_evil_laugh.wav";
+			break;
+
+		default:
+			location += "bugs_answer.wav";
+			break;
+		}
+		try {
+			playSound(location);
+		} catch (Exception e) {
+			System.out.println("unable to load: " + location);
+		}
+		
 	}
 
 	public static void playGameOver() {
@@ -136,10 +163,10 @@ public class SoundEffects {
 	}
 
 	public static void playIntro() {
-//		playSound("pacman_intro.wav");
+		// playSound("pacman_intro.wav");
 	}
-	
-	public static void playEnemyAttack(){
+
+	public static void playEnemyAttack() {
 		playSound("fight/Slime-SoundBible.com-803762203.wav");
 	}
 

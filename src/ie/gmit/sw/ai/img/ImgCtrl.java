@@ -14,13 +14,13 @@ public class ImgCtrl {
 	private Image sword, bomb;
 	private Image player_stand, player_win, player_walk, player_walk2;
 	private Image enemy_down, enemy_up;
-	
+
 	// Image Arrays
 	private BufferedImage[] items;
 	private BufferedImage[] tiles;
 	private BufferedImage[] player;
 	private BufferedImage[] enemy;
-	
+
 	public ImgCtrl() {
 		try {
 			initImages();
@@ -29,6 +29,7 @@ public class ImgCtrl {
 			e.printStackTrace();
 		}
 	}
+
 	// new image
 	private void initImages() throws Exception {
 		String url = "resources/img/";
@@ -79,7 +80,7 @@ public class ImgCtrl {
 		image = image.getScaledInstance(GameRunner.TILE_DIM, GameRunner.TILE_DIM, java.awt.Image.SCALE_SMOOTH);
 		return image;
 	}
-	
+
 	// getters
 	public Image getFloor() {
 		return floor;

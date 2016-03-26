@@ -10,68 +10,43 @@ public class GameRunner {
 	public static int SCREEN_DIM;
 	public static boolean BG_ON;
 	public static int ZOOM_MULT;
-	private int titleHeight;
-	private int infoBar;
+	private static int ZOOM_SCALE;
+	private static boolean ZOOM_MOVE;
+	private static int titleHeight;
+	private static int infoBar;
+	private static JFrame f;
 
 	public static void main(String[] args) {
 		new GameRunner();
 	}
 
 	public GameRunner() {
-		JFrame f = new JFrame();
-		
-		int ans = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Maze Size?", null, JOptionPane.INFORMATION_MESSAGE, null,
-				null, "100"));
-		
-		System.out.println("ans: " + ans);
-		
-		if (ans < 20) {
-			ans = 20;
-			System.out.println("min size is 20");
-		}else if (ans > 100){
-			ans = 20;
-			System.out.println("max size is 100");
-		}
-		
-		int bg = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Music on?\n0: off\n1: on", null, JOptionPane.INFORMATION_MESSAGE, null,
-				null, "1"));
-		
-		if (bg == 0) {
-			BG_ON = false;
-		}else{
-			BG_ON = true;
-			System.out.println("");
-		}
-		
-		// size of maze
-		MAZE_DIM = ans;
+		init();
+	}
+
+	public static void init() {
+		f = new JFrame();
+		chooseMazeSize();
+		chooseBGMusicOn();
+
 		// scale of tiles (may throw off font)
 		TILE_DIM = 64 * 2;
-
 		// others
 		VIEW_DIM = 5; // 5 * 5
-		// ZOOM_DIM = 16;
-		
-		// this will be relative anyway
-		ZOOM_DIM = 40; // perfect
-		
-		// test
-		ZOOM_MULT = 2;
-		ZOOM_DIM = 32 * ZOOM_MULT;
-//		ZOOM_DIM = 20; // 20x20
-//		ZOOM_DIM = 6; // 100x100
-		
-		
-		//MAZE_DIM / 16; //6;
-		
-		
+
+		chooseZoomScale();
+		chooseZoomMove();
+
 		// screenDim = MAZE_DIM * TILE_DIM;// full screen
 		// plus an info bar
 		SCREEN_DIM = TILE_DIM * VIEW_DIM;
 		infoBar = TILE_DIM;
 		titleHeight = 22;
 
-		
+		frameConfig(f);
+	}
+
+	private static void frameConfig(JFrame f) {
 		f.setResizable(false);
 		f.setTitle("Maze Escape");
 		f.add(new GameCtrl());
@@ -79,5 +54,107 @@ public class GameRunner {
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	public static void chooseZoomScale() {
+		try {
+			ZOOM_SCALE = Integer
+					.parseInt((String) JOptionPane.showInputDialog(f, "Zoom Scale?\n0: normal\n1: closer\n2: farther",
+							null, JOptionPane.INFORMATION_MESSAGE, null, null, "0"));
+		} catch (Exception e) {
+			ZOOM_SCALE = 0;
+		}
+
+		if (ZOOM_SCALE < 0 || ZOOM_SCALE > 2) {
+			ZOOM_SCALE = 0;
+		}
+
+		setZoomViews();
+	}
+
+	private static void setZoomViews() {
+		// ZOOM MULT: view window
+		// ZOOM DIM: tile size
+
+		// ZOOM VIEW
+		if (ZOOM_SCALE == 0) { // normal (8 tiles around)
+			ZOOM_MULT = 4;
+			ZOOM_DIM = 9 * ZOOM_MULT; // 36
+		} else if (ZOOM_SCALE == 1) { // closer
+			ZOOM_MULT = 2;
+			ZOOM_DIM = 32 * ZOOM_MULT; // 64
+		} else if (ZOOM_SCALE == 2) { // farther
+			ZOOM_MULT = GameRunner.MAZE_DIM / 5; // show full map (no limit on
+													// view window)
+			ZOOM_DIM = 8; // tiles are 4x4 dim size
+		} else {
+			ZOOM_MULT = 4;
+			ZOOM_DIM = 9 * ZOOM_MULT;
+		}
+	}
+
+	public static void chooseBGMusicOn() {
+		int bg;
+		try {
+			bg = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Music on?\n0: off\n1: on", null,
+					JOptionPane.INFORMATION_MESSAGE, null, null, "0"));
+		} catch (Exception e) {
+			bg = 1;
+		}
+
+		if (bg == 0) {
+			BG_ON = false;
+		} else {
+			BG_ON = true;
+			System.out.println("");
+		}
+	}
+
+	public static void chooseMazeSize() {
+		int mazeSize = 0;
+		try {
+			mazeSize = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Maze Size?", null,
+					JOptionPane.INFORMATION_MESSAGE, null, null, "100"));
+		} catch (Exception e) {
+			mazeSize = 100;
+		}
+
+		System.out.println("ans: " + mazeSize);
+
+		if (mazeSize < 20) {
+			mazeSize = 20;
+			System.out.println("min size is 20");
+		} else if (mazeSize > 100) {
+			mazeSize = 20;
+			System.out.println("max size is 100");
+		}
+
+		// size of maze
+		MAZE_DIM = mazeSize;
+	}
+
+	public static void chooseZoomMove() {
+		int zoomMove = 1;
+		boolean zoomMoveBool = true;
+		try {
+			zoomMove = Integer
+					.parseInt((String) JOptionPane.showInputDialog(f, "Allow movement during zoom?\n0: false\n1: true",
+							null, JOptionPane.INFORMATION_MESSAGE, null, null, "1"));
+		} catch (Exception e) {
+			zoomMove = 1;
+		}
+
+		System.out.println("zoomMove: " + zoomMove);
+
+		if (zoomMove == 1) {
+			zoomMoveBool = true;
+		} else if (zoomMove == 0) {
+			zoomMoveBool = false;
+		} else {
+			zoomMoveBool = true;
+		}
+
+		// size of maze
+		ZOOM_MOVE = zoomMoveBool;
 	}
 }

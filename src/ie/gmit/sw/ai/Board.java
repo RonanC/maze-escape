@@ -73,8 +73,8 @@ public class Board extends JPanel implements ActionListener {
 		timer = new Timer(frameRate, this); // action performed every 25 Ms
 		timer.start();
 	}
-	
-	public void messageInit(){
+
+	public void messageInit() {
 		msgWin = "You found the teleportation potion!\n\n\n";
 		msgWin += "*glug glug glug*\n\n";
 		msgWin += "*POOF*\n\n\n";
@@ -84,10 +84,13 @@ public class Board extends JPanel implements ActionListener {
 		msgStart += "There are myths of a wizard who once walked these lonesome halls.\n\n";
 		msgStart += "Legend says he left behind a potion which can free you of this place.\n\n";
 		msgStart += "\n\nPress the 'Enter' key to begin your quest.\n\n";
-		msgStart += "\n\n\n\nControls:\tWASD";
-		int fontSize = (int) (GameRunner.TILE_DIM / 1.5); // works at 64 tile size (and all maze sizes)
+		msgStart += "\n\n\n\nMovement:\tWASD";
+		msgStart += "\n\nZoom:\tZ";
+		int fontSize = (int) (GameRunner.TILE_DIM / 1.5); // works at 64 tile
+															// size (and all
+															// maze sizes)
 		fontSize *= GameRunner.TILE_DIM / 2;
-		
+
 		fontGen = new Font("Serif", Font.BOLD, fontSize);
 	}
 
@@ -122,16 +125,16 @@ public class Board extends JPanel implements ActionListener {
 
 		// enemy
 		enemyList = new ArrayList<Enemy>();
-//		spawnEnemies(false);
+		// spawnEnemies(false);
 		enemyBrain = new EnemyBrain(map, enemyList, player);
 		enemySpawned = false;
 		// old enemy
 		// enemy = new Enemy(tileDim, 7, 7);
 		// enemyBrain = new EnemyBrain(map, enemy, player);
 	}
-	
-	public void spawnEnemies(boolean kill){
-		if(kill){
+
+	public void spawnEnemies(boolean kill) {
+		if (kill) {
 			enemyList.clear();
 		}
 
@@ -142,14 +145,13 @@ public class Board extends JPanel implements ActionListener {
 		enemyBrain.spawn();
 	}
 
-
 	// get time in millis
 	public static int getTime() {
 		long delayNS = System.nanoTime();
 		long durationInMs = TimeUnit.MILLISECONDS.convert(delayNS, TimeUnit.NANOSECONDS);
 		return (int) durationInMs;
 	}
-	
+
 	// // additional
 	public void fight() {
 		System.out.println("Dual!");
@@ -179,6 +181,10 @@ public class Board extends JPanel implements ActionListener {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				startDone = true;
 				spawnEnemies(false);
+			}
+			
+			if (e.getKeyCode() == KeyEvent.VK_Z) {
+				toggleZoom();
 			}
 
 			if (!haveWon && startDone) {
@@ -257,54 +263,55 @@ public class Board extends JPanel implements ActionListener {
 			enemyList.clear();
 		}
 	}
-	
+
 	// // ACTION PERFORMED
 	// gets called a certain frames per second
-		// check if won
-		public void actionPerformed(ActionEvent e) {
-//			
-//			if(startDone && !enemySpawned){
-////				enemyBrain = new EnemyBrain(map, enemyList, player);
-//				enemySpawned = true;
-//			}
-			
-			int timeElap = getTime() - setWin;
+	// check if won
+	public void actionPerformed(ActionEvent e) {
+		//
+		// if(startDone && !enemySpawned){
+		//// enemyBrain = new EnemyBrain(map, enemyList, player);
+		// enemySpawned = true;
+		// }
 
-			// resets game
-			if (haveWon && timeElap > winDur) { // n seconds of winning!
-				// SoundEffects.playWin();
-				System.out.println("Look for the magic potion.");
-				haveWon = false;
-				startDone = false;
-				player.setTileX(1);
-				player.setTileY(1);
-				playerDraw.setPlayerLookH('r');
-				
-				// enemy
-				// TODO: change to random (let the brain reset)
-				// for (Enemy enemyItem : enemyList) {
-				// enemyItem.setPos(7, 7);
-			
-				enemySpawned = false;
-				enemyBrain.resetAllPos();
-				// }
-				// enemy.setTileX(7);
-				// enemy.setTileY(7);
+		int timeElap = getTime() - setWin;
 
-				//
-				map.reset();
-			}
+		// resets game
+		if (haveWon && timeElap > winDur) { // n seconds of winning!
+			// SoundEffects.playWin();
+			System.out.println("Look for the magic potion.");
+			haveWon = false;
+			startDone = false;
+			player.setTileX(1);
+			player.setTileY(1);
+			playerDraw.setPlayerLookH('r');
 
-			repaint();
+			// enemy
+			// TODO: change to random (let the brain reset)
+			// for (Enemy enemyItem : enemyList) {
+			// enemyItem.setPos(7, 7);
+
+			enemySpawned = false;
+			enemyBrain.resetAllPos();
+			// }
+			// enemy.setTileX(7);
+			// enemy.setTileY(7);
+
+			//
+			map.reset();
 		}
-	
+
+		repaint();
+	}
+
 	// // DRAWING
 	// paint map a certain frames per second
-		@Override
-		public void paint(Graphics g) {
-			super.paint(g);
-			// this.g = g;
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		// this.g = g;
 
+		if (!zoomedOut) {
 			if (!haveWon && startDone) {
 				int animHelperDur = 2000;
 				int animGoalDur = 1000;
@@ -325,30 +332,35 @@ public class Board extends JPanel implements ActionListener {
 							g.drawImage(imgCtrl.getFloor(), x * tileDim, y * tileDim, null);
 
 							// items
-							// inner if is for flipping the image (basic animation)
+							// inner if is for flipping the image (basic
+							// animation)
 							if (element.equals("g")) { // goal
 								if (getTime() % animGoalDur * 2 > animGoalDur) {
 									g.drawImage(imgCtrl.getGoal(), x * tileDim, y * tileDim, null);
 								} else {
-									g.drawImage(imgCtrl.getGoal(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+									g.drawImage(imgCtrl.getGoal(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim,
+											null);
 								}
 							} else if (element.equals("h")) { // helper
 								if (getTime() % animHelperDur * 2 > animHelperDur) {
 									g.drawImage(imgCtrl.getHelper(), x * tileDim, y * tileDim, null);
 								} else {
-									g.drawImage(imgCtrl.getHelper(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+									g.drawImage(imgCtrl.getHelper(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim,
+											null);
 								}
 							} else if (element.equals("s")) { // sword
 								if (getTime() % animSwordDur * 2 > animSwordDur) {
 									g.drawImage(imgCtrl.getSword(), x * tileDim, y * tileDim, null);
 								} else {
-									g.drawImage(imgCtrl.getSword(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+									g.drawImage(imgCtrl.getSword(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim,
+											null);
 								}
 							} else if (element.equals("b")) { // bomb
 								if (getTime() % animBombDur * 2 > animBombDur) {
 									g.drawImage(imgCtrl.getBomb(), x * tileDim, y * tileDim, null);
 								} else {
-									g.drawImage(imgCtrl.getBomb(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim, null);
+									g.drawImage(imgCtrl.getBomb(), (x + 1) * tileDim, y * tileDim, -tileDim, tileDim,
+											null);
 								}
 							}
 						}
@@ -393,11 +405,36 @@ public class Board extends JPanel implements ActionListener {
 
 				}
 			}
-		}
+		} // not zoomed out
+		else { // zoomed out
+			for (int y = 0; y < mazeDim; y++) {// col one
+				for (int x = 0; x < mazeDim; x++) { // fill row
+					String element = map.getPosElement(x, y);
 
-		// draws multi-line string with correct spacing
-		void drawString(Graphics g, String text, int x, int y) {
-			for (String line : text.split("\n"))
-				g.drawString(line, x - (g.getFontMetrics().stringWidth(line) / 2), y += g.getFontMetrics().getHeight());
+					// tiles
+					if (element.equals("w")) { // wall
+						g.setColor(Color.DARK_GRAY);
+						g.fillRect(x * tileDim, y * tileDim, tileDim, tileDim);
+					} else if (element.equals("g")) { // goal
+						g.setColor(Color.YELLOW);
+						g.fillRect(x * tileDim, y * tileDim, tileDim, tileDim);
+					} else if (String.format("%s,%s", x, y).equals(player.getPos())) { // player
+						g.setColor(Color.ORANGE);
+						g.fillRect(x * tileDim, y * tileDim, tileDim, tileDim);
+					} else { // floor (with items or whatever)
+//						System.out.print(String.format("%s, %s\t", x, y));
+//						System.out.println(player.getPos());
+						g.setColor(Color.LIGHT_GRAY);
+						g.fillRect(x * tileDim, y * tileDim, tileDim, tileDim);
+					}
+				}
+			}
 		}
+	}
+
+	// draws multi-line string with correct spacing
+	void drawString(Graphics g, String text, int x, int y) {
+		for (String line : text.split("\n"))
+			g.drawString(line, x - (g.getFontMetrics().stringWidth(line) / 2), y += g.getFontMetrics().getHeight());
+	}
 }

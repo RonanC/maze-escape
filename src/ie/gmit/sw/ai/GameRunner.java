@@ -13,8 +13,8 @@ public class GameRunner {
 	}
 	
 	public GameRunner() {
-		MAZE_DIM = 5;
-		TILE_DIM = 64;
+		MAZE_DIM = 100;
+		TILE_DIM = 10;
 		screenDim = MAZE_DIM * TILE_DIM;
 		titleHeight = 22;
 		

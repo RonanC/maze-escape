@@ -53,7 +53,7 @@ public class EnemyBrain extends Thread {
 		while (notPlaced) {
 			x = random.nextInt(mazeDim - 2) + 1;
 			y = random.nextInt(mazeDim - 2) + 1;
-			System.out.printf("x: %d, y: %d\t", x, y);
+//			System.out.printf("x: %d, y: %d\t", x, y);
 			// avoid walls and player
 			if (!map.getPosElement(x, y).equals("w") && !enemy.getPos().equals(player.getPos())) {
 				System.out.println(map.getPosElement(x, y));

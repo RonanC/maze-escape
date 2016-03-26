@@ -444,6 +444,14 @@ public class Board extends JPanel implements ActionListener {
 						g.setColor(Color.LIGHT_GRAY);
 						g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
 					}
+					
+					// enemies
+					for (Enemy enemy : enemyList) {
+						if (String.format("%s,%s", x, y).equals(enemy.getPos())) { // enemy
+							g.setColor(Color.RED);
+							g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
+						}
+					}
 				}
 			}
 		}

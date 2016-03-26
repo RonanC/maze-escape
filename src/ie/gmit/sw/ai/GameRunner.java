@@ -9,6 +9,7 @@ public class GameRunner {
 	public static int ZOOM_DIM;
 	public static int SCREEN_DIM;
 	public static boolean BG_ON;
+	public static int ZOOM_MULT;
 	private int titleHeight;
 	private int infoBar;
 
@@ -53,6 +54,10 @@ public class GameRunner {
 		
 		// this will be relative anyway
 		ZOOM_DIM = 40; // perfect
+		
+		// test
+		ZOOM_MULT = 2;
+		ZOOM_DIM = 32 * ZOOM_MULT;
 //		ZOOM_DIM = 20; // 20x20
 //		ZOOM_DIM = 6; // 100x100
 		

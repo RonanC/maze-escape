@@ -111,6 +111,7 @@ public class Board extends JPanel implements ActionListener {
 //		fontSize *= GameRunner.TILE_DIM / 2; // suppose to be MAZE_DIM
 		
 		int fontSize = 16;
+		fontSize = GameRunner.TILE_DIM / 4;
 		fontGen = new Font("Serif", Font.BOLD, fontSize);
 	}
 

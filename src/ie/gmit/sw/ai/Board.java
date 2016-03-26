@@ -452,12 +452,45 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
+//	private void drawEnemy(Graphics g, int animEnemyDur, Enemy enemy) {
+//		if (getTime() % animEnemyDur * 2 > animEnemyDur) {
+//			g.drawImage(enemy.getEnemy(), enemy.getTileX() * tileDim + tileDim, enemy.getTileY() * tileDim, -tileDim,
+//					tileDim, null);
+//		} else {
+//			g.drawImage(enemy.getEnemy2(), (enemy.getTileX() * tileDim + tileDim), enemy.getTileY() * tileDim, -tileDim,
+//					tileDim, null);
+//		}
+//	}
+	
+	// relative to the player
+	// we know this guy is visible to the player
+	// if we take his x away from the players we will have the offset
 	private void drawEnemy(Graphics g, int animEnemyDur, Enemy enemy) {
+		int playerX = player.getTileX();
+		int playerY = player.getTileY();
+		int enemyX = enemy.getTileX();
+		int enemyY = enemy.getTileY();
+		
+		// if player at 8 and spider at 10 then we want spider at +2
+		// if player at 8 and spider at 6 then we want spider at -2
+		// therefore spider - player = offset
+		
+		int playerZoomed = 2; // center (out of 5, with index 0)
+		
+		int offsetX = enemyX - playerX;
+		int offsetY = enemyY - playerY;
+		
+		int newEnX = playerZoomed + offsetX;
+		int newEnY = playerZoomed + offsetY;
+		
+		newEnX *= tileDim; // resize
+		newEnY *= tileDim;
+		
 		if (getTime() % animEnemyDur * 2 > animEnemyDur) {
-			g.drawImage(enemy.getEnemy(), enemy.getTileX() * tileDim + tileDim, enemy.getTileY() * tileDim, -tileDim,
+			g.drawImage(enemy.getEnemy(), newEnX + tileDim, newEnY, -tileDim,
 					tileDim, null);
 		} else {
-			g.drawImage(enemy.getEnemy2(), (enemy.getTileX() * tileDim + tileDim), enemy.getTileY() * tileDim, -tileDim,
+			g.drawImage(enemy.getEnemy2(), newEnX + tileDim, newEnY, -tileDim,
 					tileDim, null);
 		}
 	}

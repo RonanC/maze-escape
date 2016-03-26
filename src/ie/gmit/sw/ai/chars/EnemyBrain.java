@@ -56,7 +56,7 @@ public class EnemyBrain extends Thread {
 //			System.out.printf("x: %d, y: %d\t", x, y);
 			// avoid walls and player
 			if (!map.getPosElement(x, y).equals("w") && !enemy.getPos().equals(player.getPos())) {
-				System.out.println(map.getPosElement(x, y));
+//				System.out.println(map.getPosElement(x, y));
 				enemy.setPos(x, y);
 				notPlaced = false;
 				// System.out.println("placing");

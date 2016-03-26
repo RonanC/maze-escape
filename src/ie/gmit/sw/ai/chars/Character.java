@@ -5,6 +5,7 @@ import ie.gmit.sw.ai.img.ImgCtrl;
 
 public class Character {
 	protected int tileDim;
+	protected int mazeDim;
 	private int tileX;
 	private int tileY;
 	protected Maze map;

@@ -1,6 +1,7 @@
 package ie.gmit.sw.ai.chars;
 
 import java.awt.*;
+import java.util.Random;
 
 import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.Maze;
@@ -11,10 +12,13 @@ public class Player extends Character{
 	private Image player_walk;
 	private Image player_walk2;
 	private Image player_win;
+	private Random random;
 	
 	public Player(Maze map, ImgCtrl imgCtrl) {
 		super(map, imgCtrl);
 		this.tileDim = GameRunner.TILE_DIM;
+		this.mazeDim = GameRunner.MAZE_DIM;
+		random = new Random();
 	
 		setUpImages();
 		
@@ -23,7 +27,27 @@ public class Player extends Character{
 	}
 	
 	public void resetPos(){
-		setPos(2, 2);
+//		setPos(2, 2);
+		randomPos(this);
+	}
+	
+	public void randomPos(Player player) {
+		// placed somewhere random
+		int x = random.nextInt(mazeDim - 2) + 1;// don't want to choose edges
+		int y = random.nextInt(mazeDim - 2) + 1;
+		boolean notPlaced = true;
+		while (notPlaced) {
+			x = random.nextInt(mazeDim - 2) + 1;
+			y = random.nextInt(mazeDim - 2) + 1;
+//			System.out.printf("x: %d, y: %d\t", x, y);
+			// avoid walls and player
+			if (!map.getPosElement(x, y).equals("w")) { // we spawn before enemy so we don't nede to worry about spawning on them
+				System.out.println(map.getPosElement(x, y));
+				player.setPos(x, y);
+				notPlaced = false;
+				// System.out.println("placing");
+			}
+		}
 	}
 	
 	public Player(int tileX, int tileY, Maze map, ImgCtrl imgCtrl) {

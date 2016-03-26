@@ -31,7 +31,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 	// objects
 	private Timer timer; // needed for action performed
-	private Maze map;
+	private Maze maze;
 	private ImgCtrl imgCtrl;
 	private Player player;
 
@@ -62,6 +62,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 	private ArrayList<Enemy> enemyList;
 	private EnemyBrain enemyBrain;
 	private boolean enemySpawned;
+	private int enemyNum;
 
 	// animations
 	private int animHelperDur;
@@ -76,11 +77,15 @@ public class GameCtrl extends JPanel implements ActionListener {
 	private int playerPosXmax;
 	private int playerPosYmin;
 	private int playerPosYmax;
+	
+	// zoomed out view
+	private int zoomDim;
 
 	// set game up
 	public GameCtrl() {
 		this.mazeDim = GameRunner.MAZE_DIM;
 		this.tileDim = GameRunner.TILE_DIM;
+		zoomDim = GameRunner.ZOOM_DIM;
 		relativeDim = mazeDim * tileDim;
 
 		init();
@@ -114,7 +119,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		addKeyListener(new AcLis()); // get thing that listens for key press
 		setFocusable(true); // adds the key listener to our frame
 		frameRate = 1000 / 60; // 60 frames per second (every 16 Ms)
-		map = new Maze();
+		maze = new Maze();
 		imgCtrl = new ImgCtrl();
 		startDone = false;
 		haveWon = false;
@@ -122,7 +127,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		this.setBackground(Color.DARK_GRAY);
 
 		// player init
-		player = new Player(map, imgCtrl);
+		player = new Player(maze, imgCtrl);
 		setWalk = 0;
 		walkDur = 250; // quarter of a second
 		winDur = 8000;
@@ -132,7 +137,10 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 		// additionals
 		zoomedOut = false;
-		SoundEffects.playBGLoop();
+		
+		if (GameRunner.BG_ON) {
+			SoundEffects.playBGLoop();
+		}
 
 		// refactored
 		playerDraw = new PlayerImgPainter(player, tileDim, 'r', 0);
@@ -140,11 +148,9 @@ public class GameCtrl extends JPanel implements ActionListener {
 		// enemy
 		enemyList = new ArrayList<Enemy>();
 		// spawnEnemies(false);
-		enemyBrain = new EnemyBrain(map, enemyList, player);
+		enemyBrain = new EnemyBrain(maze, enemyList, player);
 		enemySpawned = false;
-		// old enemy
-		// enemy = new Enemy(tileDim, 7, 7);
-		// enemyBrain = new EnemyBrain(map, enemy, player);
+		enemyNum = GameRunner.MAZE_DIM / 2;
 
 		// animations
 		animHelperDur = 2000;
@@ -158,8 +164,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 			enemyList.clear();
 		}
 
-		for (int i = 0; i < 5; i++) {
-			enemyList.add(new Enemy(map, imgCtrl));
+		for (int i = 0; i < enemyNum; i++) {
+			enemyList.add(new Enemy(maze, imgCtrl));
 		}
 		enemySpawned = true;
 		enemyBrain.spawn();
@@ -212,24 +218,24 @@ public class GameCtrl extends JPanel implements ActionListener {
 			}
 
 			if (keycode == KeyEvent.VK_W) { // N
-				if (!map.getPosElement(player.getTileX(), player.getTileY() - 1).equals("w")) {
+				if (!maze.getPosElement(player.getTileX(), player.getTileY() - 1).equals("w")) {
 					player.move(0, -1);
 					moveCommon();
 				}
 			} else if (keycode == KeyEvent.VK_S) { // S
-				if (!map.getPosElement(player.getTileX(), player.getTileY() + 1).equals("w")) {
+				if (!maze.getPosElement(player.getTileX(), player.getTileY() + 1).equals("w")) {
 					player.move(0, 1);
 					moveCommon();
 				}
 			} else if (keycode == KeyEvent.VK_A) { // E
 				playerDraw.setPlayerLookH('l');
-				if (!map.getPosElement(player.getTileX() - 1, player.getTileY()).equals("w")) {
+				if (!maze.getPosElement(player.getTileX() - 1, player.getTileY()).equals("w")) {
 					player.move(-1, 0);
 					moveCommon();
 				}
 			} else if (keycode == KeyEvent.VK_D) { // W
 				playerDraw.setPlayerLookH('r');
-				if (!map.getPosElement(player.getTileX() + 1, player.getTileY()).equals("w")) {
+				if (!maze.getPosElement(player.getTileX() + 1, player.getTileY()).equals("w")) {
 					player.move(1, 0); // 1? tileDim
 					moveCommon();
 				}
@@ -262,20 +268,20 @@ public class GameCtrl extends JPanel implements ActionListener {
 	public void checkTile() {
 
 		// flash items and do something
-		if (map.getPosElement(player.getTileX(), player.getTileY()).equals("s")) { // sword
+		if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("s")) { // sword
 			System.out.println("Sweet sword!");
 			SoundEffects.playFoundItem();
-			map.setTileItem(player.getTileX(), player.getTileY(), 'f');
-		} else if (map.getPosElement(player.getTileX(), player.getTileY()).equals("b")) { // bomb
+			maze.setTileItem(player.getTileX(), player.getTileY(), 'f');
+		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("b")) { // bomb
 			System.out.println("Brilliant bomb!");
 			SoundEffects.playFoundItem();
-			map.setTileItem(player.getTileX(), player.getTileY(), 'f');
-		} else if (map.getPosElement(player.getTileX(), player.getTileY()).equals("h")) { // helper
+			maze.setTileItem(player.getTileX(), player.getTileY(), 'f');
+		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("h")) { // helper
 			System.out.println("Happy helper!");
 			SoundEffects.playFoundHelp();
-		} else if (map.getPosElement(player.getTileX(), player.getTileY()).equals("g")) { // goal
+		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("g")) { // goal
 			System.out.println("Perfect potion!");
-			map.setTileItem(player.getTileX(), player.getTileY(), 'f');
+			maze.setTileItem(player.getTileX(), player.getTileY(), 'f');
 
 			setWin = getTime();
 			haveWon = true;
@@ -296,7 +302,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 		int timeElap = getTime() - setWin;
 
-		// resets game
+		// NB resets game
 		if (haveWon && timeElap > winDur) { // n seconds of winning!
 			// SoundEffects.playWin();
 			System.out.println("Look for the magic potion.");
@@ -317,7 +323,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 			// enemy.setTileY(7);
 
 			//
-			map.reset();
+			maze.reset();
 		}
 
 		repaint();
@@ -332,48 +338,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 		if (!zoomedOut) {
 			if (!haveWon && startDone) {
-				// this draw around player
-				playerPosX = player.getTileX();
-				playerPosY = player.getTileY();
-
-				playerPosXmin = playerPosX - 2;
-				playerPosXmax = playerPosX + 3;
-
-				playerPosYmin = playerPosY - 2;
-				playerPosYmax = playerPosY + 3;
-
-				if (playerPosXmin < 0) {
-					playerPosXmin = 0;
-				} else if (playerPosXmax > GameRunner.MAZE_DIM) {
-					playerPosXmax = GameRunner.MAZE_DIM;
-				}
-
-				if (playerPosYmin < 0) {
-					playerPosYmin = 0;
-				} else if (playerPosYmax > GameRunner.MAZE_DIM) {
-					playerPosYmax = GameRunner.MAZE_DIM;
-				}
-
-				int yCount = -1;
-				// this will run 5 times
-				for (int y = playerPosYmin; y < playerPosYmax; y++) {// col one
-					yCount++;
-					int xCount = -1;
-					// this will run 5 times
-					for (int x = playerPosXmin; x < playerPosXmax; x++) { // fill
-						xCount++;
-						// get element // row
-						String element = map.getPosElement(x, y);
-
-						// now we need to draw it relative to the view window.
-						// always have the center
-
-						drawTiles(g, yCount, xCount, element);
-
-						drawEnemiesInView(g);
-
-					}
-				}
+				drawView(g);
 
 				// draw strings
 			} else if (!startDone) {
@@ -394,38 +359,134 @@ public class GameCtrl extends JPanel implements ActionListener {
 			// drawEnemy(g);
 		} // not zoomed out
 		else { // zoomed out
-			for (int y = 0; y < mazeDim; y++) {// col one
-				for (int x = 0; x < mazeDim; x++) { // fill row
-					String element = map.getPosElement(x, y);
+			drawViewZoomed(g);
+//			for (int y = 0; y < mazeDim; y++) {// col one
+//				for (int x = 0; x < mazeDim; x++) { // fill row
+//					String element = maze.getPosElement(x, y);
+//
+////					drawTilesZoomed(g, y, x, element);
+////					drawEnemiesZoomed(g, y, x);
+//					drawViewZoomed(g);
+//				}
+//			}
+		}
+	}
+	
+	private void drawViewZoomed(Graphics g) {
+		// this draw around player
+		playerPosX = player.getTileX();
+		playerPosY = player.getTileY();
 
-					int zoomDim = GameRunner.ZOOM_DIM;
+		playerPosXmin = playerPosX - 2;
+		playerPosXmax = playerPosX + 3;
 
-					// tiles
-					if (element.equals("w")) { // wall
-						g.setColor(Color.DARK_GRAY);
-						g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
-					} else if (element.equals("g")) { // goal
-						g.setColor(Color.YELLOW);
-						g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
-					} else if (String.format("%s,%s", x, y).equals(player.getPos())) { // player
-						g.setColor(Color.ORANGE);
-						g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
-					} else { // floor (with items or whatever)
-						// System.out.print(String.format("%s, %s\t", x, y));
-						// System.out.println(player.getPos());
-						g.setColor(Color.LIGHT_GRAY);
-						g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
-					}
-					
-					// enemies
-					for (Enemy enemy : enemyList) {
-						if (String.format("%s,%s", x, y).equals(enemy.getPos())) { // enemy
-							g.setColor(Color.RED);
-							g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
-						}
-					}
-				}
+		playerPosYmin = playerPosY - 2;
+		playerPosYmax = playerPosY + 3;
+
+		if (playerPosXmin < 0) {
+			playerPosXmin = 0;
+		} else if (playerPosXmax > GameRunner.MAZE_DIM) {
+			playerPosXmax = GameRunner.MAZE_DIM;
+		}
+
+		if (playerPosYmin < 0) {
+			playerPosYmin = 0;
+		} else if (playerPosYmax > GameRunner.MAZE_DIM) {
+			playerPosYmax = GameRunner.MAZE_DIM;
+		}
+
+		int yCount = -1;
+		// this will run 50 times
+		for (int y = playerPosYmin; y < playerPosYmax; y++) {// col one
+			yCount++;
+			int xCount = -1;
+			// this will run 50 times
+			for (int x = playerPosXmin; x < playerPosXmax; x++) { // fill
+				xCount++;
+				// get element // row
+				String element = maze.getPosElement(x, y);
+
+				// now we need to draw it relative to the view window.
+				// always have the center
+
+//				drawTiles(g, yCount, xCount, element);
+//				drawEnemiesInView(g);
+				
+				drawTilesZoomed(g, yCount, xCount, element);
+				drawEnemiesZoomed(g, yCount, xCount);
 			}
+		}
+	}
+
+	private void drawView(Graphics g) {
+		// this draw around player
+		playerPosX = player.getTileX();
+		playerPosY = player.getTileY();
+
+		playerPosXmin = playerPosX - 2;
+		playerPosXmax = playerPosX + 3;
+
+		playerPosYmin = playerPosY - 2;
+		playerPosYmax = playerPosY + 3;
+
+		if (playerPosXmin < 0) {
+			playerPosXmin = 0;
+		} else if (playerPosXmax > GameRunner.MAZE_DIM) {
+			playerPosXmax = GameRunner.MAZE_DIM;
+		}
+
+		if (playerPosYmin < 0) {
+			playerPosYmin = 0;
+		} else if (playerPosYmax > GameRunner.MAZE_DIM) {
+			playerPosYmax = GameRunner.MAZE_DIM;
+		}
+
+		int yCount = -1;
+		// this will run 5 times
+		for (int y = playerPosYmin; y < playerPosYmax; y++) {// col one
+			yCount++;
+			int xCount = -1;
+			// this will run 5 times
+			for (int x = playerPosXmin; x < playerPosXmax; x++) { // fill
+				xCount++;
+				// get element // row
+				String element = maze.getPosElement(x, y);
+
+				// now we need to draw it relative to the view window.
+				// always have the center
+
+				drawTiles(g, yCount, xCount, element);
+				drawEnemiesInView(g);
+			}
+		}
+	}
+
+	private void drawEnemiesZoomed(Graphics g, int y, int x) {
+		// enemies
+		for (Enemy enemy : enemyList) {
+			if (String.format("%s,%s", x, y).equals(enemy.getPos())) { // enemy
+				g.setColor(Color.RED);
+				g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
+			}
+		}
+	}
+
+	private void drawTilesZoomed(Graphics g, int y, int x, String element) {
+		// tiles
+		if (element.equals("w")) { // wall
+			g.setColor(Color.DARK_GRAY);
+			g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
+		} else if (element.equals("g")) { // goal
+			g.setColor(Color.YELLOW);
+			g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
+		} else if (String.format("%s,%s", x, y).equals(player.getPos())) { // player
+			g.setColor(Color.ORANGE);
+			g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
+		} else { // floor (with items or whatever)
+			// System.out.print(String.format("%s, %s\t", x, y));
+			// System.out.println(player.getPos());
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
 		}
 	}
 

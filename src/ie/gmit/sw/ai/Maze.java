@@ -20,9 +20,7 @@ public class Maze {
 		insideNum = GameRunner.MAZE_DIM - 4;
 		maze = new char[GameRunner.MAZE_DIM][GameRunner.MAZE_DIM];
 
-		// readInMap();
-		genRandomMaze();
-		placeOuterWalls();
+		reset();
 	}
 
 	private void initMaze(char element) {
@@ -33,7 +31,7 @@ public class Maze {
 			}
 		}
 
-		System.out.println(toString());
+//		System.out.println(toString());
 	}
 
 	private void readInMap() {
@@ -48,7 +46,7 @@ public class Maze {
 	private void placeOuterWalls() {
 		for (int row = 0; row < maze.length; row++) {
 			// rows
-			if (row == 0 || row == 1 || row == maze.length - 1 || row == maze.length-2) {
+			if (row == 0 || row == 1 || row == maze.length - 1 || row == maze.length - 2) {
 				for (int col = 0; col < maze.length - 1; col++) {
 					maze[row][col] = 'w';
 				}
@@ -56,12 +54,12 @@ public class Maze {
 			for (int col = 0; col < 2; col++) {
 				maze[row][col] = 'w';
 			}
-			
+
 			// left wall
 			for (int col = 0; col < 2; col++) {
 				maze[row][col] = 'w';
 			}
-			
+
 			// right wall
 			for (int col = maze.length - 1; col > maze.length - 3; col--) {
 				maze[row][col] = 'w';
@@ -77,11 +75,18 @@ public class Maze {
 
 		int itemNum = random.nextInt(GameRunner.MAZE_DIM / 5); // 10
 		int helperNum = random.nextInt(GameRunner.MAZE_DIM / 10); // 5
-		int goalNum = random.nextInt(GameRunner.MAZE_DIM / 50); // 2
+		
+		int goalNum;
+		try {
+			goalNum = random.nextInt(GameRunner.MAZE_DIM / 50); // 2
+		} catch (Exception e) {
+			goalNum = 1;
+		}
 		
 		if (goalNum < 1) {
 			goalNum = 1;
 		}
+
 
 		// items
 		int swordNumber = itemNum; // 10
@@ -102,40 +107,102 @@ public class Maze {
 		// rest of x's should be walls
 		addWalls();
 
-		System.out.println(toString());
+//		System.out.println(toString());
 	}
 
 	private void addWalls() {
 		for (int row = 0; row < maze.length; row++) {
 			for (int col = 0; col < maze[row].length - 1; col++) {
-				if(maze[row][col] == 'x'){
+				if (maze[row][col] == 'x') {
 					maze[row][col] = 'w';
 				}
 			}
 		}
 	}
-
+	
+	// https://www.youtube.com/watch?v=IjLmUT_is8g
 	private void buildMaze() {
 		// spaces work as well as f (floor)
 		// floor is cleaner IMO
+
+		// goes through each row
 		for (int row = 0; row < maze.length; row++) {
+			// goes through each column
 			for (int col = 0; col < maze[row].length - 1; col++) {
-				// chooses a random number less then 10
-				int num = (int) (Math.random() * 10);
-				if (num >= 5 && col + 1 < maze[row].length - 1) {
-					// changes X to blank
-					maze[row][col + 1] = 'f';
-					continue;
-				}
-				if (row + 1 < maze.length) { // Check south
-					// changes x to space
-					maze[row + 1][col] = 'f';
+				// with this turned on there is a chance the goal can not be found,
+				// NB
+				if (col % 2 == 0) { // every second
+					// chooses a random number less then 10
+					int num = (int) (Math.random() * 10);
+
+					// half the time this happens
+					// changes the next column to a floor
+					if (num >= 5 && col + 1 < maze[row].length - 1) { // Change
+																		// West
+						// changes X to floor
+						maze[row][col + 1] = 'f';
+						// continue; // use else instead of continue
+					} else
+					// next we check if to the south is
+					if (row + 1 < maze.length) { // Change south
+						// changes x to floor
+						maze[row + 1][col] = 'f';
+					}
+				}else{
+					// chooses a random number less then 10
+					int num = (int) (Math.random() * 10);
+
+					// half the time this happens
+					// changes the next column to a floor
+					if (num >= 5 && col + 1 < maze[row].length - 1) { // Change
+																		// West
+						// changes X to floor
+						maze[row][col + 1] = 'f';
+						// continue; // use else instead of continue
+					} else
+					// next we check if to the south is
+					if (row + 1 < maze.length) { // Change south
+						// changes x to floor
+						maze[row + 1][col] = 'f';
+					}
 				}
 			}
 		}
 	}
 
-//	private void addFeature(char feature, char replace, int number) {
+	private void buildMazeV1() {
+		// spaces work as well as f (floor)
+		// floor is cleaner IMO
+
+		// goes through each row
+		for (int row = 0; row < maze.length; row++) {
+			// goes through each column
+			for (int col = 0; col < maze[row].length - 1; col++) {
+				// with this turned on there is a chance the goal can not be found,
+				// NB
+				if (random.nextInt(10) >= 2) {
+					// chooses a random number less then 10
+					int num = (int) (Math.random() * 10);
+
+					// half the time this happens
+					// changes the next column to a floor
+					if (num >= 5 && col + 1 < maze[row].length - 1) { // Change
+																		// West
+						// changes X to floor
+						maze[row][col + 1] = 'f';
+						// continue; // use else instead of continue
+					} else
+					// next we check if to the south is
+					if (row + 1 < maze.length) { // Change south
+						// changes x to floor
+						maze[row + 1][col] = 'f';
+					}
+				}
+			}
+		}
+	}
+
+	// private void addFeature(char feature, char replace, int number) {
 	private void addFeature(char feature, char replace, int number) {
 		// randomely adds features
 		int counter = 0;
@@ -188,7 +255,9 @@ public class Maze {
 	}
 
 	public void reset() {
-		readInMap();
+		// readInMap();
+		genRandomMaze();
+		placeOuterWalls();
 	}
 
 	public void setTileItem(int x, int y, char item) {

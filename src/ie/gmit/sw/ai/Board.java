@@ -374,12 +374,22 @@ public class Board extends JPanel implements ActionListener {
 //
 //				System.out.print("playerPosXmax: " + playerPosXmax + "\t");
 //				System.out.println("playerPosYmax: " + playerPosYmax);
+				
+				int yCount = -1;
+				// this will run 5 times
 				for (int y = playerPosYmin; y < playerPosYmax; y++) {// col one
+					yCount++;
+					int xCount = -1;
+					// this will run 5 times
 					for (int x = playerPosXmin; x < playerPosXmax; x++) { // fill
-																			// row
+						xCount++;
+						// get element													// row
 						String element = map.getPosElement(x, y);
 
-						drawTiles(g, y, x, element);
+						// now we need to draw it relative to the view window.
+						// always have the center
+						
+						drawTiles(g, yCount, xCount, element);
 
 						drawEnemiesInView(g);
 
@@ -406,21 +416,23 @@ public class Board extends JPanel implements ActionListener {
 				for (int x = 0; x < mazeDim; x++) { // fill row
 					String element = map.getPosElement(x, y);
 
+					int zoomDim = GameRunner.ZOOM_DIM;
+					
 					// tiles
 					if (element.equals("w")) { // wall
 						g.setColor(Color.DARK_GRAY);
-						g.fillRect(x * tileDim, y * tileDim, tileDim, tileDim);
+						g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
 					} else if (element.equals("g")) { // goal
 						g.setColor(Color.YELLOW);
-						g.fillRect(x * tileDim, y * tileDim, tileDim, tileDim);
+						g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
 					} else if (String.format("%s,%s", x, y).equals(player.getPos())) { // player
 						g.setColor(Color.ORANGE);
-						g.fillRect(x * tileDim, y * tileDim, tileDim, tileDim);
+						g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
 					} else { // floor (with items or whatever)
 						// System.out.print(String.format("%s, %s\t", x, y));
 						// System.out.println(player.getPos());
 						g.setColor(Color.LIGHT_GRAY);
-						g.fillRect(x * tileDim, y * tileDim, tileDim, tileDim);
+						g.fillRect(x * zoomDim, y * zoomDim, zoomDim, zoomDim);
 					}
 				}
 			}

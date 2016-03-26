@@ -6,6 +6,7 @@ public class GameRunner {
 	public static int MAZE_DIM;
 	public static int TILE_DIM;
 	public static int VIEW_DIM;
+	public static int ZOOM_DIM;
 	private int screenDim;
 	private int titleHeight;
 	private int infoBar;
@@ -18,6 +19,7 @@ public class GameRunner {
 		MAZE_DIM = 100;
 		TILE_DIM = 64;
 		VIEW_DIM = 5; // 5 * 5
+		ZOOM_DIM = 16;
 //		screenDim = MAZE_DIM * TILE_DIM;// full screen
 		// plus an info bar
 		screenDim = TILE_DIM * VIEW_DIM;

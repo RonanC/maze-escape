@@ -22,7 +22,7 @@ public class Player extends Character{
 		
 		// // start position
 		// top left (1 in)
-		setPos(1, 1);
+		setPos(2, 2);
 	}
 	
 	public Player(int tileX, int tileY, Maze map, ImgCtrl imgCtrl) {

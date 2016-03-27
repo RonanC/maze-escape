@@ -10,6 +10,7 @@ import javax.sound.sampled.*;
 import ie.gmit.sw.ai.GameCtrl;
 
 public class SoundEffects {
+	
 	public static synchronized void playSound(final String audioName) {
 		String url = "resources/audio/" + audioName;
 		File file = new File(url);

@@ -6,7 +6,12 @@ import java.util.Random;
 import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.Maze;
 import ie.gmit.sw.ai.img.ImgCtrl;
-
+/*
+ * STATS:
+ * Health
+ * Steps
+ * Sword
+ */
 public class Player extends Character{
 	private Image player;
 	private Image player_walk;
@@ -18,7 +23,6 @@ public class Player extends Character{
 	// items
 	private boolean hasSword;
 	private boolean hasBomb;
-	private int health;
 	
 	public Player(Maze map, ImgCtrl imgCtrl) {
 		super(map, imgCtrl);
@@ -35,24 +39,6 @@ public class Player extends Character{
 		hasSword = false;
 		hasBomb = false;
 		health = 100;
-	}
-	
-	
-	// health mutators
-	public int getHealth() {
-		return health;
-	}
-
-	public void setHealth(int health) {
-		this.health = health;
-	}
-	
-	public void incHealth(int incAmount){
-		health += incAmount;
-	}
-	
-	public void decHealth(int decAmount){
-		health -= decAmount;
 	}
 
 

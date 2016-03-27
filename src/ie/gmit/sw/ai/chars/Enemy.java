@@ -6,25 +6,17 @@ import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.Maze;
 import ie.gmit.sw.ai.img.ImgCtrl;
 
-
+/*
+ * STATS:
+ * Health
+ * Intelligence
+ */
 public class Enemy extends Character {
 	private Image enemy;
 	private Image enemy_2;
 	
 	// stats
 	private int intelLvl;
-	// nohealth, they either live or die due to a fight
-//	
-//	public Enemy(int tileX, int tileY, Maze map, ImgCtrl imgCtrl, int intelLvl) {
-//		super(map, imgCtrl);
-//		this.tileDim = GameRunner.TILE_DIM;
-//		this.intelLvl = intelLvl;
-//		
-//		setUpImages();
-//		
-//		// // start position
-//		setPos(tileX, tileY);
-//	}
 	
 	public Enemy(Maze map, ImgCtrl imgCtrl) {
 		super(map, imgCtrl);
@@ -32,6 +24,7 @@ public class Enemy extends Character {
 		
 		// set intel level at 1
 		this.intelLvl = 1;
+		health = 50;
 
 		setUpImages();
 		

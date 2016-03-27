@@ -28,8 +28,8 @@ public class Maze {
 		genRandomMaze();
 		placeOuterWalls();
 
-//		System.out.println(toString());
-//		printMap();
+		// System.out.println(toString());
+		// printMap();
 	}
 
 	private void initMaze(char element) {
@@ -82,35 +82,33 @@ public class Maze {
 		// changes some to space
 		buildMaze();
 
+		// items
 		int itemNum = random.nextInt(GameRunner.MAZE_DIM / 5); // 10
 		int helperNum = random.nextInt(GameRunner.MAZE_DIM / 10); // 5
 
-		int goalNum;
-		try {
-			goalNum = random.nextInt(GameRunner.MAZE_DIM / 50); // 2
-		} catch (Exception e) {
-			goalNum = 1;
-		}
-
-		if (goalNum < 1) {
-			goalNum = 1;
-		}
-
-		// items
-		int swordNumber = itemNum; // 10
-		int bombNumber = itemNum; // 10
+		// int goalNum;
+		// try {
+		// goalNum = random.nextInt(GameRunner.MAZE_DIM / 50); // 2
+		// } catch (Exception e) {
+		// goalNum = 1;
+		// }
+		//
+		// if (goalNum < 1) {
+		// goalNum = 1;
+		// }
+		//
+		// int goalNumber = goalNum;
 
 		// quest items
-		int goalNumber = goalNum; // 4
-		int helperNumber = helperNum; // 12
+		int goalNumber = 1; // only one goal
 
 		// items
 		addFeature('s', 'f', itemNum);
 		addFeature('b', 'f', itemNum);
 
 		// quest items
-		addFeature('h', 'f', itemNum);
-		addFeature('g', 'f', 1);
+		addFeature('h', 'f', helperNum);
+		addFeature('g', 'f', goalNumber);
 
 		// rest of x's should be walls
 		addWalls();
@@ -254,9 +252,9 @@ public class Maze {
 		try {
 			index = maze[y][x];
 		} catch (Exception e) {
-			System.out.print("Error in Maze getPostElement(): "  + e.getMessage() + "\t");
+			System.out.print("Error in Maze getPostElement(): " + e.getMessage() + "\t");
 			System.out.println("x: " + x + ", y:" + y);
-//			index = 'w'; // default to wall
+			// index = 'w'; // default to wall
 		}
 
 		StringBuilder temp = new StringBuilder();

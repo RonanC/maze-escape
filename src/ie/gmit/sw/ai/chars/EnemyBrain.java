@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ie.gmit.sw.ai.FightCtrl;
 import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.Maze;
 import ie.gmit.sw.ai.audio.SoundEffects;
@@ -20,12 +21,14 @@ public class EnemyBrain extends Thread {
 	private ImgCtrl imgCtrl;
 
 	private boolean enemySpawned;
+	private FightCtrl fightCtrl;
 	
-	public EnemyBrain(Maze map, ArrayList<Enemy> enemyList, Player player, ImgCtrl imgCtrl) {
+	public EnemyBrain(Maze map, ArrayList<Enemy> enemyList, Player player, ImgCtrl imgCtrl, FightCtrl fightCtrl) {
 		this.imgCtrl = imgCtrl;
 		this.player = player;
 		this.map = map;
 		this.enemyList = enemyList;
+		this.fightCtrl = fightCtrl;
 		random = new Random();
 		timer = new Timer();
 		
@@ -112,7 +115,13 @@ public class EnemyBrain extends Thread {
 
 		@Override
 		public void run() {
-			if (!enemy.isInFight()) {
+			
+			if (!enemy.isAlive()) {
+				enemyList.remove(enemy);
+				SoundEffects.playEnemyDeath();
+				player.incXp(enemy.getXpWorth());
+				cancel(); // kills task
+			} else if (!enemy.isInFight()) {
 				// pick a version
 				int moveVersion = random.nextInt(2) + 1;
 
@@ -210,11 +219,7 @@ public class EnemyBrain extends Thread {
 
 		// fight
 		public void fight() {
-			System.out.println("Dual!");
-			SoundEffects.playEnemyAttack();
-			
-			player.setInFight(true);
-			enemy.setInFight(true);
+			fightCtrl.fight(enemy);
 		}
 	}
 

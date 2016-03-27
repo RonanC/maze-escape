@@ -10,7 +10,7 @@ import javax.sound.sampled.*;
 import ie.gmit.sw.ai.GameCtrl;
 
 public class SoundEffects {
-	
+
 	public static synchronized void playSound(final String audioName) {
 		String url = "resources/audio/" + audioName;
 		File file = new File(url);
@@ -85,7 +85,7 @@ public class SoundEffects {
 		}).start();
 	}
 
-	public static void playWin() {
+	public static void playGO() {
 		playSound("win");
 	}
 
@@ -120,7 +120,12 @@ public class SoundEffects {
 		playSound("fight/terminated.wav");
 	}
 
-	public static void playLostFight() {
+	public static void playEnemyDeath() {
+		playWonFight();
+		playEnemyAttack();
+	}
+
+	public static void playPlayerDeath() {
 		playSound("fight/cry.wav");
 	}
 
@@ -145,29 +150,31 @@ public class SoundEffects {
 			System.out.println("unable to load: " + location);
 		}
 	}
-	
+
 	public static void playFoundItemNoPickup() {
-//		String location = "items/noPickup/";
-//
-//		Random random = new Random();
-//		int num = random.nextInt(1);
-//
-//		switch (num) { // add more insults
-//		case 0:
-//			location += "boring.wav";
-//			break;
-//
-//		default:
-//			location += "boring.wav";
-//			break;
-//		}
-//		try {
-//			playSound(location);
-//		} catch (Exception e) {
-//			System.out.println("unable to load: " + location);
-//		}
+		// String location = "items/noPickup/";
+		//
+		// Random random = new Random();
+		// int num = random.nextInt(1);
+		//
+		// switch (num) { // add more insults
+		// case 0:
+		// location += "boring.wav";
+		// break;
+		//
+		// default:
+		// location += "boring.wav";
+		// break;
+		// }
+		// try {
+		// playSound(location);
+		// } catch (Exception e) {
+		// System.out.println("unable to load: " + location);
+		// }
 		System.out.println("no sound");
 	}
+	
+	
 
 	public static void playFoundHelp() {
 		String location = "helper/";
@@ -197,10 +204,14 @@ public class SoundEffects {
 		} catch (Exception e) {
 			System.out.println("unable to load: " + location);
 		}
-		
+
+	}
+	
+	public static void playGameOver() {
+		playSound("fight/game_over.wav");
 	}
 
-	public static void playGameOver() {
+	public static void playWin() {
 		playSound("win/Brave5.wav");
 	}
 

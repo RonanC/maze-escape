@@ -24,20 +24,25 @@ public class GameRunner {
 		init();
 	}
 
+	public static void reset() {
+		f.dispose();
+		init();
+	}
+
 	public static void init() {
 		f = new JFrame();
-		
+
 		chooseMazeSize();
 		chooseBGMusicOn();
 		chooseZoomScale();
 		chooseZoomMove();
-		
-		TILE_DIM = 64 * 2;	// scale of tiles
+
+		TILE_DIM = 64 * 2; // scale of tiles
 		VIEW_DIM = 5; // 5 * 5
-		SCREEN_DIM = TILE_DIM * VIEW_DIM;		// real co-ordinates
+		SCREEN_DIM = TILE_DIM * VIEW_DIM; // real co-ordinates
 		infoBar = TILE_DIM;// plus an info bar
 		titleHeight = 22;
-		
+
 		frameConfig(f);
 	}
 
@@ -49,6 +54,27 @@ public class GameRunner {
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	public static void choosePlayAgain() {
+		int playAgain = 1;
+		try {
+			playAgain = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Play agan?\n0: no\n1: yes", null,
+					JOptionPane.INFORMATION_MESSAGE, null, null, "1"));
+		} catch (Exception e) {
+			playAgain = 1;
+		}
+
+		if (ZOOM_SCALE < 0 || ZOOM_SCALE > 2) {
+			ZOOM_SCALE = 0;
+		}
+
+		if (playAgain == 0) {
+			System.exit(0);
+		} else {
+			reset();
+		}
+
 	}
 
 	public static void chooseZoomScale() {
@@ -92,7 +118,7 @@ public class GameRunner {
 		int bg;
 		try {
 			bg = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Music on?\n0: off\n1: on", null,
-					JOptionPane.INFORMATION_MESSAGE, null, null, "0"));
+					JOptionPane.INFORMATION_MESSAGE, null, null, "0")); // TODO: change back to 1 when finishing
 		} catch (Exception e) {
 			bg = 1;
 		}

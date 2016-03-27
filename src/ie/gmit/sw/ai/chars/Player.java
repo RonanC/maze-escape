@@ -13,6 +13,7 @@ import ie.gmit.sw.ai.img.ImgCtrl;
  * Sword
  */
 public class Player extends Character{
+	public static int MAX_HEALTH = 100;
 	private Image player;
 	private Image player_walk;
 	private Image player_walk2;
@@ -20,6 +21,9 @@ public class Player extends Character{
 	private Image punch1, punch2;
 	private Random random;
 	private int stepCount;
+
+	// when enemy dead gain xp
+	private int xp;
 	
 	// items
 	private boolean hasSword;
@@ -30,6 +34,7 @@ public class Player extends Character{
 		this.tileDim = GameRunner.TILE_DIM;
 		this.mazeDim = GameRunner.MAZE_DIM;
 		random = new Random();
+		this.xp = 0;
 	
 		setUpImages();
 		
@@ -39,7 +44,7 @@ public class Player extends Character{
 		// set info
 		hasSword = false;
 		hasBomb = false;
-		health = 100;
+		health = MAX_HEALTH;
 	}
 
 
@@ -61,7 +66,9 @@ public class Player extends Character{
 		hasBomb = equip;
 	}
 	
-	
+	public void incXp(int amount){
+		xp += amount;
+	}
 	
 	public void resetPos(){
 //		setPos(2, 2);

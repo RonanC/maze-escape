@@ -17,12 +17,23 @@ public class Character {
 	// stats
 	protected int health;
 	protected boolean inFight;
+	protected boolean alive;
+	
+	public boolean getAlive() {
+		return alive;
+	}
+
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
 
 	public Character(Maze map, ImgCtrl imgCtrl) {
 		super();
 		this.map = map;
 		this.imgCtrl = imgCtrl;
 		inFight = false;
+		alive = true;
 	}
 
 //	protected Image createImage(String tileName) {
@@ -34,9 +45,11 @@ public class Character {
 	
 	public boolean isAlive(){
 		if (health > 0) {
+			alive = true;
 			return true;
 		}
 		else{
+			alive = false;
 			return false;
 		}
 	}

@@ -95,6 +95,12 @@ public class GameCtrl extends JPanel implements ActionListener {
 	// one key press at a time
 	private boolean keyDown;
 
+	// fight
+	private FightCtrl fightCtrl;
+	private int dieTime;
+	private int dieDur;
+	private boolean gameOverSeq;
+
 	// set game up
 	public GameCtrl() {
 		this.tileDim = GameRunner.TILE_DIM;
@@ -159,10 +165,13 @@ public class GameCtrl extends JPanel implements ActionListener {
 		// refactored
 		playerImgPainter = new PlayerImgPainter(player, tileDim, 'r', 0);
 
+		// fight
+		fightCtrl = new FightCtrl(player);
+
 		// enemy
 		enemyList = new ArrayList<Enemy>();
 		// spawnEnemies(false);
-		enemyBrain = new EnemyBrain(maze, enemyList, player, imgCtrl);
+		enemyBrain = new EnemyBrain(maze, enemyList, player, imgCtrl, fightCtrl);
 		enemyNum = GameRunner.MAZE_DIM / 2;
 
 		// animations
@@ -180,6 +189,10 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 		// key down
 		keyDown = false;
+
+		// fight
+		dieDur = 3000;
+		gameOverSeq = false;
 	}
 
 	// get time in millis
@@ -190,21 +203,25 @@ public class GameCtrl extends JPanel implements ActionListener {
 	}
 
 	// // additional
-	public void fight(Enemy enemy) {
-		System.out.println("Dual!");
-		SoundEffects.playPlayerAttack();
-		player.setInFight(true);
-		enemy.setInFight(true);
-		// TODO: Add JFuzzy logic
-		// determine score from stats and randomness
-		// take health away from each
-		// lock enemies in place for 3 seconds
+	public void startFight(Enemy enemy) {
+		// fightCtrl.setFightStartTime(getTime());
+
+		// TODO: lock enemies in place for 3 seconds
+		// lock players in place
+		// player.setInFight(true);
+		// enemy.setInFight(true);
+
+		// unlock
+		// if (GameCtrl.getTime() - fightCtrl.getFightStartTime() >
+		// fightCtrl.getFightDur()) {
+		fightCtrl.fight(enemy);
+		// }
 	}
 
 	public void checkFight() {
 		for (Enemy enemy : enemyList) {
 			if (player.getPos().equals(enemy.getPos())) {
-				fight(enemy);
+				startFight(enemy);
 			}
 		}
 	}
@@ -238,7 +255,20 @@ public class GameCtrl extends JPanel implements ActionListener {
 		// player.resetPos();
 		// playerDraw.setPlayerLookH('r');
 
-		GameRunner.init();
+		GameRunner.reset();
+	}
+
+	// full reset
+	public void choosePlayAgain() {
+
+		// go to start screen
+		startDone = false;
+
+		// clear enemies
+		enemyBrain.killAllEnemies();
+
+		// play again
+		GameRunner.choosePlayAgain();
 	}
 
 	// KEY PRESS
@@ -355,10 +385,21 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 			setWin = getTime();
 			haveWon = true;
-			SoundEffects.playGameOver();
+			SoundEffects.playWin();
 			enemyList.clear();
 		}
 	}
+
+	// private void gameOver(){
+	// // play first
+	// if (getTime() - dieTime > 1000) {
+	// SoundEffects.playPlayerDeath();
+	// } else if (getTime() - dieTime > 2000) {
+	// SoundEffects.playGameOver();
+	// } else if (getTime() - dieTime > 3000) {
+	// fullReset();
+	// }
+	// }
 
 	// // ACTION PERFORMED
 	// gets called a certain frames per second
@@ -373,6 +414,28 @@ public class GameCtrl extends JPanel implements ActionListener {
 			haveWon = false;
 
 			fullReset();
+		}
+
+		// TODO: check if alive/dead
+		if (!player.getAlive()) {
+			player.setAlive(true); // so this only gets called once
+			dieTime = getTime(); // get time for game over sequence
+			gameOverSeq = true; // then we trigger the game over sequence
+			// fullReset();
+			// SoundEffects.playGameOver();
+			SoundEffects.playGameOver();
+		}
+
+		if (gameOverSeq) {
+			if (getTime() - dieTime > 1000) {
+				gameOverSeq = false;
+				choosePlayAgain();
+			}
+		}
+
+		// TODO: check if in fight
+		if (fightCtrl.isFightInProgress()) {
+
 		}
 
 		repaint();

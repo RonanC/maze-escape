@@ -35,7 +35,7 @@ public class FightCtrl {
 		this.random = new Random();
 		this.scoreMax = 20;
 		this.fightInProgress = false;
-		this.fightDur = 3000;
+		this.fightDur = 2000;
 	}
 	
 	
@@ -107,12 +107,8 @@ public class FightCtrl {
 		enemy.decHealth(playerTotalScore);
 		player.isAlive(); // updates alive status
 		
-		// print scores
-		System.out.println(playerScoreToString());
-		System.out.println(enemyScoreToString());
-		
 		// fight over
-		fightOff();
+//		fightOff();
 	}
 	
 	public void fightOn(){
@@ -127,6 +123,10 @@ public class FightCtrl {
 		setFightInProgress(false);
 		player.setInFight(false);
 		enemy.setInFight(false);
+		
+		// print scores
+		System.out.println(playerScoreToString());
+		System.out.println(enemyScoreToString());
 	}
 
 	private void resetValues() {

@@ -435,7 +435,9 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 		// TODO: check if in fight
 		if (fightCtrl.isFightInProgress()) {
-
+			if (getTime() - fightCtrl.getFightStartTime() > fightCtrl.getFightDur()) {
+				fightCtrl.fightOff();
+			}
 		}
 
 		repaint();

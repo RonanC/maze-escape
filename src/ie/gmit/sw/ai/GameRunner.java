@@ -65,8 +65,8 @@ public class GameRunner {
 			playAgain = 1;
 		}
 
-		if (ZOOM_SCALE < 0 || ZOOM_SCALE > 2) {
-			ZOOM_SCALE = 0;
+		if (playAgain < 0 || playAgain > 1) {
+			playAgain = 1;
 		}
 
 		if (playAgain == 0) {

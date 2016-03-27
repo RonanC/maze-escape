@@ -100,6 +100,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 	private int dieTime;
 	private int dieDur;
 	private boolean gameOverSeq;
+	
+	private int medKitValue;
 
 	// set game up
 	public GameCtrl() {
@@ -193,6 +195,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 		// fight
 		dieDur = 3000;
 		gameOverSeq = false;
+		
+		medKitValue = 50;
 	}
 
 	// get time in millis
@@ -366,7 +370,6 @@ public class GameCtrl extends JPanel implements ActionListener {
 			} else {// unneeded
 				SoundEffects.playFoundItemNoPickup();
 			}
-			System.out.println("Sweet sword!");
 		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("b")) { // bomb
 			if (!player.getBombStatus()) {
 				player.setBombStatus(true);
@@ -375,12 +378,21 @@ public class GameCtrl extends JPanel implements ActionListener {
 			} else {// unneeded
 				SoundEffects.playFoundItemNoPickup();
 			}
-			System.out.println("Brilliant bomb!");
+		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("m")) { // medkit
+			if (player.getHealth() < 100) {
+				player.incHealth(medKitValue);
+				if (player.getHealth() > 100) {
+					player.setHealth(100);
+				}
+				
+				maze.setTileItem(player.getTileX(), player.getTileY(), 'f');
+				SoundEffects.playFoundItem();
+			} else {// unneeded
+				SoundEffects.playFoundItemNoPickup();
+			}
 		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("h")) { // helper
-			System.out.println("Happy helper!");
 			SoundEffects.playFoundHelp();
 		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("g")) { // goal
-			System.out.println("Perfect potion!");
 			maze.setTileItem(player.getTileX(), player.getTileY(), 'f');
 
 			setWin = getTime();
@@ -389,17 +401,6 @@ public class GameCtrl extends JPanel implements ActionListener {
 			enemyList.clear();
 		}
 	}
-
-	// private void gameOver(){
-	// // play first
-	// if (getTime() - dieTime > 1000) {
-	// SoundEffects.playPlayerDeath();
-	// } else if (getTime() - dieTime > 2000) {
-	// SoundEffects.playGameOver();
-	// } else if (getTime() - dieTime > 3000) {
-	// fullReset();
-	// }
-	// }
 
 	// // ACTION PERFORMED
 	// gets called a certain frames per second
@@ -410,13 +411,12 @@ public class GameCtrl extends JPanel implements ActionListener {
 		// NB resets game
 		if (haveWon && timeElap > winDur) { // n seconds of winning!
 			// SoundEffects.playWin();
-			System.out.println("Look for the magic potion.");
+//			System.out.println("Look for the magic potion.");
 			haveWon = false;
 
-			fullReset();
+			choosePlayAgain();
 		}
 
-		// TODO: check if alive/dead
 		if (!player.getAlive()) {
 			player.setAlive(true); // so this only gets called once
 			dieTime = getTime(); // get time for game over sequence
@@ -433,7 +433,6 @@ public class GameCtrl extends JPanel implements ActionListener {
 			}
 		}
 
-		// TODO: check if in fight
 		if (fightCtrl.isFightInProgress()) {
 			if (getTime() - fightCtrl.getFightStartTime() > fightCtrl.getFightDur()) {
 				fightCtrl.fightOff();
@@ -761,6 +760,12 @@ public class GameCtrl extends JPanel implements ActionListener {
 					g.drawImage(imgCtrl.getBomb(), xCount * tileDim, yCount * tileDim, null);
 				} else {
 					g.drawImage(imgCtrl.getBomb(), (xCount + 1) * tileDim, yCount * tileDim, -tileDim, tileDim, null);
+				}
+			} else if (element.equals("m")) { // bomb
+				if (getTime() % animBombDur * 1.5 > animBombDur) {	// bomb has the same anim duration as med kit
+					g.drawImage(imgCtrl.getMedkit(), xCount * tileDim, yCount * tileDim, null);
+				} else {
+					g.drawImage(imgCtrl.getMedkit(), (xCount + 1) * tileDim, yCount * tileDim, -tileDim, tileDim, null);
 				}
 			}
 		} // end of if

@@ -119,6 +119,10 @@ public class SoundEffects {
 	public static void playWonFight() {
 		playSound("fight/terminated.wav");
 	}
+	
+	public static void playEat() {
+		playSound("items/food/eat2.wav");
+	}
 
 	public static void playEnemyDeath() {
 		playWonFight();
@@ -171,7 +175,7 @@ public class SoundEffects {
 		// } catch (Exception e) {
 		// System.out.println("unable to load: " + location);
 		// }
-		System.out.println("no sound");
+//		System.out.println("no sound");
 	}
 	
 	

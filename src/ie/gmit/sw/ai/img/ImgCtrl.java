@@ -11,7 +11,7 @@ public class ImgCtrl {
 	// Images
 	private Image floor, wall, goal;
 	private Image helper;
-	private Image sword, bomb;
+	private Image sword, bomb, medkit;
 	private Image player_stand, player_win, player_walk, player_walk2;
 	private Image enemy_down, enemy_up;
 	private Image punch1, punch2;
@@ -45,6 +45,7 @@ public class ImgCtrl {
 		items[1] = ImageIO.read(new java.io.File(url + "items/helper.png"));
 		items[2] = ImageIO.read(new java.io.File(url + "items/sword.png"));
 		items[3] = ImageIO.read(new java.io.File(url + "items/bomb.png"));
+		items[4] = ImageIO.read(new java.io.File(url + "items/medkit_lighting.png"));
 
 		player = new BufferedImage[4];
 		player[0] = ImageIO.read(new java.io.File(url + "hero/hero_stand.png"));
@@ -70,6 +71,7 @@ public class ImgCtrl {
 		helper = scaleImage(items[1]);
 		sword = scaleImage(items[2]);
 		bomb = scaleImage(items[3]);
+		medkit = scaleImage(items[4]);
 
 		// player
 		player_stand = scaleImage(player[0]);
@@ -148,5 +150,9 @@ public class ImgCtrl {
 
 	public Image getPunch2() {
 		return punch2;
+	}
+
+	public Image getMedkit() {
+		return medkit;
 	}
 }

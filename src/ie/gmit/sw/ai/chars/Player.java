@@ -29,6 +29,9 @@ public class Player extends Character{
 	private boolean hasSword;
 	private boolean hasBomb;
 	
+	private int swordStrength;
+	private int swordMaxStrength;
+	
 	public Player(Maze map, ImgCtrl imgCtrl) {
 		super(map, imgCtrl);
 		this.tileDim = GameRunner.TILE_DIM;
@@ -45,6 +48,9 @@ public class Player extends Character{
 		hasSword = false;
 		hasBomb = false;
 		health = MAX_HEALTH;
+		
+		swordMaxStrength = 2;
+		swordStrength = 0;
 	}
 
 
@@ -60,6 +66,17 @@ public class Player extends Character{
 	// set items
 	public void setSwordStatus(boolean equip){
 		hasSword = equip;
+		
+		if (equip) {
+			swordStrength = swordMaxStrength;
+		}
+	}
+	
+	public void swordDec(){
+		swordStrength--;
+		if (swordStrength <= 0) {
+			setSwordStatus(false);
+		}
 	}
 	
 	public void setBombStatus(boolean equip){

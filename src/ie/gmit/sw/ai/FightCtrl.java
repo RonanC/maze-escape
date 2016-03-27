@@ -127,6 +127,8 @@ public class FightCtrl {
 		// print scores
 		System.out.println(playerScoreToString());
 		System.out.println(enemyScoreToString());
+		
+		player.swordDec();
 	}
 
 	private void resetValues() {
@@ -210,7 +212,11 @@ public class FightCtrl {
 
 	public void enemyInit() {
 		enemyLuckScore = random.nextInt(scoreMax) + 1;
-		enemyHealthScore = enemy.getHealth() / (Enemy.MAX_HEALTH / scoreMax);
+		System.out.print("enemy.getHealth(): " + enemy.getHealth() + "\t");
+		System.out.print("Enemy.MAX_HEALTH: " + Enemy.MAX_HEALTH + "\t");
+		System.out.print("scoreMax: " + scoreMax + "\t");
+		double tempHealth = (double)enemy.getHealth() / ((double)Enemy.MAX_HEALTH / (double)scoreMax);
+		enemyHealthScore = (int) tempHealth;
 		enemyIntelScore = enemy.getIntel() * (Enemy.MAX_INTEL * (scoreMax / 4));
 	}
 

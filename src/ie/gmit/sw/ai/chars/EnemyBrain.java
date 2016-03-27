@@ -101,7 +101,6 @@ public class EnemyBrain extends Thread {
 		private Maze map;
 		private Enemy enemy;
 		private Player player;
-		private int moveVersion;
 		private Random random;
 
 		public EnemyTask(Maze map, Enemy enemy, Player player) {
@@ -109,29 +108,32 @@ public class EnemyBrain extends Thread {
 			this.enemy = enemy;
 			this.player = player;
 			random = new Random();
-			moveVersion = random.nextInt(5);
 		}
 
 		@Override
 		public void run() {
-			// pick a version
-			int moveVersion = random.nextInt(2) + 1;
+			if (!enemy.isInFight()) {
+				// pick a version
+				int moveVersion = random.nextInt(2) + 1;
 
-			switch (moveVersion) {
-			case 1:
-				v1RandomMove();
-				break;
+				switch (moveVersion) {
+				case 1:
+					v1RandomMove();
+					break;
+					
+				case 2:
+					v2AlwaysMove();
+					break;
+					
+				default:
+					v1RandomMove();
+					break;
+				}
 				
-			case 2:
-				v2AlwaysMove();
-				break;
+				checkFight(); // checked every move
+			}else{
 				
-			default:
-				v1RandomMove();
-				break;
 			}
-
-			checkFight(); // checked every move
 		}
 
 		// V4 - depth first (need to create node graph)
@@ -210,6 +212,9 @@ public class EnemyBrain extends Thread {
 		public void fight() {
 			System.out.println("Dual!");
 			SoundEffects.playEnemyAttack();
+			
+			player.setInFight(true);
+			enemy.setInFight(true);
 		}
 	}
 

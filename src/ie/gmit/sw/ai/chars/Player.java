@@ -17,6 +17,7 @@ public class Player extends Character{
 	private Image player_walk;
 	private Image player_walk2;
 	private Image player_win;
+	private Image punch1, punch2;
 	private Random random;
 	private int stepCount;
 	
@@ -109,6 +110,10 @@ public class Player extends Character{
 		
 		// win
 		player_win = imgCtrl.getPlayer_win();
+		
+		// fight
+		punch1 = imgCtrl.getPunch1();
+		punch2 = imgCtrl.getPunch2();
 	}
 	
 	public Image getPlayer(){
@@ -125,6 +130,14 @@ public class Player extends Character{
 	
 	public Image getPlayerWin(){
 		return player_win;
+	}
+	
+	public Image getPunch1(){
+		return punch1;
+	}
+	
+	public Image getPunch2(){
+		return punch2;
 	}
 
 	// other mutators

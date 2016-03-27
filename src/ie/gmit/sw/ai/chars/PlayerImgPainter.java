@@ -17,6 +17,26 @@ public class PlayerImgPainter {
 		this.playerLookH = playerLookH;
 		zoomInPos = 2 * tileDim;
 	}
+	
+	// fight
+	public void fight(Graphics g){
+		
+		
+		if (GameCtrl.getTime() % 2000 > 500 && GameCtrl.getTime() % 2000 < 1000) {
+			g.drawImage(player.getPunch1(), zoomInPos, zoomInPos + (tileDim / 8), tileDim, tileDim, null);
+		} else if (GameCtrl.getTime() % 2000 > 1500) {
+			g.drawImage(player.getPunch2(), zoomInPos, zoomInPos + (tileDim / 8), tileDim, tileDim, null);
+		}
+		
+		if (GameCtrl.getTime() % 1500 < 750) {
+			g.drawImage(player.getPlayer(), zoomInPos + tileDim, zoomInPos, -tileDim, tileDim, null);
+		} else{
+			g.drawImage(player.getPlayer(), zoomInPos, zoomInPos, tileDim, tileDim, null);
+		}
+		
+
+		
+	}
 
 	// left draw
 	public void lookLeft(Graphics g) {

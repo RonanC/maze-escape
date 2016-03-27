@@ -24,9 +24,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	// basic game info
-	private int mazeDim;
 	private int tileDim;
-	private int relativeDim;
 	private int frameRate;
 
 	// objects
@@ -55,7 +53,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 	// private Graphics g;
 
 	// refactored
-	private PlayerImgPainter playerDraw;
+	private PlayerImgPainter playerImgPainter;
 
 	// enemy
 	// private Enemy enemy;
@@ -93,16 +91,14 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 	// bag stuff
 	private int gameStartTime;
-	
+
 	// one key press at a time
 	private boolean keyDown;
 
 	// set game up
 	public GameCtrl() {
-		this.mazeDim = GameRunner.MAZE_DIM;
 		this.tileDim = GameRunner.TILE_DIM;
 		zoomDim = GameRunner.ZOOM_DIM;
-		relativeDim = mazeDim * tileDim;
 
 		init();
 
@@ -161,7 +157,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		}
 
 		// refactored
-		playerDraw = new PlayerImgPainter(player, tileDim, 'r', 0);
+		playerImgPainter = new PlayerImgPainter(player, tileDim, 'r', 0);
 
 		// enemy
 		enemyList = new ArrayList<Enemy>();
@@ -181,22 +177,10 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 		// bag stuff
 		gameStartTime = getTime();
-		
+
 		// key down
 		keyDown = false;
 	}
-
-//	public void spawnEnemies(boolean kill) {
-//		if (kill) {
-//			enemyList.clear();
-//		}
-//
-//		for (int i = 0; i < enemyNum; i++) {
-//			enemyList.add(new Enemy(maze, imgCtrl));
-//		}
-//		enemySpawned = true;
-//		enemyBrain.spawn();
-//	}
 
 	// get time in millis
 	public static int getTime() {
@@ -206,15 +190,21 @@ public class GameCtrl extends JPanel implements ActionListener {
 	}
 
 	// // additional
-	public void fight() {
+	public void fight(Enemy enemy) {
 		System.out.println("Dual!");
 		SoundEffects.playPlayerAttack();
+		player.setInFight(true);
+		enemy.setInFight(true);
+		// TODO: Add JFuzzy logic
+		// determine score from stats and randomness
+		// take health away from each
+		// lock enemies in place for 3 seconds
 	}
 
 	public void checkFight() {
-		for (Enemy enemyItem : enemyList) {
-			if (player.getPos().equals(enemyItem.getPos())) {
-				fight();
+		for (Enemy enemy : enemyList) {
+			if (player.getPos().equals(enemy.getPos())) {
+				fight(enemy);
 			}
 		}
 	}
@@ -272,13 +262,13 @@ public class GameCtrl extends JPanel implements ActionListener {
 				if (e.getKeyCode() == KeyEvent.VK_R) { // reset
 					fullReset();
 				}
-				
+
 				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) { // reset
 					System.exit(0);
 				}
 
 				// NB
-				if (!haveWon && startDone) {
+				if (!haveWon && startDone && !player.isInFight()) {
 					// if (!zoomedOut)// turn off to test maze
 					keycode = e.getKeyCode();
 				}
@@ -294,13 +284,13 @@ public class GameCtrl extends JPanel implements ActionListener {
 						moveCommon();
 					}
 				} else if (keycode == KeyEvent.VK_A) { // E
-					playerDraw.setPlayerLookH('l');
+					playerImgPainter.setPlayerLookH('l');
 					if (!maze.getPosElement(player.getTileX() - 1, player.getTileY()).equals("w")) {
 						player.move(-1, 0);
 						moveCommon();
 					}
 				} else if (keycode == KeyEvent.VK_D) { // W
-					playerDraw.setPlayerLookH('r');
+					playerImgPainter.setPlayerLookH('r');
 					if (!maze.getPosElement(player.getTileX() + 1, player.getTileY()).equals("w")) {
 						player.move(1, 0); // 1? tileDim
 						moveCommon();
@@ -326,7 +316,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 	// ran every valid keypress
 	public void moveCommon() {
-		playerDraw.incStepCount();
+		playerImgPainter.incStepCount();
 		setWalk = getTime();
 		SoundEffects.playMove();
 		checkFight(); // checked when I or the enemy moves
@@ -598,7 +588,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		} else if (element.equals("h")) { // helper
 			g.setColor(Color.GREEN);
 			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
-		}  else { // floor
+		} else { // floor
 			g.setColor(Color.LIGHT_GRAY);
 			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
 		} // end of if
@@ -746,14 +736,16 @@ public class GameCtrl extends JPanel implements ActionListener {
 		// draw player
 		// draw below items
 		int timeElap = getTime() - setWalk;
-		if (timeElap < walkDur) {
-			playerDraw.walk(g);
+		if (player.isInFight()) {
+			playerImgPainter.fight(g);
+		} else if (timeElap < walkDur) {
+			playerImgPainter.walk(g);
 		} else if (haveWon) {
-			playerDraw.win(g);
-		} else if (playerDraw.getPlayerLookH() == 'l') {
-			playerDraw.lookLeft(g);
-		} else if (playerDraw.getPlayerLookH() == 'r') {
-			playerDraw.lookRight(g);
+			playerImgPainter.win(g);
+		} else if (playerImgPainter.getPlayerLookH() == 'l') {
+			playerImgPainter.lookLeft(g);
+		} else if (playerImgPainter.getPlayerLookH() == 'r') {
+			playerImgPainter.lookRight(g);
 		}
 	}
 

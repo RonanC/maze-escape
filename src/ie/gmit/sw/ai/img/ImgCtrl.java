@@ -14,12 +14,14 @@ public class ImgCtrl {
 	private Image sword, bomb;
 	private Image player_stand, player_win, player_walk, player_walk2;
 	private Image enemy_down, enemy_up;
+	private Image punch1, punch2;
 
 	// Image Arrays
 	private BufferedImage[] items;
 	private BufferedImage[] tiles;
 	private BufferedImage[] player;
 	private BufferedImage[] enemy;
+	private BufferedImage[] misc;
 
 	public ImgCtrl() {
 		try {
@@ -53,6 +55,10 @@ public class ImgCtrl {
 		enemy = new BufferedImage[2];
 		enemy[0] = ImageIO.read(new java.io.File(url + "enemy/spider_down.png"));
 		enemy[1] = ImageIO.read(new java.io.File(url + "enemy/spider_up.png"));
+		
+		misc = new BufferedImage[2];
+		misc[0] = ImageIO.read(new java.io.File(url + "misc/punch1_big.png"));
+		misc[1] = ImageIO.read(new java.io.File(url + "misc/punch2_big.png"));
 
 		// // scale
 		// tiles
@@ -74,6 +80,11 @@ public class ImgCtrl {
 		// enemy
 		enemy_down = scaleImage(enemy[0]);
 		enemy_up = scaleImage(enemy[1]);
+		
+		// misc
+		punch1 = scaleImage(misc[0]);
+		punch2 = scaleImage(misc[1]);
+		
 	}
 
 	public static Image scaleImage(Image image) {
@@ -129,5 +140,13 @@ public class ImgCtrl {
 
 	public Image getEnemy_up() {
 		return enemy_up;
+	}
+
+	public Image getPunch1() {
+		return punch1;
+	}
+
+	public Image getPunch2() {
+		return punch2;
 	}
 }

@@ -3,17 +3,17 @@ package ie.gmit.sw.ai;
 import java.io.*;
 import java.util.*;
 
-public class Maze {
+public class MazeCharDepre {
 
 	private Scanner input;
-	private Node[][] maze;
+	private char[][] maze;
 	private Random random;
 	private int insideNum;
 
-	public Maze() {
+	public MazeCharDepre() {
 		random = new Random();
 		insideNum = GameRunner.MAZE_DIM - 4;
-		maze = new Node[GameRunner.MAZE_DIM][GameRunner.MAZE_DIM];
+		maze = new char[GameRunner.MAZE_DIM][GameRunner.MAZE_DIM];
 
 		reset();
 	}
@@ -31,7 +31,7 @@ public class Maze {
 		System.out.println(maze.length);
 		for (int row = 0; row < maze.length; row++) {
 			for (int col = 0; col < maze[row].length; col++) {
-				maze[row][col] = new Node(row, col, element);
+				maze[row][col] = element;
 			}
 		}
 
@@ -52,21 +52,21 @@ public class Maze {
 			// rows
 			if (row == 0 || row == 1 || row == maze.length - 1 || row == maze.length - 2) {
 				for (int col = 0; col < maze.length - 1; col++) {
-					maze[row][col].setElement('w');
+					maze[row][col] = 'w';
 				}
 			}
 			for (int col = 0; col < 2; col++) {
-				maze[row][col].setElement('w');
+				maze[row][col] = 'w';
 			}
 
 			// left wall
 			for (int col = 0; col < 2; col++) {
-				maze[row][col].setElement('w');
+				maze[row][col] = 'w';
 			}
 
 			// right wall
 			for (int col = maze.length - 1; col > maze.length - 3; col--) {
-				maze[row][col].setElement('w');
+				maze[row][col] = 'w';
 			}
 		}
 	}
@@ -120,8 +120,8 @@ public class Maze {
 	private void addWalls() {
 		for (int row = 0; row < maze.length; row++) {
 			for (int col = 0; col < maze[row].length - 1; col++) {
-				if (maze[row][col].getElement() == 'x') {
-					maze[row][col].setElement('w');
+				if (maze[row][col] == 'x') {
+					maze[row][col] = 'w';
 				}
 			}
 		}
@@ -149,13 +149,13 @@ public class Maze {
 																	// (break
 																	// wall)
 					// changes X to floor
-					maze[row][col + 1].setElement('f');
+					maze[row][col + 1] = 'f';
 					// continue; // use else instead of continue
 				} else
 				// next we check if to the south is
 				if (row + 1 < maze.length) { // Change south
 					// changes x to floor
-					maze[row + 1][col].setElement('f');
+					maze[row + 1][col] = 'f';
 				}
 			}
 		}
@@ -181,13 +181,13 @@ public class Maze {
 					if (num >= 5 && col + 1 < maze[row].length - 1) { // Change
 																		// West
 						// changes X to floor
-						maze[row][col + 1].setElement('f');
+						maze[row][col + 1] = 'f';
 						// continue; // use else instead of continue
 					} else
 					// next we check if to the south is
 					if (row + 1 < maze.length) { // Change south
 						// changes x to floor
-						maze[row + 1][col].setElement('f');
+						maze[row + 1][col] = 'f';
 					}
 				}
 			}
@@ -207,8 +207,8 @@ public class Maze {
 			int row = (int) ((insideNum) * Math.random()) + 2;
 			int col = (int) ((insideNum) * Math.random()) + 2;
 
-			if (maze[row][col].getElement() == replace) {
-				maze[row][col].setElement(feature);
+			if (maze[row][col] == replace) {
+				maze[row][col] = feature;
 				counter++;
 			}
 		}
@@ -234,7 +234,7 @@ public class Maze {
 			// go through each col
 			for (int col = 0; col < rowStr.length(); col++) {
 				char element = rowStr.charAt(col);
-				maze[row][col].setElement(element);
+				maze[row][col] = element;
 			}
 		}
 	}
@@ -245,13 +245,13 @@ public class Maze {
 
 	public void setTileItem(int x, int y, char item) {
 		// row by col
-		maze[y][x].setElement(item);
+		maze[y][x] = item;
 	}
 
 	public String getPosElement(int x, int y) {
 		char index = 0;
 		try {
-			index = maze[y][x].getElement();
+			index = maze[y][x];
 		} catch (Exception e) {
 			System.out.print("Error in Maze getPostElement(): " + e.getMessage() + "\t");
 			System.out.println("x: " + x + ", y:" + y);

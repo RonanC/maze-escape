@@ -23,10 +23,27 @@ public class Node {
 	private int row = -1;
 	private int col = -1;
 	private int distance;
+	
+	// game
+	private char element;
+
+	public char getElement() {
+		return element;
+	}
+
+	public void setElement(char element) {
+		this.element = element;
+	}
 
 	public Node(int row, int col) {
 		this.row = row;
 		this.col = col;
+	}
+	
+	public Node(int row, int col, char element) {
+		this.row = row;
+		this.col = col;
+		this.element = element;
 	}
 
 	public int getRow() {

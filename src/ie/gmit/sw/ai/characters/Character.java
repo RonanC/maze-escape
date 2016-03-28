@@ -1,7 +1,7 @@
-package ie.gmit.sw.ai.chars;
+package ie.gmit.sw.ai.characters;
 
-import ie.gmit.sw.ai.Maze;
 import ie.gmit.sw.ai.img.ImgCtrl;
+import ie.gmit.sw.ai.maze.Maze;
 /*
  * STATS:
  * Health

@@ -1,4 +1,4 @@
-package ie.gmit.sw.ai.chars;
+package ie.gmit.sw.ai.characters;
 
 import java.awt.Graphics;
 

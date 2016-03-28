@@ -1,4 +1,4 @@
-package ie.gmit.sw.ai.fuzzy;
+package ie.gmit.sw.ai.fight;
 
 import net.sourceforge.jFuzzyLogic.*;
 import net.sourceforge.jFuzzyLogic.plot.*;

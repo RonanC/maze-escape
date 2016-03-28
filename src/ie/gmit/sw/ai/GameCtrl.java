@@ -7,11 +7,13 @@ import java.util.concurrent.*;
 import javax.swing.*;
 
 import ie.gmit.sw.ai.audio.*;
-import ie.gmit.sw.ai.chars.Enemy;
-import ie.gmit.sw.ai.chars.EnemyBrain;
-import ie.gmit.sw.ai.chars.Player;
-import ie.gmit.sw.ai.chars.PlayerImgPainter;
+import ie.gmit.sw.ai.characters.Enemy;
+import ie.gmit.sw.ai.characters.EnemyBrain;
+import ie.gmit.sw.ai.characters.Player;
+import ie.gmit.sw.ai.characters.PlayerImgPainter;
+import ie.gmit.sw.ai.fight.FightCtrl;
 import ie.gmit.sw.ai.img.ImgCtrl;
+import ie.gmit.sw.ai.maze.Maze;
 import javafx.application.Application;
 
 // the player is tied into this class, 

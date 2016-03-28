@@ -1,11 +1,11 @@
-package ie.gmit.sw.ai;
+package ie.gmit.sw.ai.fight;
 
 import java.util.Random;
 import java.util.Timer;
 
+import ie.gmit.sw.ai.GameCtrl;
 import ie.gmit.sw.ai.audio.SoundEffects;
-import ie.gmit.sw.ai.chars.*;
-import ie.gmit.sw.ai.fuzzy.FuzzyScore;
+import ie.gmit.sw.ai.characters.*;
 
 public class FightCtrl {
 	private Player player;

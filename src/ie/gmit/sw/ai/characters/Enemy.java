@@ -1,10 +1,10 @@
-package ie.gmit.sw.ai.chars;
+package ie.gmit.sw.ai.characters;
 
 import java.awt.Image;
 
 import ie.gmit.sw.ai.GameRunner;
-import ie.gmit.sw.ai.Maze;
 import ie.gmit.sw.ai.img.ImgCtrl;
+import ie.gmit.sw.ai.maze.Maze;
 
 /*
  * STATS:

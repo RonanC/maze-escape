@@ -1,6 +1,6 @@
 package ie.gmit.sw.ai.traversers.heuristic;
 
-import ie.gmit.sw.ai.Node;
+import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
 

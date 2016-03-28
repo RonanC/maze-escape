@@ -1,15 +1,15 @@
-package ie.gmit.sw.ai.chars;
+package ie.gmit.sw.ai.characters;
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import ie.gmit.sw.ai.FightCtrl;
 import ie.gmit.sw.ai.GameRunner;
-import ie.gmit.sw.ai.Maze;
 import ie.gmit.sw.ai.audio.SoundEffects;
+import ie.gmit.sw.ai.fight.FightCtrl;
 import ie.gmit.sw.ai.img.ImgCtrl;
+import ie.gmit.sw.ai.maze.Maze;
 
 public class EnemyBrain extends Thread {
 	private ArrayList<Enemy> enemyList;

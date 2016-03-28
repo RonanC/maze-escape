@@ -3,6 +3,7 @@ package ie.gmit.sw.ai.traversers.uninformed;
 import java.awt.Component;
 
 import ie.gmit.sw.ai.*;
+import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
 

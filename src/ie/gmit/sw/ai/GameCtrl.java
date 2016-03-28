@@ -646,7 +646,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		} else if (element.equals("g")) { // goal
 			g.setColor(Color.YELLOW);
 			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
-		} else if (element.equals("b") || element.equals("s")) { // item
+		} else if (element.equals("b") || element.equals("s") || element.equals("m")) { // item
 			g.setColor(Color.CYAN);
 			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
 		} else if (element.equals("h")) { // helper

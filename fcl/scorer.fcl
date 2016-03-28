@@ -1,0 +1,82 @@
+/*
+ * Calculates damage based on characters statistics
+	
+*/
+
+FUNCTION_BLOCK scorer	// Block definition (there may be more than one block per file)
+
+VAR_INPUT				// Define input variables
+	luck : REAL;
+	health : REAL;
+	weapon : REAL;
+END_VAR
+
+VAR_OUTPUT				// Define output variable
+	score : REAL;
+END_VAR
+
+FUZZIFY luck			// sigmodial	// jumps in 6's
+	TERM low := (0, 1) (8, 0) ; 
+	TERM average := (6, 0) (9,1) (12,1) (14,0);
+	TERM high := (12, 0) (20, 1);
+	
+	// sigmodial caused issues
+//	TERM low := SIGM -0.2 6;
+//	TERM average := GBELL 20 3 12;
+//	TERM high := SIGM 0.2 18;
+	// standard deviation from mean
+	// graduation percentage
+	// middle point
+END_FUZZIFY
+
+FUZZIFY health			// jumps in 4's
+	TERM devestating := (0,1) (4,0);
+	TERM poor := TRIAN 3 7 11;
+	TERM good := TRIAN 9 13 17;
+	TERM strong := (16,0) (20,1);
+END_FUZZIFY
+
+FUZZIFY weapon			// Fuzzify input variable 'weapon': { 'bare', 'mediocre', 'mighty }
+	TERM bare := (0,1) (8,0);
+	TERM mediocre := TRIAN 5 10 15;
+	TERM mighty := (12,0) (20,1);
+END_FUZZIFY
+
+DEFUZZIFY score			// Defzzzify output variable 'score' : {'losing', 'drawing', 'winning' }
+	TERM losing := (0,1) (20,0);
+	TERM drawing := TRIAN 15.0 30.0 45.0;
+	TERM winning := (40,0) (60,1);
+	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
+RULEBLOCK No1
+	AND : MIN;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
+	ACT : MIN;			// Use 'min' activation method
+	ACCU : MAX;			// Use 'max' accumulation method
+
+// losing
+	RULE 1 : IF luck IS low THEN score IS losing;
+	RULE 2 : IF health IS devestating THEN score IS losing;
+	RULE 3 : IF weapon IS bare THEN score IS losing;
+	
+// drawing
+	RULE 4 : IF luck IS average THEN score IS drawing;
+	RULE 5 : IF health IS good THEN score IS drawing;
+	RULE 6 : IF weapon IS mediocre THEN score IS drawing;
+
+// winning
+	RULE 7 : IF luck IS high THEN score IS winning;
+	RULE 8 : IF health IS strong THEN score IS winning;
+	RULE 9 : IF weapon IS mighty THEN score IS winning;
+	
+// complex
+	RULE 10 : IF health IS devestating AND luck IS low AND weapon IS bare THEN score IS losing;
+	RULE 11 : IF health IS good THEN score IS drawing; 
+	RULE 12 : IF health IS strong AND luck IS high THEN score IS winning;
+	RULE 13 : IF weapon IS mighty AND luck IS high THEN score IS winning;
+	RULE 14 : IF weapon IS bare AND luck IS high AND health IS NOT strong THEN score IS winning;
+	
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

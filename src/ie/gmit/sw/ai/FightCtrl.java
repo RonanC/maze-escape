@@ -5,6 +5,7 @@ import java.util.Timer;
 
 import ie.gmit.sw.ai.audio.SoundEffects;
 import ie.gmit.sw.ai.chars.*;
+import ie.gmit.sw.ai.fuzzy.FuzzyScore;
 
 public class FightCtrl {
 	private Player player;
@@ -25,6 +26,9 @@ public class FightCtrl {
 	private boolean fightInProgress;
 	private int fightStartTime;
 	private int fightDur;
+	
+	// fuzzy scoring
+	private FuzzyScore fuzzyScore;
 
 	// damage
 	// private int enemyMaxDamage = 40;
@@ -36,79 +40,8 @@ public class FightCtrl {
 		this.scoreMax = 20;
 		this.fightInProgress = false;
 		this.fightDur = 2000;
-	}
-	
-	
-
-	// TODO: Add JFuzzy logic
-	// determine score from stats and randomness
-
-	// the score will be attack power
-	// player can generate from between 10 to 60
-	// enemy can generate from between 10 to 60
-
-	// take health away from each
-	// lock enemies in place for 3 seconds
-
-	public int getFightStartTime() {
-		return fightStartTime;
-	}
-
-
-
-	public int getFightDur() {
-		return fightDur;
-	}
-
-
-
-	public void setFightStartTime(int fightStartTime) {
-		this.fightStartTime = fightStartTime;
-	}
-
-
-
-	public void setFightDur(int fightDur) {
-		this.fightDur = fightDur;
-	}
-
-
-
-	public boolean isFightInProgress() {
-		return fightInProgress;
-	}
-
-
-
-	public void setFightInProgress(boolean fightInProgress) {
-		this.fightInProgress = fightInProgress;
-	}
-
-
-
-	public void fight(Enemy enemy) {
-		this.enemy = enemy;
-		resetValues();
-		fightOn();
 		
-		// print raw stats
-		System.out.println(playerRawStatsToString());
-		System.out.println(enemyRawStatsToString());
-		
-		System.out.println("Dual!");
-		SoundEffects.playPlayerAttack();
-		SoundEffects.playEnemyAttack();
-
-		// generate scores
-		genScores();
-
-		// health damage
-		player.decHealth(enemyTotalScore);
-		enemy.decHealth(playerTotalScore);
-		player.isAlive(); // updates alive status
-		
-		// fight over
-//		fightOff();
+		fuzzyScore = new FuzzyScore();
 	}
 	
 	public void fightOn(){
@@ -125,12 +58,94 @@ public class FightCtrl {
 		enemy.setInFight(false);
 		
 		// print scores
-		System.out.println(playerScoreToString());
-		System.out.println(enemyScoreToString());
+//		System.out.println(playerScoreToString());
+//		System.out.println(enemyScoreToString());
 		
 		player.swordDec();
 	}
 
+
+	public void fight(Enemy enemy) {
+		this.enemy = enemy;
+		resetValues();
+		fightOn();
+		
+		// print raw stats
+//		System.out.println(playerRawStatsToString());
+//		System.out.println(enemyRawStatsToString());
+		
+		System.out.println("Dual!");
+		SoundEffects.playPlayerAttack();
+		SoundEffects.playEnemyAttack();
+
+		// generate scores
+//		genScores(); // gets various scores from stats and sums them
+		genFuzzyScores(); // passes stats to fuzzy engine which processes each characters score
+
+		// health damage
+		player.decHealth(enemyTotalScore);
+		enemy.decHealth(playerTotalScore);
+		player.isAlive(); // updates alive status
+		
+		// fight over
+//		fightOff();
+	}
+
+	public void genFuzzyScores(){
+		createScores();
+		
+		playerTotalScore = fuzzyScore.getCharScore(playerLuckScore, playerHealthScore, playerWeaponScore);
+		enemyTotalScore = fuzzyScore.getCharScore(enemyLuckScore, enemyHealthScore, enemyIntelScore);
+		
+		System.out.println("Player Score (Fuzzy): " + playerTotalScore);
+		System.out.println("Enemy Score (Fuzzy): " + enemyTotalScore);
+	}
+
+	private void createScores() {
+		// massage data into a usable format (all between 0 and 20).
+		playerCreateScores();
+		enemyCreateScores();
+	}
+	
+	public void genScores() {
+		createScores();
+		
+		playerAdd();
+		enemyAdd();
+	}
+
+	public void playerCreateScores() {
+		int playerLuckInit = random.nextInt(scoreMax) + 1;
+		// steps increases luck
+		playerLuckScore = (playerLuckInit * (playerSteps / 150)) + playerLuckInit;
+		playerHealthScore = player.getHealth() / (Player.MAX_HEALTH / scoreMax);
+
+		// if they have a sword it dramatically increases the their odds
+		if (player.getSwordStatus()) {
+			playerWeaponScore = random.nextInt(5) + 6;
+		}
+	}
+
+	public void enemyCreateScores() {
+		enemyLuckScore = random.nextInt(scoreMax) + 1;
+		double tempHealth = (double)enemy.getHealth() / ((double)Enemy.MAX_HEALTH / (double)scoreMax);
+		enemyHealthScore = (int) tempHealth;
+		enemyIntelScore = enemy.getIntel() * (Enemy.MAX_INTEL * (scoreMax / 4));
+	}
+
+	public void playerAdd() {
+		// 3 stats, 20 points each, total of 60
+		playerTotalScore += playerLuckScore;
+		playerTotalScore += playerHealthScore;
+		playerTotalScore += playerWeaponScore;
+	}
+
+	public void enemyAdd() {
+		enemyTotalScore += enemyLuckScore;
+		enemyTotalScore += enemyHealthScore;
+		enemyTotalScore += enemyIntelScore;
+	}
+	
 	private void resetValues() {
 		// reset values
 		playerTotalScore = 0;
@@ -182,54 +197,38 @@ public class FightCtrl {
 
 		return sb.toString();
 	}
-
-	public void genScores() {
-		playerInit();
-		playerAdd();
-
-		enemyInit();
-		enemyAdd();
+	
+	public int getFightStartTime() {
+		return fightStartTime;
 	}
 
-	// public int scoreToDamage(int score) {
-	// // stretch it between 0 and 60;
-	// int damage = 0;
-	//
-	// return damage;
-	// }
 
-	public void playerInit() {
-		int playerLuckInit = random.nextInt(scoreMax) + 1;
-		// steps increases luck
-		playerLuckScore = (playerLuckInit * (playerSteps / 150)) + playerLuckInit;
-		playerHealthScore = player.getHealth() / (Player.MAX_HEALTH / scoreMax);
 
-		// if they have a sword it dramatically increases the their odds
-		if (player.getSwordStatus()) {
-			playerWeaponScore = random.nextInt(5) + 6;
-		}
+	public int getFightDur() {
+		return fightDur;
 	}
 
-	public void enemyInit() {
-		enemyLuckScore = random.nextInt(scoreMax) + 1;
-		System.out.print("enemy.getHealth(): " + enemy.getHealth() + "\t");
-		System.out.print("Enemy.MAX_HEALTH: " + Enemy.MAX_HEALTH + "\t");
-		System.out.print("scoreMax: " + scoreMax + "\t");
-		double tempHealth = (double)enemy.getHealth() / ((double)Enemy.MAX_HEALTH / (double)scoreMax);
-		enemyHealthScore = (int) tempHealth;
-		enemyIntelScore = enemy.getIntel() * (Enemy.MAX_INTEL * (scoreMax / 4));
+
+
+	public void setFightStartTime(int fightStartTime) {
+		this.fightStartTime = fightStartTime;
 	}
 
-	public void playerAdd() {
-		// 3 stats, 20 points each, total of 60
-		playerTotalScore += playerLuckScore;
-		playerTotalScore += playerHealthScore;
-		playerTotalScore += playerWeaponScore;
+
+
+	public void setFightDur(int fightDur) {
+		this.fightDur = fightDur;
 	}
 
-	public void enemyAdd() {
-		enemyTotalScore += enemyLuckScore;
-		enemyTotalScore += enemyHealthScore;
-		enemyTotalScore += enemyIntelScore;
+
+
+	public boolean isFightInProgress() {
+		return fightInProgress;
+	}
+
+
+
+	public void setFightInProgress(boolean fightInProgress) {
+		this.fightInProgress = fightInProgress;
 	}
 }

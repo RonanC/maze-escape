@@ -1,5 +1,7 @@
 package ie.gmit.sw.ai.traversers;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Random;
 
 import ie.gmit.sw.ai.characters.Player;
@@ -15,15 +17,35 @@ public abstract class Traversator {
 	protected Node goal;
 	protected int[] newPos;
 	protected Player player;
+	
+	protected boolean keepRunning;
+	protected Deque<int[]> allPositions;
 
+	public Traversator(Node[][] maze, int row, int col, Player player) {
+		this.player = player;
+		
+		// create deep copy of nodes so that different enemies do not disturb each others nodes.
+		Node[][] newMaze = new Node[maze.length][maze[0].length];
+		for (int i = 0; i < newMaze.length; i++) {
+			for (int j = 0; j < newMaze.length; j++) {
+				newMaze[i][j] = new Node(i, j);
+				newMaze[i][j].setElement(maze[i][j].getElement());;
+			}
+		}
+		
+		init(newMaze, row, col);
+	}
 	
 	public void init(Node[][] maze, int row, int col) {
 		this.mazeArray = maze;
 		this.currentNode = mazeArray[row][col];
+		allPositions = new LinkedList<int[]>();
+		keepRunning = true;
 		time = System.currentTimeMillis();
 		visitCount = 0;
 		complete = false;
-		setGoalNodeRand();
+//		setGoalNodeRand();
+		setPlayerAsGoal();
 		newPos = new int[2];
 	}
 	
@@ -42,20 +64,7 @@ public abstract class Traversator {
 		this.complete = complete;
 	}
 
-	public Traversator(Node[][] maze, int row, int col, Player player) {
-		this.player = player;
-		
-		// create deep copy of nodes so that different enemies do not disturb each others nodes.
-		Node[][] newMaze = new Node[maze.length][maze[0].length];
-		for (int i = 0; i < newMaze.length; i++) {
-			for (int j = 0; j < newMaze.length; j++) {
-				newMaze[i][j] = new Node(i, j);
-				newMaze[i][j].setElement(maze[i][j].getElement());;
-			}
-		}
-		
-		init(newMaze, row, col);
-	}
+
 	
 
 	public void resetAndSetGoal(){

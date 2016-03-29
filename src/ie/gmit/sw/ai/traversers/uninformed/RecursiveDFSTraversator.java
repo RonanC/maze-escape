@@ -12,8 +12,6 @@ public class RecursiveDFSTraversator extends Traversator {
 	/*
 	 * keeps traversing through first child no queue
 	 */
-	private boolean keepRunning = true;
-	private Deque<int[]> allPositions;
 
 	public RecursiveDFSTraversator(Node[][] maze, int row, int col, Player player) {
 		super(maze, row, col, player);
@@ -24,12 +22,14 @@ public class RecursiveDFSTraversator extends Traversator {
 
 	public void initCustom() {
 		// dfs(currentNode);
-		allPositions = new LinkedList<int[]>();
+//		allPositions = new LinkedList<int[]>();
+//		keepRunning = true;
 		dfs(currentNode);
 	}
 
 	@Override
-	public int[] findNextMove() { // let the enemy select one move at a time from the list
+	public int[] findNextMove() { // let the enemy select one move at a time
+									// from the list
 
 		if (!keepRunning) {
 			newPos = allPositions.pop();
@@ -42,8 +42,8 @@ public class RecursiveDFSTraversator extends Traversator {
 
 	public void dfs(Node nodeTemp) { // get all positions and save to list
 		allPositions.add(new int[] { nodeTemp.getRow(), nodeTemp.getCol() });
-
 		resetNewPos();
+
 		if (!keepRunning)
 			return;
 

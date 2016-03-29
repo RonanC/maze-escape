@@ -17,6 +17,7 @@ public class EnemyBrain extends Thread {
 	private Random random;
 	private Player player;
 	private ImgCtrl imgCtrl;
+	private int depthLimit;
 
 	private boolean enemySpawned;
 	private FightCtrl fightCtrl;
@@ -33,6 +34,8 @@ public class EnemyBrain extends Thread {
 
 		enemySpawned = false;
 		enemyTasks = new ArrayList<EnemyTask>();
+		
+		depthLimit = GameRunner.MAZE_DIM / 2;
 	}
 
 	public void spawn() {
@@ -42,14 +45,14 @@ public class EnemyBrain extends Thread {
 		int intelCount = 0;
 		for (Enemy enemy : enemyList) {
 			enemyCount++;
-			System.out.println("enemy #" + enemyCount + ", with intel level of: " + intelCount);
+			System.out.println("\nenemy #" + enemyCount + ", with intel level of: " + intelCount);
 			// lvl1 enemy
 			randomPos(enemy);
-			enemy.setIntelLvl(3); // intelCount // TODO
+			enemy.setIntelLvl(4); // intelCount // TODO
 			EnemyTask enemyTask = new EnemyTask(map.getMazeArrayClone(), enemy, player);
 			enemyTasks.add(enemyTask);
 			// schedule the start for every second
-			timer.schedule(enemyTask, enemyTask.sleepDur, enemyTask.sleepDur);
+			timer.schedule(enemyTask, enemyTask.sleepDur * 2, enemyTask.sleepDur);
 			intelCount++;
 		}
 	}
@@ -186,13 +189,20 @@ public class EnemyBrain extends Thread {
 				System.out.println(" traversator created.");
 				break;
 				
-			case 3:	// Recursive DFS 	1.13
+			case 3:	// Recursive DFS 
 				setSleepDur(500);
 				traversator = new RecursiveDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
 				System.out.println("recursive DFS created");
 				break;
+				
+			case 4:	// Depth Limited DFS
+				setSleepDur(500);
+				
+				traversator = new DepthLimitedDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player, depthLimit);
+				System.out.println("depth limited DFS created");
+				break;
 
-			default:
+			default:  // TODO
 				System.out.println("default");
 				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
 				System.out.println("random walk created");

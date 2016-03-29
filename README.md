@@ -24,6 +24,38 @@ For the informed searches I only save the output of the algorithm.
 I save this to a FIFO queue.
 When you meet a helper(prisoner) he then lights up the path to your goal (up to N steps), which disappears after N time. 
 
+### Fuzzy Logic
+Fuzzy logic is used for the fighting.  
+The player and enemy statistics are massaged into an even format, which is then passed into the fuzzy class which fuzzifies the values and gives you a solid value back (your score, which equates to damage).  
+The damage is then cast onto one another and if either parties health is below 0 then death incurs.  
+
+#### Player Statistics
+- Health
+- Sword
+- Luck (Randomness and Steps)
+
+#### Enemy Statistics
+- Health
+- Intelligence
+- Luck (Randomness)
+
+### Items
+- Sword (breaks after two battles)
+- Bomb (kills everything within N spaces)
+- Med Kit (increases health by N amount)
+
+
+### Intellect
+The enemies are assigned an intellect level each.  
+This decides which search algorithm they are given and also affects their outcome in battles.
+
+### Scalability
+Everything in the game scales.  
+When you change the size of the map, you get a different amount of enemies and items.  
+Each enemy has a different intellect level, which is spread out evenly.  
+The depth limit of the Depth limited DFS is also scaled to the size of the map.  
+As is everything where possible.
+
 ## Animations
 I created various different frames for the player and enemy.  
 I used the frames in different contexts throughout the game to create animations.
@@ -39,6 +71,7 @@ I have added various keys for different functions:
 Movement: WASD  
 Map: M  
 Reset: R  
+Bomb: Space  
 Quit: ESC  
 
 ## Packages

@@ -77,7 +77,7 @@ public class EnemyBrain extends Thread {
 	public void killAllEnemies() {
 		enemyList.clear();
 		setEnemySpawned(false);
-		
+
 		for (EnemyTask enemyTask : enemyTasks) {
 			enemyTask.cancel();
 		}
@@ -119,7 +119,7 @@ public class EnemyBrain extends Thread {
 			random = new Random();
 			int intel = random.nextInt(Enemy.MAX_INTEL);
 			enemy.setIntelLvl(intel);
-			
+
 			switch (enemy.getIntelLvl()) {
 			case 1:
 				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX());
@@ -142,11 +142,11 @@ public class EnemyBrain extends Thread {
 				player.incXp(enemy.getXpWorth());
 				cancel(); // kills task
 			} else if (!enemy.isInFight()) {
-				int choice = traversator.findNextMove();
+				int choice = traversator.findNextMove()[0];
 				move(choice);
 
 				checkFight(); // checked every move
-			} 
+			}
 		}
 
 		// V4 - depth first (need to create node graph)
@@ -154,14 +154,14 @@ public class EnemyBrain extends Thread {
 		// V3 - breadth first (need to create node graph)
 
 		// V2 - pick only a move which is not a wall
-//		public void v2AlwaysMove() {
-//			int choice = random.nextInt(4); // N, S, E, W
-//			boolean moveChoice = false;
-//			while (moveChoice == false) {
-//				choice = random.nextInt(4);
-//				moveChoice = move(choice);
-//			}
-//		}
+		// public void v2AlwaysMove() {
+		// int choice = random.nextInt(4); // N, S, E, W
+		// boolean moveChoice = false;
+		// while (moveChoice == false) {
+		// choice = random.nextInt(4);
+		// moveChoice = move(choice);
+		// }
+		// }
 
 		public boolean move(int choice) {
 			switch (choice) {
@@ -198,21 +198,29 @@ public class EnemyBrain extends Thread {
 					return false;
 				}
 
+			case 4: // Found Goal Node
+				System.out.println("EnemyBrain: Found Goal Node");
+				return false;
+
+			case 5: // Could not find goal Node
+				System.out.println("EnemyBrain: Could not find goal Node");
+				return false;
+
 			default:
 				return false;
 			}
 		}
 
-//		// V1 - random move (may even walk into a wall)
-//		public void v1RandomMove() {
-//			int choice = random.nextInt(4); // N, S, E, W
-//			move(choice);
-//		}
-//
-//		// ran every valid keypress
-//		public void moveCommon() {
-//
-//		}
+		// // V1 - random move (may even walk into a wall)
+		// public void v1RandomMove() {
+		// int choice = random.nextInt(4); // N, S, E, W
+		// move(choice);
+		// }
+		//
+		// // ran every valid keypress
+		// public void moveCommon() {
+		//
+		// }
 
 		public void checkFight() {
 			if (player.getPos().equals(enemy.getPos())) {
@@ -226,18 +234,18 @@ public class EnemyBrain extends Thread {
 		}
 	}
 
-//	@Override
-//	public synchronized void start() {
-//		// TODO Auto-generated method stub
-//		super.start();
-//		System.out.println("start");
-//	}
-//
-//	@Override
-//	public void run() {
-//		// TODO Auto-generated method stub
-//		super.run();
-//		System.out.println("run");
-//	}
+	// @Override
+	// public synchronized void start() {
+	// // TODO Auto-generated method stub
+	// super.start();
+	// System.out.println("start");
+	// }
+	//
+	// @Override
+	// public void run() {
+	// // TODO Auto-generated method stub
+	// super.run();
+	// System.out.println("run");
+	// }
 
 }

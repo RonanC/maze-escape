@@ -82,7 +82,7 @@ public class EnemyTask extends Thread {
 //			 cancel(); // kills task
 			
 		} else if (!enemy.isInFight()) {
-			int choice = traversator.findNextMove();
+			int choice = traversator.findNextMove()[0];
 			move(choice);
 			checkFight(); // checked every move
 		} else {

@@ -22,7 +22,7 @@ public class RandomWalk extends Traversator {
 		System.out.println("Number of steps allowed: " + steps);
 	}
 
-	public int findNextMove() { // traverse one step
+	public int[] findNextMove() { // traverse one step
 		if (visitCount <= steps && currentNode != null) {
 			currentNode.setVisited(true); // this is what changes the color of the node
 			visitCount++;
@@ -31,7 +31,8 @@ public class RandomWalk extends Traversator {
 				time = System.currentTimeMillis() - time; // Stop the clock
 				TraversatorStats.printStats(currentNode, time, visitCount);
 				complete = true;
-				return 4; // found goal
+				newPos[0] = 4;
+				return newPos; // found goal
 			} else {
 				try { // Needed to let the screen paint each move (enemies skip spaces otherwise).
 					Thread.sleep(10);
@@ -49,12 +50,12 @@ public class RandomWalk extends Traversator {
 				} catch (Exception e) {
 					System.out.println("error:" + e.getMessage());
 				}
-
-				return choice; // 0, 1, 2, 3
+				newPos[0] = choice;
+				return newPos; // 0, 1, 2, 3
 			}
 		}
-
-		return 5; // out of steps
+		newPos[0] = 5;
+		return newPos; // out of steps
 
 	}
 

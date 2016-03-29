@@ -12,12 +12,13 @@ public abstract class Traversator {
 	protected Node currentNode;
 	protected Node[][] mazeArray;
 	protected Node goal;
+	protected int[] newPos;
 
 	public Traversator(Node[][] maze, int row, int col) {
 		init(maze, maze[row][col]);
 	}
 
-	public abstract int findNextMove();
+	public abstract int[] findNextMove();
 
 	public void init(Node[][] maze, Node node) {
 		this.mazeArray = maze;
@@ -26,6 +27,7 @@ public abstract class Traversator {
 		visitCount = 0;
 		complete = false;
 		setGoalNodeRand();
+		newPos = new int[2];
 	}
 
 	// Pick a goal node

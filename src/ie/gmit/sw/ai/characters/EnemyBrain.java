@@ -39,17 +39,17 @@ public class EnemyBrain extends Thread {
 		System.out.println("spawning enemies");
 		// create enemy tasks
 		int enemyCount = 0;
-		int intelCount = 1;
+		int intelCount = 0;
 		for (Enemy enemy : enemyList) {
 			enemyCount++;
 			System.out.println("enemy #" + enemyCount + ", with intel level of: " + intelCount);
 			// lvl1 enemy
 			randomPos(enemy);
-			enemy.setIntelLvl(1); // intelCount
+			enemy.setIntelLvl(intelCount); // intelCount
 			EnemyTask enemyTask = new EnemyTask(map.getMazeArrayClone(), enemy, player);
 			enemyTasks.add(enemyTask);
 			// schedule the start for every second
-			timer.schedule(enemyTask, 1000, 100);
+			timer.schedule(enemyTask, enemyTask.sleepDur, enemyTask.sleepDur);
 			intelCount++;
 		}
 	}
@@ -115,8 +115,10 @@ public class EnemyBrain extends Thread {
 		private Player player;
 		private Random random;
 		private Traversator traversator;
+		private int sleepDur;
 
 		public EnemyTask(Node[][] mazeArray, Enemy enemy, Player player) {
+			sleepDur = 1000;
 			this.map = new Maze();
 			map.setMazeArray(mazeArray);
 			this.enemy = enemy;
@@ -128,6 +130,17 @@ public class EnemyBrain extends Thread {
 			setTraversor(enemy, player);
 		}
 
+		
+		public int getSleepDur() {
+			return sleepDur;
+		}
+
+
+		public void setSleepDur(int sleepDur) {
+			this.sleepDur = sleepDur;
+		}
+
+
 		private void setTraversor(Enemy enemy, Player player) {
 			boolean dfs;
 
@@ -138,7 +151,8 @@ public class EnemyBrain extends Thread {
 				break;
 
 			case 1: // brute force: DFS
-				dfs = false; // random.nextBoolean();
+				setSleepDur(200);
+				dfs = true; // random.nextBoolean();
 				traversator = new BruteForceTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(),
 						dfs, player);
 				traversator.setGoalNode(player.getTileY(), player.getTileX());// chase
@@ -155,6 +169,7 @@ public class EnemyBrain extends Thread {
 				break;
 
 			case 2: // brute force: BFS
+				setSleepDur(800);
 				dfs = false; // random.nextBoolean();
 				traversator = new BruteForceTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(),
 						dfs, player);

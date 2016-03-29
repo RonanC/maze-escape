@@ -138,7 +138,7 @@ public class EnemyBrain extends Thread {
 				break;
 
 			case 1: // brute force: DFS
-				dfs = true; // random.nextBoolean();
+				dfs = false; // random.nextBoolean();
 				traversator = new BruteForceTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(),
 						dfs, player);
 				traversator.setGoalNode(player.getTileY(), player.getTileX());// chase
@@ -207,8 +207,8 @@ public class EnemyBrain extends Thread {
 							if (newPos[0] == 4) {
 								System.out.println("Found player location.");
 								enemy.setPos(traversator.getGoalNode().getCol(), traversator.getGoalNode().getRow());
-								System.out.println("row: " + traversator.getGoalNode().getRow());
-								System.out.println("col: " + traversator.getGoalNode().getCol());
+//								System.out.println("row: " + traversator.getGoalNode().getRow());
+//								System.out.println("col: " + traversator.getGoalNode().getCol());
 							} else if (newPos[0] == 5) {
 								System.out.println("Could not find player location.");
 							} else {

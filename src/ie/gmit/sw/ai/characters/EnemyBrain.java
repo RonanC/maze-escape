@@ -45,7 +45,7 @@ public class EnemyBrain extends Thread {
 			System.out.println("enemy #" + enemyCount + ", with intel level of: " + intelCount);
 			// lvl1 enemy
 			randomPos(enemy);
-			enemy.setIntelLvl(intelCount); // intelCount
+			enemy.setIntelLvl(3); // intelCount // TODO
 			EnemyTask enemyTask = new EnemyTask(map.getMazeArrayClone(), enemy, player);
 			enemyTasks.add(enemyTask);
 			// schedule the start for every second
@@ -57,7 +57,7 @@ public class EnemyBrain extends Thread {
 	public void createEnemies(int enemyNum) {
 		killAllEnemies();
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 5; i++) {	// TODO
 			enemyList.add(new Enemy(map, imgCtrl));
 		}
 		enemySpawned = true;
@@ -145,7 +145,7 @@ public class EnemyBrain extends Thread {
 			boolean dfs;
 
 			switch (enemy.getIntelLvl()) {
-			case 0:
+			case 0:	// random walk
 				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
 				System.out.println("random walk created");
 				break;
@@ -185,6 +185,12 @@ public class EnemyBrain extends Thread {
 				}
 				System.out.println(" traversator created.");
 				break;
+				
+			case 3:	// Recursive DFS 	1.13
+				setSleepDur(500);
+				traversator = new RecursiveDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
+				System.out.println("recursive DFS created");
+				break;
 
 			default:
 				System.out.println("default");
@@ -213,7 +219,6 @@ public class EnemyBrain extends Thread {
 						// try {
 						// Thread.sleep(1000);
 						// } catch (InterruptedException e) {
-						// // TODO Auto-generated catch block
 						// e.printStackTrace();
 						// }
 
@@ -343,14 +348,12 @@ public class EnemyBrain extends Thread {
 
 	// @Override
 	// public synchronized void start() {
-	// // TODO Auto-generated method stub
 	// super.start();
 	// System.out.println("start");
 	// }
 	//
 	// @Override
 	// public void run() {
-	// // TODO Auto-generated method stub
 	// super.run();
 	// System.out.println("run");
 	// }

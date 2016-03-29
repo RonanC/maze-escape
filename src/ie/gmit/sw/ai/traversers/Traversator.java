@@ -16,6 +16,17 @@ public abstract class Traversator {
 	protected int[] newPos;
 	protected Player player;
 
+	
+	public void init(Node[][] maze, int row, int col) {
+		this.mazeArray = maze;
+		this.currentNode = mazeArray[row][col];
+		time = System.currentTimeMillis();
+		visitCount = 0;
+		complete = false;
+		setGoalNodeRand();
+		newPos = new int[2];
+	}
+	
 	public int[] getPos(){
 		int[] position = new int[2];
 		position[0] = currentNode.getRow();
@@ -69,15 +80,7 @@ public abstract class Traversator {
 
 	public abstract int[] findNextMove();
 
-	public void init(Node[][] maze, int row, int col) {
-		this.mazeArray = maze;
-		this.currentNode = mazeArray[row][col];
-		time = System.currentTimeMillis();
-		visitCount = 0;
-		complete = false;
-		setGoalNodeRand();
-		newPos = new int[2];
-	}
+
 	
 	public void resetNewPos(){
 		newPos[0] = -1;

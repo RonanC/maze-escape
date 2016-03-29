@@ -175,7 +175,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 		// enemy
 		enemyList = new ArrayList<Enemy>();
 		// spawnEnemies(false);
-		enemyBrain = new EnemyBrain(maze, enemyList, player, imgCtrl, fightCtrl, this);
+		enemyBrain = new EnemyBrain(maze, enemyList, player, imgCtrl, fightCtrl);
+//		enemyBrain.run();
 		enemyNum = GameRunner.MAZE_DIM / 2;
 
 		// animations

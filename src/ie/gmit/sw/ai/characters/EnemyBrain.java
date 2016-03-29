@@ -45,10 +45,20 @@ public class EnemyBrain extends Thread {
 		int intelCount = 0;
 		for (Enemy enemy : enemyList) {
 			enemyCount++;
-			System.out.println("\nenemy #" + enemyCount + ", with intel level of: " + intelCount);
+			if (GameRunner.ENEMY_ALGO_NUM != 6) {
+				System.out.println("\nenemy #" + enemyCount + ", with intel level of: " + GameRunner.ENEMY_ALGO_NUM);
+			}else{
+				System.out.println("\nenemy #" + enemyCount + ", with intel level of: " + intelCount);
+			}
+			
 			// lvl1 enemy
 			randomPos(enemy);
-			enemy.setIntelLvl(4); // intelCount // TODO
+			if (GameRunner.ENEMY_ALGO_NUM != 6) {
+				enemy.setIntelLvl(GameRunner.ENEMY_ALGO_NUM);
+			}else{
+				enemy.setIntelLvl(intelCount); // intelCount // TODO
+			}
+			
 			EnemyTask enemyTask = new EnemyTask(map.getMazeArrayClone(), enemy, player);
 			enemyTasks.add(enemyTask);
 			// schedule the start for every second
@@ -60,7 +70,7 @@ public class EnemyBrain extends Thread {
 	public void createEnemies(int enemyNum) {
 		killAllEnemies();
 
-		for (int i = 0; i < 5; i++) {	// TODO
+		for (int i = 0; i <= Enemy.MAX_INTEL; i++) {	// TODO
 			enemyList.add(new Enemy(map, imgCtrl));
 		}
 		enemySpawned = true;
@@ -200,6 +210,13 @@ public class EnemyBrain extends Thread {
 				
 				traversator = new DepthLimitedDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player, depthLimit);
 				System.out.println("depth limited DFS created");
+				break;
+				
+			case 5:	// Depth Limited DFS
+				setSleepDur(500);
+				
+				traversator = new IDDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
+				System.out.println("iterative deepening DFS created");
 				break;
 
 			default:  // TODO

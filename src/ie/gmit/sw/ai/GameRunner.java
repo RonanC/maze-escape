@@ -15,6 +15,8 @@ public class GameRunner {
 	private static int titleHeight;
 	private static int infoBar;
 	private static JFrame f;
+	
+	public static int ENEMY_ALGO_NUM;
 
 	public static void main(String[] args) {
 		new GameRunner();
@@ -37,6 +39,7 @@ public class GameRunner {
 		chooseBGMusicOn();
 		chooseZoomScale();
 		chooseZoomMove();
+		chooseEnemyAlgo();
 
 		TILE_DIM = 64 * 2; // scale of tiles
 		VIEW_DIM = 5; // 5 * 5
@@ -178,5 +181,30 @@ public class GameRunner {
 
 		// size of maze
 		ZOOM_MOVE = zoomMoveBool;
+	}
+	
+	public static void chooseEnemyAlgo() {
+		String menuQuestion = "";
+		menuQuestion += "Choose an enemy algorithm:\n";
+		menuQuestion += "0: Random Walk\n";
+		menuQuestion += "1: Brute Force (DFS)\n";
+		menuQuestion += "2: Brute Force (BFS)\n";
+		menuQuestion += "3: Recursive DFS\n";
+		menuQuestion += "4: Depth Limited DFS\n";
+		menuQuestion += "5: Iterative Deepening DFS\n";
+		menuQuestion += "6: mixture of all algorithms\n";
+		
+		
+		try {
+			ENEMY_ALGO_NUM = Integer
+					.parseInt((String) JOptionPane.showInputDialog(f, menuQuestion,
+							null, JOptionPane.INFORMATION_MESSAGE, null, null, "6"));
+		} catch (Exception e) {
+			ENEMY_ALGO_NUM = 6;
+		}
+
+		if (ENEMY_ALGO_NUM < 0 || ENEMY_ALGO_NUM > 6) {
+			ENEMY_ALGO_NUM = 6;
+		}
 	}
 }

@@ -15,7 +15,7 @@ import ie.gmit.sw.ai.traversers.Traversator;
  */
 public class Enemy extends Character {
 	public static int MAX_HEALTH = 50;
-	public static int MAX_INTEL = 10;
+	public static int MAX_INTEL = 5;
 	private Image enemy;
 	private Image enemy_2;
 	private int xpWorth, xpMult;

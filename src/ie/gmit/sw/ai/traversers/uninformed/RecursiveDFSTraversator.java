@@ -15,9 +15,10 @@ public class RecursiveDFSTraversator extends Traversator {
 
 	public RecursiveDFSTraversator(Node[][] maze, int row, int col, Player player) {
 		super(maze, row, col, player);
-		initCustom();
+
 		setComplete(true); // we want to wait until this is complete before
 							// letting the enemy use it. It is reversed.
+		initCustom();
 	}
 
 	public void initCustom() {
@@ -25,18 +26,28 @@ public class RecursiveDFSTraversator extends Traversator {
 //		allPositions = new LinkedList<int[]>();
 //		keepRunning = true;
 		dfs(currentNode);
+		setComplete(false);
 	}
 
 	@Override
 	public int[] findNextMove() { // let the enemy select one move at a time
 									// from the list
 
-		if (!keepRunning) {
+		if (!allPositions.isEmpty()) {
+//			System.out.print("pop\t");
 			newPos = allPositions.pop();
+//			System.out.println(newPos[0] + ", " + newPos[1]);
 		} else {
-			System.out.println("not ready");
+//			System.out.println("not ready");
 			resetNewPos();
 		}
+		
+		try { // Simulate processing each expanded node
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		return newPos;
 	}
 

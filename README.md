@@ -44,10 +44,13 @@ The damage is then cast onto one another and if either parties health is below 0
 - Bomb (kills everything within N spaces)
 - Med Kit (increases health by N amount)
 
-
 ### Intellect
 The enemies are assigned an intellect level each.  
 This decides which search algorithm they are given and also affects their outcome in battles.
+
+## Enemy Generation
+There are six enemies generated.  
+One for each algorithm.
 
 ### Scalability
 Everything in the game scales.  

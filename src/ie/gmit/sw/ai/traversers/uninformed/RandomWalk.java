@@ -19,6 +19,7 @@ public class RandomWalk extends Traversator {
 	}
 	
 	private void initCustom() {
+		complete = false;
 		steps = (int) Math.pow(mazeArray.length, 2) * 2;
 		System.out.println("Number of steps allowed: " + steps);
 	}

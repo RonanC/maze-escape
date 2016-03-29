@@ -43,7 +43,7 @@ public abstract class Traversator {
 		keepRunning = true;
 		time = System.currentTimeMillis();
 		visitCount = 0;
-		complete = false;
+//		complete = false;
 //		setGoalNodeRand();
 		setPlayerAsGoal();
 		newPos = new int[2];

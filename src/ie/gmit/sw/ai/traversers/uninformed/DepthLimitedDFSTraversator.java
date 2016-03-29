@@ -10,7 +10,7 @@ import java.util.LinkedList;
 
 public class DepthLimitedDFSTraversator extends Traversator {
 	/*
-	 * same as DFS but
+	 * same as DFS but limited.
 	 */
 	private int limit;
 
@@ -49,6 +49,12 @@ public class DepthLimitedDFSTraversator extends Traversator {
 //			System.out.println("not ready");
 			resetNewPos();
 		}
+		
+		try { // Simulate processing each expanded node
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		return newPos;
 	}
 
@@ -86,11 +92,11 @@ public class DepthLimitedDFSTraversator extends Traversator {
 			return;
 		}
 
-		try { // Simulate processing each expanded node
-			Thread.sleep(10);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try { // Simulate processing each expanded node
+//			Thread.sleep(10);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 
 		Node[] children = node.children(mazeArray);
 		for (int i = 0; i < children.length; i++) {

@@ -34,7 +34,7 @@ public class BruteForceTraversator extends Traversator {
 	
 	public BruteForceTraversator(Node[][] maze, int row, int col, boolean depthFirst, Player player) {
 		super(maze, row, col, player);
-
+		complete = false;
 		initCustom(depthFirst);
 	}
 	

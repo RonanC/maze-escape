@@ -231,6 +231,7 @@ public class EnemyBrain extends Thread {
 		public void run() {
 
 			if (!enemy.isAlive()) {
+				System.out.println("You killed a level " + enemy.getIntelLvl() + " spider!");
 				enemyList.remove(enemy);
 				SoundEffects.playEnemyDeath();
 				player.incXp(enemy.getXpWorth());

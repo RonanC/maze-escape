@@ -11,7 +11,6 @@ public class Maze {
 	private Node[][] maze;
 	private Random random;
 	private int insideNum;
-
 	private Node goal;
 
 	public Maze() {
@@ -21,6 +20,7 @@ public class Maze {
 
 		reset();
 	}
+
 
 	// Pick a goal node
 	public void setGoalNodeRand() {
@@ -117,6 +117,10 @@ public class Maze {
 		int bombNum = random.nextInt(GameRunner.MAZE_DIM / 5);
 
 		int helperNum = random.nextInt(GameRunner.MAZE_DIM / 10) * 2;
+		
+		if (helperNum < 3) {
+			helperNum = 3;
+		}
 
 		// 10'000 spaces in a 100 by 100 maze.
 
@@ -247,6 +251,7 @@ public class Maze {
 				counter++;
 				if (feature == 'g') {
 					setGoalNode(row, col);
+					System.out.println("GOAL: row: " + row + ", col: " + col);
 				}
 			}
 		}

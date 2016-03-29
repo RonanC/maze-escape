@@ -23,6 +23,8 @@ public class Node {
 	private int row = -1;
 	private int col = -1;
 	private int distance;
+	
+	private boolean helperPath = false;
 
 	// game
 	private char element;
@@ -33,6 +35,15 @@ public class Node {
 
 	public void setElement(char element) {
 		this.element = element;
+	}
+	
+	
+	public void setHelperPath(boolean onPath){
+		this.helperPath = onPath;
+	}
+	
+	public boolean getHelperPath(){
+		return helperPath;
 	}
 
 	public Node(int row, int col) {

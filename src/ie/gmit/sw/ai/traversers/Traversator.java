@@ -45,10 +45,17 @@ public abstract class Traversator {
 		visitCount = 0;
 //		complete = false;
 //		setGoalNodeRand();
-		setPlayerAsGoal();
+		if (player != null) {
+			setPlayerAsGoal();	// only for enemies
+		}
+		
 		newPos = new int[2];
 	}
 	
+	public Deque<int[]> getAllPositions() {
+		return allPositions;
+	}
+
 	public int[] getPos(){
 		int[] position = new int[2];
 		position[0] = currentNode.getRow();

@@ -9,6 +9,7 @@ import javax.swing.*;
 import ie.gmit.sw.ai.audio.*;
 import ie.gmit.sw.ai.characters.Enemy;
 import ie.gmit.sw.ai.characters.EnemyBrain;
+import ie.gmit.sw.ai.characters.Helper;
 import ie.gmit.sw.ai.characters.Player;
 import ie.gmit.sw.ai.characters.PlayerImgPainter;
 import ie.gmit.sw.ai.fight.FightCtrl;
@@ -104,6 +105,13 @@ public class GameCtrl extends JPanel implements ActionListener {
 	private boolean gameOverSeq;
 
 	private int medKitValue;
+
+	Color clrPurple = new Color(204, 0, 255);
+	Color clrBlue = new Color(102, 163, 255);
+	Color clrGreen = new Color(51, 204, 51);
+	Color clrOrange = new Color(255, 153, 0);
+	Color clrYellow = new Color(230, 230, 0);
+	Color clrRed = new Color(204, 0, 0);
 
 	// set game up
 	public GameCtrl() {
@@ -212,7 +220,6 @@ public class GameCtrl extends JPanel implements ActionListener {
 	public void startFight(Enemy enemy) {
 		// fightCtrl.setFightStartTime(getTime());
 
-		// TODO: lock enemies in place for 3 seconds
 		// lock players in place
 		// player.setInFight(true);
 		// enemy.setInFight(true);
@@ -409,6 +416,10 @@ public class GameCtrl extends JPanel implements ActionListener {
 			}
 		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("h")) { // helper
 			SoundEffects.playFoundHelp();
+			Helper helper = new Helper(this.maze, player.getTileY(), player.getTileX(), maze.getGoalNode()); // TODO
+			helper.markPath();
+			helper.printPath();
+			System.out.println(player.getPos());
 		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("g")) { // goal
 			maze.setTileItem(player.getTileX(), player.getTileY(), 'f');
 
@@ -647,37 +658,38 @@ public class GameCtrl extends JPanel implements ActionListener {
 				xCount++;
 				// get element // row
 				String element = maze.getPosElement(x, y); // gets element
+				boolean onHelperPath = maze.getMazeArray()[y][x].getHelperPath();
 
 				// now we need to draw it relative to the view window.
 				// always have the center
 
-				drawTilesZoomed(g, yCount, xCount, element, x, y);
+				drawTilesZoomed(g, yCount, xCount, element, x, y, onHelperPath);
 			}
 		}
 	}
 
-	private void drawTilesZoomed(Graphics g, int yCount, int xCount, String element, int x, int y) {
+	private void drawTilesZoomed(Graphics g, int yCount, int xCount, String element, int x, int y,
+			boolean onHelperPath) {
 		// relative
 		// tiles
 		if (element.equals("w")) { // wall
 			g.setColor(Color.DARK_GRAY);
-			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
-		} else if (String.format("%s,%s", x, y).equals(player.getPos())) {
-			g.setColor(Color.ORANGE);
-			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
+		}  else if (String.format("%s,%s", x, y).equals(player.getPos())) {	// player
+			g.setColor(clrOrange);
+		}else if (onHelperPath) { // yellow brick
+			// road TODO
+			g.setColor(clrYellow);
 		} else if (element.equals("g")) { // goal
-			g.setColor(Color.YELLOW);
-			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
+			g.setColor(clrPurple);
 		} else if (element.equals("b") || element.equals("s") || element.equals("m")) { // item
-			g.setColor(Color.CYAN);
-			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
+			g.setColor(clrBlue);
 		} else if (element.equals("h")) { // helper
-			g.setColor(Color.GREEN);
-			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
+			g.setColor(clrGreen);
 		} else { // floor
 			g.setColor(Color.LIGHT_GRAY);
-			g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
 		} // end of if
+
+		g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
 
 		// enemy
 		try {
@@ -686,7 +698,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 				if (String.format("%s,%s", x, y).equals(enemy.getPos())) {
 					if (String.format("%s,%s", x, y).equals(enemy.getPos())) {
-						g.setColor(Color.RED);
+						g.setColor(clrRed);
 						g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
 					}
 				}
@@ -733,8 +745,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 				// now we need to draw it relative to the view window.
 				// always have the center
-
-				drawTilesInView(g, yCount, xCount, element);
+				boolean onHelperPath = maze.getMazeArray()[y][x].getHelperPath();
+				drawTilesInView(g, yCount, xCount, element, onHelperPath);	// TODO
 				drawEnemiesInView(g, yCount, xCount);
 			}
 		}
@@ -744,24 +756,42 @@ public class GameCtrl extends JPanel implements ActionListener {
 		// draw enemy if inside view
 		int animEnemyDur = 1000;
 		for (Enemy enemy : enemyList) {
-			int enX = enemy.getTileX();
-			int enY = enemy.getTileY();
+			if (enemy.isAlive()) {
+				int enX = enemy.getTileX();
+				int enY = enemy.getTileY();
 
-			if (enX >= playerPosXmin && enX < playerPosXmax && enY >= playerPosYmin && enY < playerPosYmax) {
-				drawEnemy(g, animEnemyDur, enemy);
+				if (enX >= playerPosXmin && enX < playerPosXmax && enY >= playerPosYmin && enY < playerPosYmax) {
+					drawEnemy(g, animEnemyDur, enemy);
+				}
 			}
+
 		}
 	}
 
-	private void drawTilesInView(Graphics g, int yCount, int xCount, String element) {
+	private void drawTilesInView(Graphics g, int yCount, int xCount, String element, boolean onHelperPath) {
 		// tiles
 		if (element.equals("w")) { // wall
 			g.drawImage(imgCtrl.getWall(), xCount * tileDim, yCount * tileDim, null);
-		} else if (element.equals("f")) { // floor
+		} else if (element.equals("f")) { // floor // TODO
 			// using default background color
-			g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount * tileDim, null);
+			// TODO
+
+//			g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount * tileDim, null);
+
+			if (onHelperPath) {
+				g.drawImage(imgCtrl.getPath(), xCount * tileDim, yCount * tileDim, null);	// yellow brick road
+			}else{
+				g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount * tileDim, null);
+			}
+			
+
 		} else {
-			g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount * tileDim, null);
+			if (onHelperPath) {
+				g.drawImage(imgCtrl.getPath(), xCount * tileDim, yCount * tileDim, null);	// yellow brick road
+			}else{
+				g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount * tileDim, null);
+			}
+			
 
 			// items
 			// inner if is for flipping the image (basic

@@ -38,22 +38,26 @@ public class EnemyBrain extends Thread {
 	public void spawn() {
 		System.out.println("spawning enemies");
 		// create enemy tasks
+		int enemyCount = 0;
+		int intelCount = 1;
 		for (Enemy enemy : enemyList) {
-			// System.out.println("new enemy");
+			enemyCount++;
+			System.out.println("enemy #" + enemyCount + ", with intel level of: " + intelCount);
 			// lvl1 enemy
 			randomPos(enemy);
-
-			EnemyTask enemyTask = new EnemyTask(map, enemy, player);
+			enemy.setIntelLvl(1); // intelCount
+			EnemyTask enemyTask = new EnemyTask(map.getMazeArrayClone(), enemy, player);
 			enemyTasks.add(enemyTask);
 			// schedule the start for every second
-			timer.schedule(enemyTask, 1000, 1000);
+			timer.schedule(enemyTask, 1000, 100);
+			intelCount++;
 		}
 	}
 
 	public void createEnemies(int enemyNum) {
 		killAllEnemies();
 
-		for (int i = 0; i < enemyNum; i++) {
+		for (int i = 0; i < 5; i++) {
 			enemyList.add(new Enemy(map, imgCtrl));
 		}
 		enemySpawned = true;
@@ -112,22 +116,64 @@ public class EnemyBrain extends Thread {
 		private Random random;
 		private Traversator traversator;
 
-		public EnemyTask(Maze map, Enemy enemy, Player player) {
-			this.map = map;
+		public EnemyTask(Node[][] mazeArray, Enemy enemy, Player player) {
+			this.map = new Maze();
+			map.setMazeArray(mazeArray);
 			this.enemy = enemy;
 			this.player = player;
 			random = new Random();
-			int intel = random.nextInt(Enemy.MAX_INTEL);
-			enemy.setIntelLvl(intel);
+			// int intel = 2;//random.nextInt(Enemy.MAX_INTEL);
+			// enemy.setIntelLvl(intel);
+
+			setTraversor(enemy, player);
+		}
+
+		private void setTraversor(Enemy enemy, Player player) {
+			boolean dfs;
 
 			switch (enemy.getIntelLvl()) {
-			case 1:
-				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX());
+			case 0:
+				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
 				System.out.println("random walk created");
 				break;
 
+			case 1: // brute force: DFS
+				dfs = true; // random.nextBoolean();
+				traversator = new BruteForceTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(),
+						dfs, player);
+				traversator.setGoalNode(player.getTileY(), player.getTileX());// chase
+																				// player
+																				// original
+																				// position
+				System.out.print("brute force ");
+				if (dfs) {
+					System.out.print("DFS");
+				} else {
+					System.out.print("BFS");
+				}
+				System.out.println(" traversator created.");
+				break;
+
+			case 2: // brute force: BFS
+				dfs = false; // random.nextBoolean();
+				traversator = new BruteForceTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(),
+						dfs, player);
+				traversator.setGoalNode(player.getTileY(), player.getTileX());// chase
+																				// player
+																				// original
+																				// position
+				System.out.print("brute force ");
+				if (dfs) {
+					System.out.print("DFS");
+				} else {
+					System.out.print("BFS");
+				}
+				System.out.println(" traversator created.");
+				break;
+
 			default:
-				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX());
+				System.out.println("default");
+				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
 				System.out.println("random walk created");
 				break;
 			}
@@ -142,8 +188,45 @@ public class EnemyBrain extends Thread {
 				player.incXp(enemy.getXpWorth());
 				cancel(); // kills task
 			} else if (!enemy.isInFight()) {
-				int choice = traversator.findNextMove()[0];
-				move(choice);
+				if (!traversator.isComplete()) {
+
+					if (enemy.getIntelLvl() == 0) { // random walk
+						int choice = traversator.findNextMove()[0];
+						move(choice);
+					} else if (enemy.getIntelLvl() > 0) {
+						int newPos[] = traversator.findNextMove();
+						// try {
+						// Thread.sleep(1000);
+						// } catch (InterruptedException e) {
+						// // TODO Auto-generated catch block
+						// e.printStackTrace();
+						// }
+
+						if (newPos[1] == -1) {
+							// setCurrentGoal();
+							if (newPos[0] == 4) {
+								System.out.println("Found player location.");
+								enemy.setPos(traversator.getGoalNode().getCol(), traversator.getGoalNode().getRow());
+								System.out.println("row: " + traversator.getGoalNode().getRow());
+								System.out.println("col: " + traversator.getGoalNode().getCol());
+							} else if (newPos[0] == 5) {
+								System.out.println("Could not find player location.");
+							} else {
+								System.out.println("Error, out of moves perhaps?"); 
+								// searching for new enemy location...
+							}
+							System.out.println(
+									"player location, row: " + player.getTileY() + ", col: " + player.getTileX());
+							System.out.println("enemy goal, row:" + traversator.getGoalNode().getRow() + ", col: "
+									+ traversator.getGoalNode().getCol() + "\n");
+//							traversator.resetAndSetGoal();
+							setTraversor(enemy, player);
+							
+						} else {
+							enemy.setPos(newPos[1], newPos[0]);
+						}
+					}
+				}
 
 				checkFight(); // checked every move
 			}
@@ -200,15 +283,24 @@ public class EnemyBrain extends Thread {
 
 			case 4: // Found Goal Node
 				System.out.println("EnemyBrain: Found Goal Node");
+				setCurrentGoal();
 				return false;
 
 			case 5: // Could not find goal Node
 				System.out.println("EnemyBrain: Could not find goal Node");
+				setCurrentGoal();
 				return false;
 
 			default:
 				return false;
 			}
+		}
+
+		public void setCurrentGoal() {
+			traversator.setGoalNode(player.getTileY(), player.getTileX());// chase
+																			// player
+																			// original
+																			// position
 		}
 
 		// // V1 - random move (may even walk into a wall)

@@ -91,7 +91,7 @@ public class EnemyTask extends Thread {
 	}
 
 	private void randomWalk() {
-		traversator = new RandomWalk(mazeArrayClone, enemy.getTileY(), enemy.getTileX());
+		traversator = new RandomWalk(mazeArrayClone, enemy.getTileY(), enemy.getTileX(), player);
 		System.out.println("random walk created");
 	}
 	

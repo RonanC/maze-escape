@@ -225,11 +225,18 @@ public class GameCtrl extends JPanel implements ActionListener {
 	}
 
 	public void checkFight() {
-		for (Enemy enemy : enemyList) {
-			if (player.getPos().equals(enemy.getPos())) {
-				startFight(enemy);
+		try {
+			for (Enemy enemy : enemyList) {
+				if (player.getPos().equals(enemy.getPos())) {
+					if (!player.isInFight()) {
+						startFight(enemy);
+					}
+				}
 			}
+		} catch (Exception e) {
+			System.out.println("Enemy already dead error: " + e.getMessage());
 		}
+
 	}
 
 	// zoom
@@ -272,13 +279,13 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 		// clear enemies
 		enemyBrain.killAllEnemies();
-		
+
 		// // reset maze
-		
-		 maze.reset();
+
+		maze.reset();
 		// // reset player
-		 player.resetPos();
-		 playerImgPainter.setPlayerLookH('r');
+		player.resetPos();
+		playerImgPainter.setPlayerLookH('r');
 
 		// play again
 		GameRunner.choosePlayAgain();
@@ -294,8 +301,9 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 				if (e.getKeyCode() == KeyEvent.VK_ENTER && startDone == false) {
 					startDone = true;
-					enemyBrain.createEnemies(enemyNum);
-					enemyBrain.spawn();
+					enemyBrain.createEnemies(enemyNum); // create enemies calls
+														// spawn
+					// enemyBrain.spawn();
 				}
 
 				if (e.getKeyCode() == KeyEvent.VK_M) { // zoom into MAP
@@ -420,7 +428,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		if (haveWon) {
 			zoomedOut = false;
 		}
-		
+
 		// NB resets game
 		if (haveWon && timeElap > winDur) { // n seconds of winning!
 			// SoundEffects.playWin();
@@ -672,13 +680,20 @@ public class GameCtrl extends JPanel implements ActionListener {
 		} // end of if
 
 		// enemy
-		for (Enemy enemy : enemyList) {
-			// checks if in view
-			if (String.format("%s,%s", x, y).equals(enemy.getPos()))
+		try {
+			for (Enemy enemy : enemyList) {
+				// checks if in view
+
 				if (String.format("%s,%s", x, y).equals(enemy.getPos())) {
-					g.setColor(Color.RED);
-					g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
+					if (String.format("%s,%s", x, y).equals(enemy.getPos())) {
+						g.setColor(Color.RED);
+						g.fillRect(xCount * zoomDim, yCount * zoomDim, zoomDim, zoomDim);
+					}
 				}
+
+			}
+		} catch (Exception e) {
+			System.out.println("error painting enemy zoomed out: " + e.getMessage());
 		}
 	}
 

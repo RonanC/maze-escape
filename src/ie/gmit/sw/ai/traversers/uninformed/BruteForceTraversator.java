@@ -1,6 +1,7 @@
 package ie.gmit.sw.ai.traversers.uninformed;
 
 import ie.gmit.sw.ai.*;
+import ie.gmit.sw.ai.characters.Player;
 import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
@@ -31,8 +32,11 @@ public class BruteForceTraversator extends Traversator {
 	private boolean dfs = false;
 	Deque<Node> queue;
 	
-	public BruteForceTraversator(Node[][] maze, int row, int col, boolean depthFirst) {
-		super(maze, row, col);
+	public BruteForceTraversator(Node[][] maze, int row, int col, boolean depthFirst, Player player) {
+		super(maze, row, col, player);
+
+		
+		
 		initCustom(depthFirst);
 	}
 	
@@ -44,10 +48,12 @@ public class BruteForceTraversator extends Traversator {
 		queue.offer(currentNode); // adds element to the end of the queue (starting
 							// node added)
 	}
-
+	
 	public int[] findNextMove() {
+		resetNewPos();
 		if (!queue.isEmpty()) { // while the queue is not empty
-			System.out.println("queue: " + queue.toString());
+//			System.out.println("queue: " + queue.toString());
+			
 			currentNode = queue.poll(); // take from the head
 
 			// same as other algorithms
@@ -58,13 +64,16 @@ public class BruteForceTraversator extends Traversator {
 			if (currentNode.isGoalNode()) {
 				time = System.currentTimeMillis() - time; // Stop the clock
 				TraversatorStats.printStats(currentNode, time, visitCount);
-				setGoalNodeRand();// reset goal node
+//				setGoalNodeRand();// reset goal node
 				newPos[0] = 4;
+				setComplete(true);
+				queue.clear();
+				resetGraph();
 				return newPos;
 			}
 
 			try { // let painter paint screen
-				Thread.sleep(10);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -101,7 +110,10 @@ public class BruteForceTraversator extends Traversator {
 			return newPos;
 		} else{
 			// queue empty, did not find node
+			setComplete(true);
 			newPos[0] = 5;
+			queue.clear();
+			resetGraph();
 			return newPos;
 		}
 	}

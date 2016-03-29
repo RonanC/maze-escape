@@ -1,5 +1,6 @@
 package ie.gmit.sw.ai.traversers.uninformed;
 
+import ie.gmit.sw.ai.characters.Player;
 import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
@@ -12,8 +13,8 @@ public class RandomWalk extends Traversator {
 	 * low memory, high time
 	 */
 
-	public RandomWalk(Node[][] maze, int row, int col) {
-		super(maze, row, col);
+	public RandomWalk(Node[][] maze, int row, int col, Player player) {
+		super(maze, row, col, player);
 		initCustom();
 	}
 	
@@ -23,6 +24,7 @@ public class RandomWalk extends Traversator {
 	}
 
 	public int[] findNextMove() { // traverse one step
+		resetNewPos();
 		if (visitCount <= steps && currentNode != null) {
 			currentNode.setVisited(true); // this is what changes the color of the node
 			visitCount++;

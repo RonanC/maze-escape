@@ -30,9 +30,13 @@ public class Maze {
 		maze[randRow][randCol].setGoalNode(true);
 		goal = maze[randRow][randCol];
 	}
+	
+	public void setMazeArray(Node[][] mazeArray){
+		this.maze = mazeArray;
+	}
 
 	public void setGoalNode(int row, int col) {
-		maze[row][col].setGoalNode(true);
+//		maze[row][col].setGoalNode(true);	// we only set this true in the actual search algorithm
 		goal = maze[row][col];
 	}
 

@@ -82,7 +82,7 @@ public class GameRunner {
 		try {
 			ZOOM_SCALE = Integer
 					.parseInt((String) JOptionPane.showInputDialog(f, "Zoom Scale?\n0: normal\n1: closer\n2: farther",
-							null, JOptionPane.INFORMATION_MESSAGE, null, null, "0"));
+							null, JOptionPane.INFORMATION_MESSAGE, null, null, "2"));
 		} catch (Exception e) {
 			ZOOM_SCALE = 0;
 		}
@@ -136,7 +136,7 @@ public class GameRunner {
 		int mazeSize = 0;
 		try {
 			mazeSize = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Maze Size?", null,
-					JOptionPane.INFORMATION_MESSAGE, null, null, "100"));
+					JOptionPane.INFORMATION_MESSAGE, null, null, "40"));
 		} catch (Exception e) {
 			mazeSize = 100;
 		}

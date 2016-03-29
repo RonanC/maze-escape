@@ -91,14 +91,13 @@ public class EnemyTask extends Thread {
 	}
 
 	private void randomWalk() {
-		traversator = new RandomWalk();
-		traversator.init(mazeArrayClone, getCurrentNode());
+		traversator = new RandomWalk(mazeArrayClone, enemy.getTileY(), enemy.getTileX());
 		System.out.println("random walk created");
 	}
 	
-	private Node getCurrentNode(){
-		return mazeArrayClone[enemy.getTileY()][enemy.getTileX()];
-	}
+//	private Node getCurrentNode(){
+//		return mazeArrayClone[enemy.getTileY()][enemy.getTileX()];
+//	}
 
 	// V4 - depth first (need to create node graph)
 

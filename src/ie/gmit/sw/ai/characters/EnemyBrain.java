@@ -6,6 +6,8 @@ import ie.gmit.sw.ai.audio.*;
 import ie.gmit.sw.ai.fight.*;
 import ie.gmit.sw.ai.img.*;
 import ie.gmit.sw.ai.maze.*;
+import ie.gmit.sw.ai.traversers.*;
+import ie.gmit.sw.ai.traversers.uninformed.*;
 
 public class EnemyBrain extends Thread {
 	private ArrayList<Enemy> enemyList;
@@ -108,12 +110,27 @@ public class EnemyBrain extends Thread {
 		private Enemy enemy;
 		private Player player;
 		private Random random;
+		private Traversator traversator;
 
 		public EnemyTask(Maze map, Enemy enemy, Player player) {
 			this.map = map;
 			this.enemy = enemy;
 			this.player = player;
 			random = new Random();
+			int intel = random.nextInt(Enemy.MAX_INTEL);
+			enemy.setIntelLvl(intel);
+			
+			switch (enemy.getIntelLvl()) {
+			case 1:
+				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX());
+				System.out.println("random walk created");
+				break;
+
+			default:
+				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX());
+				System.out.println("random walk created");
+				break;
+			}
 		}
 
 		@Override
@@ -125,27 +142,11 @@ public class EnemyBrain extends Thread {
 				player.incXp(enemy.getXpWorth());
 				cancel(); // kills task
 			} else if (!enemy.isInFight()) {
-				// pick a version
-				int moveVersion = random.nextInt(2) + 1;
-
-				switch (moveVersion) {
-				case 1:
-					v1RandomMove();
-					break;
-
-				case 2:
-					v2AlwaysMove();
-					break;
-
-				default:
-					v1RandomMove();
-					break;
-				}
+				int choice = traversator.findNextMove();
+				move(choice);
 
 				checkFight(); // checked every move
-			} else {
-
-			}
+			} 
 		}
 
 		// V4 - depth first (need to create node graph)
@@ -153,16 +154,14 @@ public class EnemyBrain extends Thread {
 		// V3 - breadth first (need to create node graph)
 
 		// V2 - pick only a move which is not a wall
-		public void v2AlwaysMove() {
-			int choice = random.nextInt(4); // N, S, E, W
-			boolean moveChoice = false;
-			while (moveChoice == false) {
-				choice = random.nextInt(4);
-				moveChoice = move(choice);
-			}
-			;
-
-		}
+//		public void v2AlwaysMove() {
+//			int choice = random.nextInt(4); // N, S, E, W
+//			boolean moveChoice = false;
+//			while (moveChoice == false) {
+//				choice = random.nextInt(4);
+//				moveChoice = move(choice);
+//			}
+//		}
 
 		public boolean move(int choice) {
 			switch (choice) {
@@ -204,16 +203,16 @@ public class EnemyBrain extends Thread {
 			}
 		}
 
-		// V1 - random move (may even walk into a wall)
-		public void v1RandomMove() {
-			int choice = random.nextInt(4); // N, S, E, W
-			move(choice);
-		}
-
-		// ran every valid keypress
-		public void moveCommon() {
-
-		}
+//		// V1 - random move (may even walk into a wall)
+//		public void v1RandomMove() {
+//			int choice = random.nextInt(4); // N, S, E, W
+//			move(choice);
+//		}
+//
+//		// ran every valid keypress
+//		public void moveCommon() {
+//
+//		}
 
 		public void checkFight() {
 			if (player.getPos().equals(enemy.getPos())) {
@@ -227,18 +226,18 @@ public class EnemyBrain extends Thread {
 		}
 	}
 
-	@Override
-	public synchronized void start() {
-		// TODO Auto-generated method stub
-		super.start();
-		System.out.println("start");
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		super.run();
-		System.out.println("run");
-	}
+//	@Override
+//	public synchronized void start() {
+//		// TODO Auto-generated method stub
+//		super.start();
+//		System.out.println("start");
+//	}
+//
+//	@Override
+//	public void run() {
+//		// TODO Auto-generated method stub
+//		super.run();
+//		System.out.println("run");
+//	}
 
 }

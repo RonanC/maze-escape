@@ -130,7 +130,7 @@ public class FightCtrl {
 		enemyLuckScore = random.nextInt(scoreMax) + 1;
 		double tempHealth = (double)enemy.getHealth() / ((double)Enemy.MAX_HEALTH / (double)scoreMax);
 		enemyHealthScore = (int) tempHealth;
-		enemyIntelScore = enemy.getIntel() * (Enemy.MAX_INTEL * (scoreMax / 4));
+		enemyIntelScore = enemy.getIntelLvl() * (Enemy.MAX_INTEL * (scoreMax / 4));
 	}
 
 	public void playerAdd() {
@@ -191,7 +191,7 @@ public class FightCtrl {
 	public String enemyRawStatsToString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("===Enemy Raw Stats===\n");
-		sb.append("Intel:\t" + enemy.getIntel() + "\n");
+		sb.append("Intel:\t" + enemy.getIntelLvl() + "\n");
 		sb.append("Health:\t" + enemy.getHealth() + "\n");
 		sb.append("\n");
 

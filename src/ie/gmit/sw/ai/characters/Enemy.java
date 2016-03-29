@@ -83,10 +83,6 @@ public class Enemy extends Character {
 		}
 	}
 
-	public int getIntel() {
-		return intelLvl;
-	}
-
 	public void setUpImages() {
 		// enemy
 		enemy = imgCtrl.getEnemy_down();

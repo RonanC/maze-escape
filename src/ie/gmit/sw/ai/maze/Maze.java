@@ -23,7 +23,7 @@ public class Maze {
 	}
 
 	// Pick a goal node
-	public void setGoalNode() {
+	public void setGoalNodeRand() {
 		Random generator = new Random();
 		int randRow = generator.nextInt(maze.length);
 		int randCol = generator.nextInt(maze[0].length);

@@ -23,7 +23,7 @@ public class RandomWalk extends Traversator {
 		System.out.println("Number of steps allowed: " + steps);
 	}
 
-	public int[] findNextMove() { // traverse one step
+	public int[] findNextMove() { // traverse one step through the algorithm at a time
 		resetNewPos();
 		if (visitCount <= steps && currentNode != null) {
 			currentNode.setVisited(true); // this is what changes the color of the node

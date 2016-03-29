@@ -29,7 +29,7 @@ public class RecursiveDFSTraversator extends Traversator {
 	}
 
 	@Override
-	public int[] findNextMove() { // then let the enemy select one at a time
+	public int[] findNextMove() { // let the enemy select one move at a time from the list
 
 		if (!keepRunning) {
 			newPos = allPositions.pop();
@@ -40,7 +40,7 @@ public class RecursiveDFSTraversator extends Traversator {
 		return newPos;
 	}
 
-	public void dfs(Node nodeTemp) { // get all positions
+	public void dfs(Node nodeTemp) { // get all positions and save to list
 		allPositions.add(new int[] { nodeTemp.getRow(), nodeTemp.getCol() });
 
 		resetNewPos();

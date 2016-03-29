@@ -35,8 +35,6 @@ public class BruteForceTraversator extends Traversator {
 	public BruteForceTraversator(Node[][] maze, int row, int col, boolean depthFirst, Player player) {
 		super(maze, row, col, player);
 
-		
-		
 		initCustom(depthFirst);
 	}
 	
@@ -49,7 +47,7 @@ public class BruteForceTraversator extends Traversator {
 							// node added)
 	}
 	
-	public int[] findNextMove() {
+	public int[] findNextMove() { // traverse one step through the algorithm at a time
 		resetNewPos();
 		if (!queue.isEmpty()) { // while the queue is not empty
 //			System.out.println("queue: " + queue.toString());

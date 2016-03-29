@@ -26,6 +26,7 @@ public class GameRunner {
 
 	public static void reset() {
 		f.dispose();
+		f.removeAll();
 		init();
 	}
 

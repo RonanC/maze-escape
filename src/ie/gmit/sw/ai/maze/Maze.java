@@ -40,11 +40,11 @@ public class Maze {
 		return goal;
 	}
 
-	public Node[][] getMaze() {
+	public Node[][] getMazeArray() {
 		return maze;
 	}
 
-	public Node[][] getMazeClone() {
+	public Node[][] getMazeArrayClone() {
 		return maze.clone(); // unique for each enemy
 	}
 

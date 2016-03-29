@@ -39,7 +39,7 @@ public class RandomWalk implements Traversator {
 				Node[] children = node.children(maze); // get all children
 				// choose a random child
 				int choice = (int) (children.length * Math.random());
-				System.out.println("children choice: " + choice);
+//				System.out.println("children choice: " + choice);
 				try {
 					node = children[choice];
 				} catch (Exception e) {

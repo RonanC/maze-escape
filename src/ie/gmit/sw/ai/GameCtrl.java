@@ -112,7 +112,6 @@ public class GameCtrl extends JPanel implements ActionListener {
 		timer = new Timer(frameRate, this); // action performed every 25 Ms
 		init();
 
-
 		timer.start();
 	}
 
@@ -176,7 +175,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		enemyList = new ArrayList<Enemy>();
 		// spawnEnemies(false);
 		enemyBrain = new EnemyBrain(maze, enemyList, player, imgCtrl, fightCtrl);
-//		enemyBrain.run();
+		// enemyBrain.run();
 		enemyNum = GameRunner.MAZE_DIM / 2;
 
 		// animations
@@ -273,6 +272,13 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 		// clear enemies
 		enemyBrain.killAllEnemies();
+		
+		// // reset maze
+		
+		 maze.reset();
+		// // reset player
+		 player.resetPos();
+		 playerImgPainter.setPlayerLookH('r');
 
 		// play again
 		GameRunner.choosePlayAgain();
@@ -411,6 +417,10 @@ public class GameCtrl extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		int timeElap = getTime() - setWin;
 
+		if (haveWon) {
+			zoomedOut = false;
+		}
+		
 		// NB resets game
 		if (haveWon && timeElap > winDur) { // n seconds of winning!
 			// SoundEffects.playWin();
@@ -420,7 +430,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 			choosePlayAgain();
 		}
 
-		if (!player.getAlive()) {
+		if (!player.getAlive() && startDone == true) {
 			player.setAlive(true); // so this only gets called once
 			dieTime = getTime(); // get time for game over sequence
 			gameOverSeq = true; // then we trigger the game over sequence

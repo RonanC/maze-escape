@@ -16,8 +16,8 @@ public class EnemyTask3 {
 	private Player player;
 	private Random random;
 	private int traversatorNum;
-	private Traversator traversator;
 	
+	private Traversator traversator;
 	private Maze mazeClone;
 	private Node[][] nodesClone;
 	private Node currentNode;
@@ -59,7 +59,7 @@ public class EnemyTask3 {
 	
 	private void customRandomWalk() {
 		traversator = new RandomWalk();
-		traversator.init(map.getMazeClone(), getCurrentNode());
+		traversator.init(map.getMazeArrayClone(), getCurrentNode());
 		System.out.println("random walk created");
 	}
 }

@@ -1,17 +1,13 @@
 package ie.gmit.sw.ai.characters;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+import ie.gmit.sw.ai.*;
+import ie.gmit.sw.ai.audio.*;
+import ie.gmit.sw.ai.fight.*;
+import ie.gmit.sw.ai.img.*;
+import ie.gmit.sw.ai.maze.*;
 
-import ie.gmit.sw.ai.GameRunner;
-import ie.gmit.sw.ai.fight.FightCtrl;
-import ie.gmit.sw.ai.img.ImgCtrl;
-import ie.gmit.sw.ai.maze.Maze;
-
-public class EnemyBrain { 
+public class EnemyBrain extends Thread {
 	private ArrayList<Enemy> enemyList;
 	private int mazeDim = GameRunner.MAZE_DIM;
 	private Maze map;
@@ -22,9 +18,7 @@ public class EnemyBrain {
 
 	private boolean enemySpawned;
 	private FightCtrl fightCtrl;
-
-	private LinkedList<EnemyTask> enemyTasks;
-	private GeneralTask gt;
+	private ArrayList<EnemyTask> enemyTasks;
 
 	public EnemyBrain(Maze map, ArrayList<Enemy> enemyList, Player player, ImgCtrl imgCtrl, FightCtrl fightCtrl) {
 		this.imgCtrl = imgCtrl;
@@ -34,11 +28,9 @@ public class EnemyBrain {
 		this.fightCtrl = fightCtrl;
 		random = new Random();
 		timer = new Timer();
+
 		enemySpawned = false;
-		enemyTasks = new LinkedList<EnemyTask>();
-		gt = new GeneralTask();
-//		timer.schedule(gt, 1000);
-		timer.scheduleAtFixedRate(gt, 1000, 1000);
+		enemyTasks = new ArrayList<EnemyTask>();
 	}
 
 	public void spawn() {
@@ -49,15 +41,11 @@ public class EnemyBrain {
 			// lvl1 enemy
 			randomPos(enemy);
 
-			EnemyTask enemyTask = new EnemyTask(map, enemy, player, enemyList, enemyTasks, fightCtrl);
-			enemyTask.start();
+			EnemyTask enemyTask = new EnemyTask(map, enemy, player);
 			enemyTasks.add(enemyTask);
 			// schedule the start for every second
-			// timer.schedule(enemyTask, 0, 500);
+			timer.schedule(enemyTask, 1000, 1000);
 		}
-		
-//		timer.schedule(gt, 1000, 1000);
-//		timer.scheduleAtFixedRate(gt, 1000, 1000);
 	}
 
 	public void createEnemies(int enemyNum) {
@@ -87,6 +75,10 @@ public class EnemyBrain {
 	public void killAllEnemies() {
 		enemyList.clear();
 		setEnemySpawned(false);
+		
+		for (EnemyTask enemyTask : enemyTasks) {
+			enemyTask.cancel();
+		}
 	}
 
 	public void randomPos(Enemy enemy) {
@@ -108,36 +100,145 @@ public class EnemyBrain {
 		}
 	}
 
-	public class GeneralTask extends TimerTask {
+	// Single enemy
+	public class EnemyTask extends TimerTask {
+		// this enemy has a form, is in a place and knows that there is a
+		// player.
+		private Maze map;
+		private Enemy enemy;
+		private Player player;
+		private Random random;
+
+		public EnemyTask(Maze map, Enemy enemy, Player player) {
+			this.map = map;
+			this.enemy = enemy;
+			this.player = player;
+			random = new Random();
+		}
 
 		@Override
 		public void run() {
-			if (!enemyTasks.isEmpty()) {
-				try {
-					for (EnemyTask enemyTask : enemyTasks) {
-						enemyTask.run();
-						// enemyTask.move(1);
-					}
-				} catch (Exception e) {
-					System.out.println("error: " + e.getMessage());
+
+			if (!enemy.isAlive()) {
+				enemyList.remove(enemy);
+				SoundEffects.playEnemyDeath();
+				player.incXp(enemy.getXpWorth());
+				cancel(); // kills task
+			} else if (!enemy.isInFight()) {
+				// pick a version
+				int moveVersion = random.nextInt(2) + 1;
+
+				switch (moveVersion) {
+				case 1:
+					v1RandomMove();
+					break;
+
+				case 2:
+					v2AlwaysMove();
+					break;
+
+				default:
+					v1RandomMove();
+					break;
 				}
+
+				checkFight(); // checked every move
+			} else {
+
 			}
+		}
+
+		// V4 - depth first (need to create node graph)
+
+		// V3 - breadth first (need to create node graph)
+
+		// V2 - pick only a move which is not a wall
+		public void v2AlwaysMove() {
+			int choice = random.nextInt(4); // N, S, E, W
+			boolean moveChoice = false;
+			while (moveChoice == false) {
+				choice = random.nextInt(4);
+				moveChoice = move(choice);
+			}
+			;
+
+		}
+
+		public boolean move(int choice) {
+			switch (choice) {
+			case 0: // N
+				if (!map.getPosElement(enemy.getTileX(), enemy.getTileY() - 1).equals("w")) {
+					enemy.move(0, -1);
+					return true;
+				} else {
+					return false;
+				}
+
+			case 1: // S
+				if (!map.getPosElement(enemy.getTileX(), enemy.getTileY() + 1).equals("w")) {
+					enemy.move(0, 1);
+					return true;
+				} else {
+					return false;
+				}
+
+			case 2: // E
+
+				if (!map.getPosElement(enemy.getTileX() - 1, enemy.getTileY()).equals("w")) {
+					enemy.move(-1, 0);
+					return true;
+				} else {
+					return false;
+				}
+
+			case 3: // W
+				if (!map.getPosElement(enemy.getTileX() + 1, enemy.getTileY()).equals("w")) {
+					enemy.move(1, 0); // 1? tileDim
+					return true;
+				} else {
+					return false;
+				}
+
+			default:
+				return false;
+			}
+		}
+
+		// V1 - random move (may even walk into a wall)
+		public void v1RandomMove() {
+			int choice = random.nextInt(4); // N, S, E, W
+			move(choice);
+		}
+
+		// ran every valid keypress
+		public void moveCommon() {
+
+		}
+
+		public void checkFight() {
+			if (player.getPos().equals(enemy.getPos())) {
+				fight();
+			}
+		}
+
+		// fight
+		public void fight() {
+			fightCtrl.fight(enemy);
 		}
 	}
 
+	@Override
+	public synchronized void start() {
+		// TODO Auto-generated method stub
+		super.start();
+		System.out.println("start");
+	}
 
-	// @Override
-	// public synchronized void start() {
-	// // TODO Auto-generated method stub
-	// super.start();
-	// System.out.println("start");
-	// }
-	//
-	// @Override
-	// public void run() {
-	// // TODO Auto-generated method stub
-	// super.run();
-	// System.out.println("run");
-	// }
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		super.run();
+		System.out.println("run");
+	}
 
 }

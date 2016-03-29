@@ -7,35 +7,68 @@ import java.util.Random;
 import ie.gmit.sw.ai.audio.SoundEffects;
 import ie.gmit.sw.ai.fight.FightCtrl;
 import ie.gmit.sw.ai.maze.Maze;
+import ie.gmit.sw.ai.maze.Node;
+import ie.gmit.sw.ai.traversers.Traversator;
+import ie.gmit.sw.ai.traversers.uninformed.RandomWalk;
 
 // Single enemy
 public class EnemyTask extends Thread {
 	// this enemy has a form, is in a place and knows that there is a
 	// player.
-	private Maze map;
+	private Maze globalMaze;
 	private Enemy enemy;
 	private Player player;
 	private Random random;
 	private ArrayList<Enemy> enemyList;
 	private LinkedList<EnemyTask> enemyTasks;
 	private FightCtrl fightCtrl;
+	
+	// serach stuff
+	private Traversator traversator;
+	private Maze mazeClone;
+	private Node[][] mazeArrayClone;
+	private Node currentNode;
 
-	public EnemyTask(Maze map, Enemy enemy, Player player, ArrayList<Enemy> enemyList, LinkedList<EnemyTask> enemyTasks, FightCtrl fightCtrl) {
-		this.map = map;
+
+	public Enemy getEnemy() {
+		return enemy;
+	}
+
+	public void setEnemy(Enemy enemy) {
+		this.enemy = enemy;
+	}
+
+	public EnemyTask(Maze globalMaze, Enemy enemy, Player player, ArrayList<Enemy> enemyList, LinkedList<EnemyTask> enemyTasks,
+			FightCtrl fightCtrl) {
+		this.globalMaze = globalMaze;
 		this.enemy = enemy;
 		this.player = player;
 		random = new Random();
 		this.enemyList = enemyList;
 		this.enemyTasks = enemyTasks;
 		this.fightCtrl = fightCtrl;
+		this.mazeArrayClone = globalMaze.getMazeArrayClone();
+
+		// pick a version
+		// random.nextInt(1);
+		enemy.setIntelLvl(0);
+
+		switch (enemy.getIntelLvl()) {
+		case 0:
+			randomWalk();
+			break;
+
+		default:
+			randomWalk();
+			break;
+		}
 	}
-	
-	
+
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		super.run();
-		
+
 		runTask();
 	}
 
@@ -43,32 +76,28 @@ public class EnemyTask extends Thread {
 	public void runTask() {
 		if (!enemy.isAlive()) {
 			enemyList.remove(enemy);
+//			enemyTasks.remove(this);
 			SoundEffects.playEnemyDeath();
 			player.incXp(enemy.getXpWorth());
-			// cancel(); // kills task
-			enemyTasks.remove(this);
+//			 cancel(); // kills task
+			
 		} else if (!enemy.isInFight()) {
-			// pick a version
-			int moveVersion = 1;// random.nextInt(1) + 1;
-
-			switch (moveVersion) {
-			case 1:
-				v1RandomMove();
-				break;
-
-			case 2:
-				v2AlwaysMove();
-				break;
-
-			default:
-				v1RandomMove();
-				break;
-			}
-
+			int choice = traversator.findNextMove();
+			move(choice);
 			checkFight(); // checked every move
 		} else {
 
 		}
+	}
+
+	private void randomWalk() {
+		traversator = new RandomWalk();
+		traversator.init(mazeArrayClone, getCurrentNode());
+		System.out.println("random walk created");
+	}
+	
+	private Node getCurrentNode(){
+		return mazeArrayClone[enemy.getTileY()][enemy.getTileX()];
 	}
 
 	// V4 - depth first (need to create node graph)
@@ -88,15 +117,15 @@ public class EnemyTask extends Thread {
 	public boolean move(int choice) {
 		switch (choice) {
 		case 0: // N
-			if (!map.getPosElement(enemy.getTileX(), enemy.getTileY() - 1).equals("w")) {
+			if (!globalMaze.getPosElement(enemy.getTileX(), enemy.getTileY() - 1).equals("w")) {
 				enemy.move(0, -1);
 				return true;
 			} else {
 				return false;
 			}
-			
+
 		case 1: // S
-			if (!map.getPosElement(enemy.getTileX(), enemy.getTileY() + 1).equals("w")) {
+			if (!globalMaze.getPosElement(enemy.getTileX(), enemy.getTileY() + 1).equals("w")) {
 				enemy.move(0, 1);
 				return true;
 			} else {
@@ -105,7 +134,7 @@ public class EnemyTask extends Thread {
 
 		case 2: // E
 
-			if (!map.getPosElement(enemy.getTileX() - 1, enemy.getTileY()).equals("w")) {
+			if (!globalMaze.getPosElement(enemy.getTileX() - 1, enemy.getTileY()).equals("w")) {
 				enemy.move(-1, 0);
 				return true;
 			} else {
@@ -113,7 +142,7 @@ public class EnemyTask extends Thread {
 			}
 
 		case 3: // W
-			if (!map.getPosElement(enemy.getTileX() + 1, enemy.getTileY()).equals("w")) {
+			if (!globalMaze.getPosElement(enemy.getTileX() + 1, enemy.getTileY()).equals("w")) {
 				enemy.move(1, 0); // 1? tileDim
 				return true;
 			} else {

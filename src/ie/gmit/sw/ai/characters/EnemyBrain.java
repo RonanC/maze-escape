@@ -1,6 +1,8 @@
 package ie.gmit.sw.ai.characters;
 
+import java.awt.Component;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -11,7 +13,7 @@ import ie.gmit.sw.ai.fight.FightCtrl;
 import ie.gmit.sw.ai.img.ImgCtrl;
 import ie.gmit.sw.ai.maze.Maze;
 
-public class EnemyBrain extends Thread {
+public class EnemyBrain { // extends thread
 	private ArrayList<Enemy> enemyList;
 	private int mazeDim = GameRunner.MAZE_DIM;
 	private Maze map;
@@ -22,8 +24,13 @@ public class EnemyBrain extends Thread {
 
 	private boolean enemySpawned;
 	private FightCtrl fightCtrl;
-	
-	public EnemyBrain(Maze map, ArrayList<Enemy> enemyList, Player player, ImgCtrl imgCtrl, FightCtrl fightCtrl) {
+
+	private Component viewer;
+	private LinkedList<EnemyTask> enemyTasks;
+	private GeneralTask gt;
+
+	public EnemyBrain(Maze map, ArrayList<Enemy> enemyList, Player player, ImgCtrl imgCtrl, FightCtrl fightCtrl,
+			Component viewer) {
 		this.imgCtrl = imgCtrl;
 		this.player = player;
 		this.map = map;
@@ -31,8 +38,10 @@ public class EnemyBrain extends Thread {
 		this.fightCtrl = fightCtrl;
 		random = new Random();
 		timer = new Timer();
-		
+		this.viewer = viewer;
+
 		enemySpawned = false;
+		enemyTasks = new LinkedList<EnemyTask>();
 	}
 
 	public void spawn() {
@@ -44,11 +53,14 @@ public class EnemyBrain extends Thread {
 			randomPos(enemy);
 
 			EnemyTask enemyTask = new EnemyTask(map, enemy, player);
+			enemyTasks.add(enemyTask);
 			// schedule the start for every second
-			timer.schedule(enemyTask, 0, 1000);
+			// timer.schedule(enemyTask, 0, 500);
 		}
+		gt = new GeneralTask();
+		timer.schedule(gt, 0, 500);
 	}
-	
+
 	public void createEnemies(int enemyNum) {
 		killAllEnemies();
 
@@ -58,12 +70,12 @@ public class EnemyBrain extends Thread {
 		enemySpawned = true;
 		spawn();
 	}
-	
-	public boolean getEnemySpawned(){
+
+	public boolean getEnemySpawned() {
 		return enemySpawned;
 	}
-	
-	public void setEnemySpawned(boolean spawned){
+
+	public void setEnemySpawned(boolean spawned) {
 		enemySpawned = spawned;
 	}
 
@@ -72,8 +84,8 @@ public class EnemyBrain extends Thread {
 			randomPos(enemy);
 		}
 	}
-	
-	public void killAllEnemies(){
+
+	public void killAllEnemies() {
 		enemyList.clear();
 		setEnemySpawned(false);
 	}
@@ -86,10 +98,10 @@ public class EnemyBrain extends Thread {
 		while (notPlaced) {
 			x = random.nextInt(mazeDim - 2) + 1;
 			y = random.nextInt(mazeDim - 2) + 1;
-//			System.out.printf("x: %d, y: %d\t", x, y);
+			// System.out.printf("x: %d, y: %d\t", x, y);
 			// avoid walls and player
 			if (!map.getPosElement(x, y).equals("w") && !enemy.getPos().equals(player.getPos())) {
-//				System.out.println(map.getPosElement(x, y));
+				// System.out.println(map.getPosElement(x, y));
 				enemy.setPos(x, y);
 				notPlaced = false;
 				// System.out.println("placing");
@@ -97,8 +109,28 @@ public class EnemyBrain extends Thread {
 		}
 	}
 
+	public class GeneralTask extends TimerTask {
+
+		@Override
+		public void run() {
+			if (!enemyTasks.isEmpty()) {
+
+				try {
+					for (EnemyTask enemyTask : enemyTasks) {
+						enemyTask.run();
+					}
+				} catch (Exception e) {
+					System.out.println("error: " + e.getMessage());
+				}
+
+			}
+
+		}
+
+	}
+
 	// Single enemy
-	public class EnemyTask extends TimerTask {
+	public class EnemyTask {
 		// this enemy has a form, is in a place and knows that there is a
 		// player.
 		private Maze map;
@@ -113,36 +145,38 @@ public class EnemyBrain extends Thread {
 			random = new Random();
 		}
 
-		@Override
+//		@Override
 		public void run() {
-			
+			viewer.repaint();
 			if (!enemy.isAlive()) {
 				enemyList.remove(enemy);
 				SoundEffects.playEnemyDeath();
 				player.incXp(enemy.getXpWorth());
-				cancel(); // kills task
+//				cancel(); // kills task
+				enemyTasks.remove(this);
 			} else if (!enemy.isInFight()) {
 				// pick a version
-				int moveVersion = random.nextInt(2) + 1;
+				int moveVersion = random.nextInt(1) + 1;
 
 				switch (moveVersion) {
 				case 1:
 					v1RandomMove();
 					break;
-					
+
 				case 2:
 					v2AlwaysMove();
 					break;
-					
+
 				default:
 					v1RandomMove();
 					break;
 				}
-				
+
 				checkFight(); // checked every move
-			}else{
-				
+			} else {
+
 			}
+			viewer.repaint();
 		}
 
 		// V4 - depth first (need to create node graph)
@@ -153,10 +187,11 @@ public class EnemyBrain extends Thread {
 		public void v2AlwaysMove() {
 			int choice = random.nextInt(4); // N, S, E, W
 			boolean moveChoice = false;
-			while(moveChoice == false){
+			while (moveChoice == false) {
 				choice = random.nextInt(4);
 				moveChoice = move(choice);
-			};
+			}
+			;
 
 		}
 
@@ -194,7 +229,7 @@ public class EnemyBrain extends Thread {
 				} else {
 					return false;
 				}
-				
+
 			default:
 				return false;
 			}
@@ -223,18 +258,18 @@ public class EnemyBrain extends Thread {
 		}
 	}
 
-	@Override
-	public synchronized void start() {
-		// TODO Auto-generated method stub
-		super.start();
-		System.out.println("start");
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		super.run();
-		System.out.println("run");
-	}
+	// @Override
+	// public synchronized void start() {
+	// // TODO Auto-generated method stub
+	// super.start();
+	// System.out.println("start");
+	// }
+	//
+	// @Override
+	// public void run() {
+	// // TODO Auto-generated method stub
+	// super.run();
+	// System.out.println("run");
+	// }
 
 }

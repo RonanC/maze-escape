@@ -10,20 +10,20 @@ public class Node {
 		Wall, Passage
 	};
 
-	public enum NodePassage {
-		North, South, East, West, None
-	};
+//	public enum NodePassage {
+//		North, South, East, West, None
+//	};
 
 	private Node parent;
 	private Color color = Color.BLACK; // black color
 	private NodeType type = NodeType.Wall; // default is wall
-	private NodePassage passage = NodePassage.None;
+//	private NodePassage passage = NodePassage.None;
 	public boolean visited = false;
 	public boolean goal;
 	private int row = -1;
 	private int col = -1;
 	private int distance;
-	
+
 	// game
 	private char element;
 
@@ -39,7 +39,7 @@ public class Node {
 		this.row = row;
 		this.col = col;
 	}
-	
+
 	public Node(int row, int col, char element) {
 		this.row = row;
 		this.col = col;
@@ -73,28 +73,28 @@ public class Node {
 	public Node[] children(Node[][] maze) { // pass the maze in, get a Node
 											// array back.
 
-		// Gets all four children.
+		// Gets all four children available.
 		Node[] children = new Node[MAX_EXITS];
-		if (col - 1 >= 0 && passage == NodePassage.West)
+		if (col - 1 >= 0 && maze[row][col - 1].getElement() != 'w')
 			children[0] = maze[row][col - 1]; // A West edge
-		if (col + 1 < maze[row].length && maze[row][col + 1].getPassage() == NodePassage.West)
+		if (col + 1 < maze[row].length && maze[row][col + 1].getElement() != 'w')
 			children[1] = maze[row][col + 1]; // An East Edge
-		if (row - 1 >= 0 && passage == NodePassage.North)
+		if (row - 1 >= 0 && maze[row - 1][col].getElement() != 'w')
 			children[2] = maze[row - 1][col]; // A North edge
-		if (row + 1 < maze.length && maze[row + 1][col].getPassage() == NodePassage.North)
+		if (row + 1 < maze.length && maze[row + 1][col].getElement() != 'w')
 			children[3] = maze[row + 1][col]; // An South Edge
 
 		int counter = 0;
 		for (int i = 0; i < children.length; i++) { // goes through each child
-			if (children[i] != null)	// if child is not empty
-				counter++;	// increment counter
+			if (children[i] != null) // if child is not empty
+				counter++; // increment counter
 		}
 
 		// this makes sure the array length is correct (2, 3 or 4)
-		Node[] tmp = new Node[counter];	// array with length of 2, 3 or 4
+		Node[] tmp = new Node[counter]; // array with length of 2, 3 or 4
 		int index = 0;
 		for (int i = 0; i < children.length; i++) {// goes through each child
-			if (children[i] != null) {	// copy all children into tmp (seems unnecessary)
+			if (children[i] != null) { // copy all children into tmp
 				tmp[index] = children[i];
 				index++;
 			}
@@ -111,13 +111,13 @@ public class Node {
 		this.type = type;
 	}
 
-	public NodePassage getPassage() {
-		return passage;
-	}
-
-	public void setPassage(NodePassage passage) {
-		this.passage = passage;
-	}
+//	public NodePassage getPassage() {
+//		return passage;
+//	}
+//
+//	public void setPassage(NodePassage passage) {
+//		this.passage = passage;
+//	}
 
 	public boolean isVisited() {
 		return visited;
@@ -153,11 +153,11 @@ public class Node {
 		this.distance = distance;
 	}
 
-	public String toString() {
-		if (passage == NodePassage.North) {
-			return "N ";
-		} else {
-			return "W ";
-		}
-	}
+//	public String toString() {
+//		if (passage == NodePassage.North) {
+//			return "N ";
+//		} else {
+//			return "W ";
+//		}
+//	}
 }

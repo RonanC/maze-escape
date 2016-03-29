@@ -102,8 +102,8 @@ public class Player extends Character{
 			y = random.nextInt(mazeDim - 2) + 1;
 //			System.out.printf("x: %d, y: %d\t", x, y);
 			// avoid walls and player
-			if (!map.getPosElement(x, y).equals("w")) { // we spawn before enemy so we don't nede to worry about spawning on them
-				System.out.println(map.getPosElement(x, y));
+			if (!mazeGlobal.getPosElement(x, y).equals("w")) { // we spawn before enemy so we don't nede to worry about spawning on them
+				System.out.println(mazeGlobal.getPosElement(x, y));
 				player.setPos(x, y);
 				notPlaced = false;
 				// System.out.println("placing");

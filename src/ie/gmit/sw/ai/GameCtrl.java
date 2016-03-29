@@ -109,10 +109,10 @@ public class GameCtrl extends JPanel implements ActionListener {
 	public GameCtrl() {
 		this.tileDim = GameRunner.TILE_DIM;
 		zoomDim = GameRunner.ZOOM_DIM;
-
+		timer = new Timer(frameRate, this); // action performed every 25 Ms
 		init();
 
-		timer = new Timer(frameRate, this); // action performed every 25 Ms
+
 		timer.start();
 	}
 
@@ -175,7 +175,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		// enemy
 		enemyList = new ArrayList<Enemy>();
 		// spawnEnemies(false);
-		enemyBrain = new EnemyBrain(maze, enemyList, player, imgCtrl, fightCtrl);
+		enemyBrain = new EnemyBrain(maze, enemyList, player, imgCtrl, fightCtrl, this);
 		enemyNum = GameRunner.MAZE_DIM / 2;
 
 		// animations

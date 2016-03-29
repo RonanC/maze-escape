@@ -5,6 +5,8 @@ import java.awt.Image;
 import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.img.ImgCtrl;
 import ie.gmit.sw.ai.maze.Maze;
+import ie.gmit.sw.ai.maze.Node;
+import ie.gmit.sw.ai.traversers.Traversator;
 
 /*
  * STATS:
@@ -20,6 +22,37 @@ public class Enemy extends Character {
 
 	// stats
 	private int intelLvl;
+	
+	// traversal stuff
+//	private int traversatorNum;
+//	private Traversator traversator;
+
+	
+	
+	public int getIntelLvl() {
+		return intelLvl;
+	}
+//
+//	public int getTraversatorNum() {
+//		return traversatorNum;
+//	}
+//
+//	public Traversator getTraversator() {
+//		return traversator;
+//	}
+//
+//
+//
+//	public void setTraversatorNum(int traversatorNum) {
+//		this.traversatorNum = traversatorNum;
+//	}
+//
+//	public void setTraversator(Traversator traversator) {
+//		this.traversator = traversator;
+//	}
+
+
+
 
 	public Enemy(Maze map, ImgCtrl imgCtrl) {
 		super(map, imgCtrl);
@@ -28,7 +61,7 @@ public class Enemy extends Character {
 		this.xpMult = 10;
 		this.intelLvl = 1;
 		this.xpWorth = intelLvl * xpMult;
-		
+
 		health = MAX_HEALTH;
 
 		setUpImages();
@@ -36,13 +69,13 @@ public class Enemy extends Character {
 		// // start position
 		setPos(7, 7);
 	}
-	
-	public int getXpWorth(){
+
+	public int getXpWorth() {
 		return xpWorth;
 	}
 
 	public void setIntelLvl(int intelLvl) {
-		if (intelLvl > 0 && intelLvl <= MAX_INTEL) {
+		if (intelLvl >= 0 && intelLvl <= MAX_INTEL) {
 			this.intelLvl = intelLvl;
 			this.xpWorth = intelLvl * xpMult;
 		} else {

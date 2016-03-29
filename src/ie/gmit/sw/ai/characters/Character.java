@@ -2,6 +2,8 @@ package ie.gmit.sw.ai.characters;
 
 import ie.gmit.sw.ai.img.ImgCtrl;
 import ie.gmit.sw.ai.maze.Maze;
+import ie.gmit.sw.ai.maze.Node;
+
 /*
  * STATS:
  * Health
@@ -12,17 +14,26 @@ public class Character {
 	protected int mazeDim;
 	private int tileX;
 	private int tileY;
-	protected Maze map;
+	protected Maze mazeGlobal;
 	protected ImgCtrl imgCtrl;
 	// stats
 	protected int health;
 	protected boolean inFight;
 	protected boolean alive;
+
+
+	public void setMazeGlobal(Maze mazeGlobal) {
+		this.mazeGlobal = mazeGlobal;
+	}
+
+	public Maze getMazeGlobal() {
+		return mazeGlobal;
+	}
+
 	
 	public boolean getAlive() {
 		return alive;
 	}
-
 
 	public void setAlive(boolean alive) {
 		this.alive = alive;
@@ -30,30 +41,31 @@ public class Character {
 
 	public Character(Maze map, ImgCtrl imgCtrl) {
 		super();
-		this.map = map;
+		this.mazeGlobal = map;
 		this.imgCtrl = imgCtrl;
 		inFight = false;
 		alive = true;
 	}
 
-//	protected Image createImage(String tileName) {
-//		ImageIcon img = new ImageIcon("resources/img/" + tileName); // get imageicon
-//		Image image = img.getImage(); // transform it into an image
-//		Image scaledImg = image.getScaledInstance(tileDim, tileDim,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-//		return scaledImg;
-//	}
-	
-	public boolean isAlive(){
+	// protected Image createImage(String tileName) {
+	// ImageIcon img = new ImageIcon("resources/img/" + tileName); // get
+	// imageicon
+	// Image image = img.getImage(); // transform it into an image
+	// Image scaledImg = image.getScaledInstance(tileDim, tileDim,
+	// java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+	// return scaledImg;
+	// }
+
+	public boolean isAlive() {
 		if (health > 0) {
 			alive = true;
 			return true;
-		}
-		else{
+		} else {
 			alive = false;
 			return false;
 		}
 	}
-	
+
 	public boolean isInFight() {
 		return inFight;
 	}
@@ -70,12 +82,12 @@ public class Character {
 	public void setHealth(int health) {
 		this.health = health;
 	}
-	
-	public void incHealth(int incAmount){
+
+	public void incHealth(int incAmount) {
 		health += incAmount;
 	}
-	
-	public void decHealth(int decAmount){
+
+	public void decHealth(int decAmount) {
 		health -= decAmount;
 	}
 
@@ -83,7 +95,7 @@ public class Character {
 		// x negative go left, positive go right
 		// bigger number means you move faster
 		// it will move tile by tile
-		
+
 		tileX += dx;
 		tileY += dy;
 	}

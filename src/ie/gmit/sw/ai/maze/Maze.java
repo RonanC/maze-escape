@@ -12,12 +12,40 @@ public class Maze {
 	private Random random;
 	private int insideNum;
 
+	private Node goal;
+
 	public Maze() {
 		random = new Random();
 		insideNum = GameRunner.MAZE_DIM - 4;
 		maze = new Node[GameRunner.MAZE_DIM][GameRunner.MAZE_DIM];
 
 		reset();
+	}
+
+	// Pick a goal node
+	public void setGoalNode() {
+		Random generator = new Random();
+		int randRow = generator.nextInt(maze.length);
+		int randCol = generator.nextInt(maze[0].length);
+		maze[randRow][randCol].setGoalNode(true);
+		goal = maze[randRow][randCol];
+	}
+
+	public void setGoalNode(int row, int col) {
+		maze[row][col].setGoalNode(true);
+		goal = maze[row][col];
+	}
+
+	public Node getGoalNode() {
+		return goal;
+	}
+
+	public Node[][] getMaze() {
+		return maze;
+	}
+
+	public Node[][] getMazeClone() {
+		return maze.clone(); // unique for each enemy
 	}
 
 	public void reset() {
@@ -111,7 +139,7 @@ public class Maze {
 
 		// quest items
 		addFeature('h', 'f', helperNum);
-		addFeature('g', 'f', goalNumber);
+		addFeature('g', 'f', 1);
 
 		// rest of x's should be walls
 		addWalls();
@@ -198,6 +226,7 @@ public class Maze {
 
 	// private void addFeature(char feature, char replace, int number) {
 	private void addFeature(char feature, char replace, int number) {
+
 		// randomely adds features
 		int counter = 0;
 		while (counter < number) {
@@ -212,6 +241,9 @@ public class Maze {
 			if (maze[row][col].getElement() == replace) {
 				maze[row][col].setElement(feature);
 				counter++;
+				if (feature == 'g') {
+					setGoalNode(row, col);
+				}
 			}
 		}
 	}

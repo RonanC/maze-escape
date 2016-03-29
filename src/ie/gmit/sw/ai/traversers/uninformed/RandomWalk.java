@@ -1,44 +1,25 @@
 package ie.gmit.sw.ai.traversers.uninformed;
 
-import java.util.Random;
-
 import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
 
-public class RandomWalk implements Traversator {
+public class RandomWalk extends Traversator {
 	/*
 	 * Sets the current node to visited, then chooses a random child node and
 	 * moves to it
 	 * 
 	 * low memory, high time
 	 */
-	private long time;
-	private int visitCount;
-	private int steps;
-	private boolean complete;
-	private Node currentNode;
-	private Node[][] mazeArray;
-	
-	private Node goal;
-
 
 	public RandomWalk(Node[][] maze, int row, int col) {
-		init(maze, maze[row][col]);
+		super(maze, row, col);
+		initCustom();
 	}
 	
-	public void init(Node[][] maze, Node node) {
-		this.mazeArray = maze;
-		this.currentNode = node;
-		time = System.currentTimeMillis();
-		visitCount = 0;
-
-		steps = (int) Math.pow(maze.length, 2) * 2;
+	private void initCustom() {
+		steps = (int) Math.pow(mazeArray.length, 2) * 2;
 		System.out.println("Number of steps allowed: " + steps);
-
-		complete = false;
-		
-		setGoalNodeRand();
 	}
 
 	public int findNextMove() { // traverse one step
@@ -52,7 +33,7 @@ public class RandomWalk implements Traversator {
 				complete = true;
 				return 4; // found goal
 			} else {
-				try { // Simulate processing each expanded node
+				try { // Needed to let the screen paint each move (enemies skip spaces otherwise).
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -76,29 +57,5 @@ public class RandomWalk implements Traversator {
 		return 5; // out of steps
 
 	}
-	
-	// Pick a goal node
-	public void setGoalNodeRand() {
-		int randRow;
-		int randCol;
-		do {
-			Random generator = new Random();
-			randRow = generator.nextInt(mazeArray.length);
-			randCol = generator.nextInt(mazeArray[0].length);
-		} while (mazeArray[randRow][randCol].getElement() != 'w');
-
-		mazeArray[randRow][randCol].setGoalNode(true);
-		goal = mazeArray[randRow][randCol];
-	}
-
-	public void setGoalNode(int row, int col) {
-		mazeArray[row][col].setGoalNode(true);
-		goal = mazeArray[row][col];
-	}
-
-	public Node getGoalNode() {
-		return goal;
-	}
-
 
 }

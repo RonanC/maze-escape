@@ -18,20 +18,32 @@ public class GameRunner {
 	private static JFrame f;
 
 	public static int ENEMY_ALGO_NUM;
+	
+	private static GameRunner gr = null;
 
 	public static void main(String[] args) {
-		new GameRunner();
+		gr = new GameRunner();
 	}
 
 	public GameRunner() {
 		init();
 	}
 
-	public static void reset() {
-		BG_KILL = true;
-		f.dispose();
-		f.removeAll();
-		init();
+	public static void gameOver() {
+		chooseGameOver();
+		
+//		try {
+//			gr.finalize();
+//		} catch (Throwable e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		gr = new GameRunner();
+//		BG_KILL = true;
+//		f.dispose();
+//		f.removeAll();
+//		f.getDefaultCloseOperation();
+//		init();
 	}
 
 	public static void init() {
@@ -78,24 +90,25 @@ public class GameRunner {
 	}
 
 	public static void choosePlayAgain() {
-		BG_KILL = true;
-		int playAgain = 1;
-		try {
-			playAgain = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Play again?\n0: no\n1: yes", null,
-					JOptionPane.INFORMATION_MESSAGE, null, null, "1"));
-		} catch (Exception e) {
-			playAgain = 1;
-		}
-
-		if (playAgain < 0 || playAgain > 1) {
-			playAgain = 1;
-		}
-
-		if (playAgain == 0) {
-			System.exit(0);
-		} else {
-			reset();
-		}
+		chooseGameOver();
+//		BG_KILL = true;
+//		int playAgain = 1;
+//		try {
+//			playAgain = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Play again?\n0: no\n1: yes", null,
+//					JOptionPane.INFORMATION_MESSAGE, null, null, "1"));
+//		} catch (Exception e) {
+//			playAgain = 1;
+//		}
+//
+//		if (playAgain < 0 || playAgain > 1) {
+//			playAgain = 1;
+//		}
+//
+//		if (playAgain == 0) {
+//			System.exit(0);
+//		} else {
+//			gameOver();
+//		}
 
 	}
 
@@ -246,5 +259,14 @@ public class GameRunner {
 		}
 
 		return useDefaults;
+	}
+	
+	public static void chooseGameOver() {
+		String menuQuestion = "";
+		menuQuestion += "Thank you, come again.";
+		int useDefaults = 1;
+		
+		int option = JOptionPane.showConfirmDialog(f, menuQuestion); 
+		System.exit(0);
 	}
 }

@@ -1,10 +1,8 @@
-package ie.gmit.sw.ai.characters;
+package ie.gmit.sw.ai.maze;
 
 import java.util.Deque;
 
 import ie.gmit.sw.ai.GameRunner;
-import ie.gmit.sw.ai.maze.Maze;
-import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.heuristic.*;
 
@@ -19,7 +17,7 @@ public class InformedPathMarker {
 	
 	public InformedPathMarker(Maze map, int helperPosRow, int helperPosCol, Node goalNode, int algoNum, boolean helper) {
 		// init
-		int pathLen = GameRunner.MAZE_DIM / 2;
+		int pathLen = GameRunner.MAZE_DIM / 4;
 		this.helper = helper;
 		this.maze = map;
 		int[] goalPos= {goalNode.getCol(), goalNode.getRow()};

@@ -16,7 +16,6 @@ public class Character {
 	private int tileY;
 	protected Maze mazeGlobal;
 	protected ImgCtrl imgCtrl;
-	// stats
 	protected int health;
 	protected boolean inFight;
 	protected boolean alive;

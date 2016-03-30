@@ -34,7 +34,7 @@ I could have had the enemies just go straight to you but I wanted to illustrate 
 For the breadth first search the enemy teleports around the map (as the search makes them do this).
 
 #### Heuristic Searches
-`ie.gmit.sw.ai.characters.InformedPathMarker.java` is where these algorithms are implemented.  
+`ie.gmit.sw.ai.maze.InformedPathMarker.java` is where these algorithms are implemented.  
 For the informed searches I only save the output of the algorithm.  
 I save this to a FIFO queue.
 When you meet a helper(prisoner) he then lights up the path to your goal (up to N steps), which disappears after N time. 
@@ -98,7 +98,6 @@ Movement: WASD
 Map: M  
 Bomb: Space  
 Mute BG Tunes:\tT
-Reset: R  
 Quit: ESC  
 
 ## General Info

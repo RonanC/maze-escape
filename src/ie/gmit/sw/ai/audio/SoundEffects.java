@@ -59,43 +59,43 @@ public class SoundEffects {
 					clip.loop(Clip.LOOP_CONTINUOUSLY);
 //					clip.start();
 
-					boolean flipped = false;
-					
-					while (true) {
-//						System.out.println("BG ON");
-						if (GameRunner.BG_KILL) {
-//							System.out.println("BG KILL");
-							clip.stop();
-							clip.close();
-							clip.drain();
-						}
-						
-						if (!GameRunner.BG_ON) {
-							clip.stop();
-							flipped = true;
-						}
-						
-						if (GameRunner.BG_ON && flipped == true) {
-							flipped = false;
-							clip.start();
-						}
-
-						if (GameRunner.BG_ON) {
-							// System.out.println(Board.getTime() % 100000);
-							if (GameCtrl.getTime() % 100000 > 99950) { 
-//								System.out.println("new clip");
-								// song change every 100 seconds
-								String url = "resources/audio/" + chooseBg();
-//								System.out.println(url);
-								File file = new File(url);
-								inputStream = AudioSystem.getAudioInputStream(file);
-
-								clip.close();
-								clip.open(inputStream);
-								clip.loop(Clip.LOOP_CONTINUOUSLY);
-							}
-						}
-					}
+//					boolean flipped = false;
+//					
+//					while (true) {
+////						System.out.println("BG ON");
+//						if (GameRunner.BG_KILL) {
+////							System.out.println("BG KILL");
+//							clip.stop();
+//							clip.close();
+//							clip.drain();
+//						}
+//						
+//						if (!GameRunner.BG_ON) {
+//							clip.stop();
+//							flipped = true;
+//						}
+//						
+//						if (GameRunner.BG_ON && flipped == true) {
+//							flipped = false;
+//							clip.start();
+//						}
+//
+//						if (GameRunner.BG_ON) {
+//							// System.out.println(Board.getTime() % 100000);
+//							if (GameCtrl.getTime() % 100000 > 99950) { 
+////								System.out.println("new clip");
+//								// song change every 100 seconds
+//								String url = "resources/audio/" + chooseBg();
+////								System.out.println(url);
+//								File file = new File(url);
+//								inputStream = AudioSystem.getAudioInputStream(file);
+//
+//								clip.close();
+//								clip.open(inputStream);
+//								clip.loop(Clip.LOOP_CONTINUOUSLY);
+//							}
+//						}
+//					}
 
 				} catch (Exception e) {
 					System.out.print("Sound Effects: \t");

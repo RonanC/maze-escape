@@ -10,13 +10,14 @@ import javax.swing.*;
 import ie.gmit.sw.ai.audio.*;
 import ie.gmit.sw.ai.characters.Enemy;
 import ie.gmit.sw.ai.characters.EnemyBrain;
-import ie.gmit.sw.ai.characters.InformedPathMarker;
 import ie.gmit.sw.ai.characters.Player;
 import ie.gmit.sw.ai.characters.PlayerImgPainter;
 import ie.gmit.sw.ai.fight.FightCtrl;
 import ie.gmit.sw.ai.img.ImgCtrl;
+import ie.gmit.sw.ai.maze.InformedPathMarker;
 import ie.gmit.sw.ai.maze.Maze;
 import javafx.application.Application;
+import sun.security.x509.IssuerAlternativeNameExtension;
 
 // the player is tied into this class, 
 // as many player variables are checked against the game state
@@ -118,14 +119,15 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 	private int helperNum = 0;
 	private InformedPathMarker helper = null; // only one helper at a time
-	private InformedPathMarker bomber = null; // only one bomber at a time (bomb wheres
-										// off marks)
+	private InformedPathMarker bomber = null; // only one bomber at a time (bomb
+												// wheres
+	// off marks)
 	private int bomberNum = 0;
 	private int explosionStartTime = 0;
 	private int explosionDuration = 2000;
 	private boolean explosionOn = false;
 	private Random random;
-	
+
 	private int zoomDamage = 5;
 	private int stepMultDamage = 5;
 
@@ -155,7 +157,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		msgStart += "\nMap:\tM";
 		msgStart += "\nBomb:\tSpace";
 		msgStart += "\nMute BG Tunes:\tT";
-		msgStart += "\nReset:\tR";
+		// msgStart += "\nReset:\tR";
 		msgStart += "\nQuit:\tESC";
 
 		int fontSize = 16;
@@ -227,8 +229,6 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 		// health kit
 		medKitValue = 20;
-		
-		
 
 		random = new Random();
 		helperNum = random.nextInt(4);
@@ -276,10 +276,10 @@ public class GameCtrl extends JPanel implements ActionListener {
 	public void toggleZoom() {
 		if (startDone && !haveWon) {
 			zoomedOut = !zoomedOut;
-			if (zoomedOut) {
+			if (!zoomedOut) {
 				player.decHealth(zoomDamage);
 			}
-			
+
 		}
 	}
 
@@ -305,27 +305,27 @@ public class GameCtrl extends JPanel implements ActionListener {
 		// player.resetPos();
 		// playerDraw.setPlayerLookH('r');
 
-		GameRunner.reset();
+		GameRunner.gameOver();
 	}
 
 	// full reset
 	public void choosePlayAgain() {
 		GameRunner.BG_KILL = true;
 		// go to start screen
-		startDone = false;
+//		startDone = false;
 
 		// clear enemies
-		enemyBrain.killAllEnemies();
+//		enemyBrain.killAllEnemies();
 
 		// // reset maze
 
-		maze.reset();
+//		maze.reset();
 		// // reset player
-		player.resetPos();
+//		player.resetPos();
 		playerImgPainter.setPlayerLookH('r');
 
 		// play again
-		GameRunner.choosePlayAgain();
+		 GameRunner.choosePlayAgain();
 	}
 
 	// KEY PRESS
@@ -345,12 +345,13 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 				if (e.getKeyCode() == KeyEvent.VK_M) { // zoom into MAP
 					toggleZoom();
+					player.isAlive();
 				}
 
-				if (e.getKeyCode() == KeyEvent.VK_R) { // reset
-					GameRunner.BG_KILL = true;
-					fullReset();
-				}
+				// if (e.getKeyCode() == KeyEvent.VK_R) { // reset
+				// GameRunner.BG_KILL = true;
+				// fullReset();
+				// }
 
 				if (e.getKeyCode() == KeyEvent.VK_T) { // Mute music (T for
 														// Tunez)
@@ -449,6 +450,10 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 	// ran every keypress
 	public void checkTile() {
+		player.isAlive();
+		// if (!player.isAlive()) {
+		// game
+		// }
 
 		// flash items and do something
 		if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("s")) { // sword
@@ -507,6 +512,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 			setWin = getTime();
 			haveWon = true;
+			GameRunner.BG_KILL = true;
+			GameRunner.BG_ON = false;
 			SoundEffects.playWin();
 			enemyList.clear();
 		}
@@ -520,7 +527,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 		if (getTime() - explosionStartTime > explosionDuration) { // explosion
 			// over
-			 explosionOn = false;
+			explosionOn = false;
 		} else {
 
 		}
@@ -553,6 +560,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 			// fullReset();
 			// SoundEffects.playGameOver();
 			SoundEffects.playGameOver();
+			
 		}
 
 		if (gameOverSeq) {
@@ -780,14 +788,14 @@ public class GameCtrl extends JPanel implements ActionListener {
 		} else if (onExplosionPath && explosionOn) { // explosion
 			// road TODO
 			g.setColor(clrExplosion);
-		}else if (element.equals("b") || element.equals("s") || element.equals("m")) { // item
+		} else if (element.equals("b") || element.equals("s") || element.equals("m")) { // item
 			g.setColor(clrBlue);
 		} else if (element.equals("h")) { // helper
 			g.setColor(clrGreen);
 		} else if (onHelperPath) { // yellow brick
 			// road TODO
 			g.setColor(clrYellow);
-		}  else if (onBurntPath) {
+		} else if (onBurntPath) {
 			g.setColor(clrBurnt);
 		} else { // floor
 			g.setColor(Color.LIGHT_GRAY);
@@ -898,7 +906,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 				g.drawImage(imgCtrl.getPath(), xCount * tileDim, yCount * tileDim, null); // yellow
 																							// brick
 																							// road
-			}  else if (onBurntPath) {
+			} else if (onBurntPath) {
 				g.drawImage(imgCtrl.getExplosion_over(), xCount * tileDim, yCount * tileDim, null);
 			} else {
 				g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount * tileDim, null);

@@ -20,8 +20,9 @@ public class Helper {
 		int[] goalPos= {goalNode.getCol(), goalNode.getRow()};
 		mazeArray = maze.getMazeArray();
 		
-		basicHillClimber(map, helperPosRow, helperPosCol, goalPos);
+//		basicHillClimber(map, helperPosRow, helperPosCol, goalPos);
 //		steepestAscentHillClimber(map, helperPosRow, helperPosCol, goalPos);
+		bestFirstTraversator(map, helperPosRow, helperPosCol, goalPos);
 		
 		allPositions = traversator.getAllPositions();	// get positions
 	}
@@ -34,6 +35,11 @@ public class Helper {
 	private void steepestAscentHillClimber(Maze map, int helperPosRow, int helperPosCol, int[] goalPos) {
 		System.out.println("\nSteepest Ascent Hill Climbing Traversal Helper.");
 		traversator = new SteepestAscentHillClimbingTraversator(map.getMazeArrayClone(), helperPosRow, helperPosCol, goalPos);
+	}
+	
+	private void bestFirstTraversator(Maze map, int helperPosRow, int helperPosCol, int[] goalPos) {
+		System.out.println("\nBest First Traversator Helper.");
+		traversator = new BestFirstTraversator(map.getMazeArrayClone(), helperPosRow, helperPosCol, goalPos);
 	}
 	
 	public void markPath(){

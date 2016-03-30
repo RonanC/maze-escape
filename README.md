@@ -9,7 +9,19 @@ Legend says he left behind a potion which can free you of this place.
 ![maze](https://github.com/RonanC/maze-escape/blob/master/screen-shots/maze.png "maze")
 ![win](https://github.com/RonanC/maze-escape/blob/master/screen-shots/win.png "win")
 
-## Insights
+
+## Search Algorithms
+The enemies use the six different uninformed search algorithms (there are always at least 6 enemies).  
+The helpers (rats) use the informed heuristic searches to show you (half the map length) the way there.  
+
+Bombs do the same, a random heuristic algorithm is chosen and shows you half the map length towards the goal, 
+the difference is you can place it where you want and it will cause a firely blast that will kill enemies for N seconds.  
+
+We have all the positions for the search algorithms to the goal but we only show have the maze length amount of spaces.
+
+I have used every algorithm.  
+I have implemented them in various ways.
+
 ### Uninformed Searches
 For the Random Walk and Brute Force DFS/BFS searches I get the co-ordinates for each iteration and pass it back to the enemy object to be painted.
 For the other algorithms I found it better to actually compute all the moves first, save them to a queue and then let the enemy object pop each co-ordinate position off this queue.
@@ -23,6 +35,12 @@ For the breadth first search the enemy teleports around the map (as the search m
 For the informed searches I only save the output of the algorithm.  
 I save this to a FIFO queue.
 When you meet a helper(prisoner) he then lights up the path to your goal (up to N steps), which disappears after N time. 
+
+#### Custom player placement
+This algorithm works by setting the current node at the bottom left and the goal node at the top right.  
+We then calculate the hueuristic between each node and the actual in game goal.  
+We keep track of the worst node, and place the player there.  
+We could check the other diagonal as well which might move us even a few more tiles further away.
 
 ### Fuzzy Logic
 Fuzzy logic is used for the fighting.  
@@ -59,17 +77,7 @@ Each enemy has a different intellect level, which is spread out evenly.
 The depth limit of the Depth limited DFS is also scaled to the size of the map.  
 As is everything where possible.  
 
-## Search Algorithms
-The enemies use the six different uninformed search algorithms (there are always at least 6 enemies).  
-The helpers (rats) use the informed heuristic searches to show you (half the map length) the way there.  
 
-Bombs do the same, a random heuristic algorithm is chosen and shows you half the map length towards the goal, 
-the difference is you can place it where you want and it will cause a firely blast that will kill enemies for N seconds.  
-
-We have all the positions for the search algorithms to the goal but we only show have the maze length amount of spaces.
-
-I have used every algorithm.  
-I have implemented them in various ways.
 
 ## Animations
 I created various different frames for the player and enemy.  

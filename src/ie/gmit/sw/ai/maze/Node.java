@@ -39,6 +39,14 @@ public class Node {
 	public void setHelperNum(int helperNum) {
 		this.helperNum = helperNum;
 	}
+	
+	
+
+	public void setGoal(boolean goal) {
+		this.goal = goal;
+	}
+
+
 
 	// game
 	private char element;

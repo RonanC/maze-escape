@@ -24,18 +24,29 @@ public class WorstFirstTraversator extends Traversator {
 	private int[] worstPos;
 	private Node worstNode;
 	private Node oldGoal;
+	private Node startPos;
+	private Node newGoal;
 
 	public WorstFirstTraversator(Node[][] maze, int row, int col, int[] goalPos, Node oldGoal) {
 		super(maze, row, col, null);
 		this.oldGoal = oldGoal;
 		worstPos = new int[] { row, col };
 		setComplete(false);
+		
 		setGoalNode(goalPos[0], goalPos[1]);
+		this.newGoal = getGoalNode();
+		worstNode = currentNode;
 		traverse(); // fill up allPositions queue.
 		// we want the worst one, that means more nodes expanded and we have a better chance of finding a worse heuristic
-		System.out.println("visit count: " + visitCount);
+//		System.out.println("visit count: " + visitCount);
 
 		worstPos = new int[]{worstNode.getRow(), worstNode.getCol()};
+		
+		// we will now try the other diagonal
+//		resetGraph();
+//		setCurrentNode(oldGoal);
+//		setGoal(startPos);
+//		traverse();
 	}
 	
 	
@@ -79,7 +90,7 @@ public class WorstFirstTraversator extends Traversator {
 		queue.addFirst(currentNode); // queue
 
 		long time = System.currentTimeMillis();
-		worstNode = currentNode;
+		
 		while (!queue.isEmpty()) { // while not empty
 			currentNode = queue.poll(); // take from front
 			if (currentNode.getHeuristic(oldGoal) > worstNode.getHeuristic(oldGoal)) {

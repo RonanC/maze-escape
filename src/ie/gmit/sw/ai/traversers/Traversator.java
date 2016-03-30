@@ -36,6 +36,32 @@ public abstract class Traversator {
 		init(newMaze, row, col);
 	}
 	
+	
+	
+	public Node getCurrentNode() {
+		return currentNode;
+	}
+
+
+
+	public Node getGoal() {
+		return goal;
+	}
+
+
+
+	public void setGoal(Node goal) {
+		this.goal = goal;
+	}
+
+
+
+	public void setCurrentNode(Node currentNode) {
+		this.currentNode = currentNode;
+	}
+
+
+
 	public void init(Node[][] maze, int row, int col) {
 		this.mazeArray = maze;
 		this.currentNode = mazeArray[row][col];

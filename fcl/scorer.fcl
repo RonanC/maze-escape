@@ -42,10 +42,10 @@ FUZZIFY weapon			// Fuzzify input variable 'weapon': { 'bare', 'mediocre', 'migh
 	TERM mighty := (12,0) (20,1);
 END_FUZZIFY
 
-DEFUZZIFY score			// Defzzzify output variable 'score' : {'losing', 'drawing', 'winning' }
-	TERM losing := (0,1) (20,0);
-	TERM drawing := TRIAN 15.0 30.0 45.0;
-	TERM winning := (40,0) (60,1);
+DEFUZZIFY score			// Defuzzify output variable 'score' : {'losing', 'drawing', 'winning' }
+	TERM losing := (0,1) (12,0);
+	TERM drawing := TRIAN 10.0 20.0 30.0;
+	TERM winning := (28,0) (40,1);
 	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
 	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
 END_DEFUZZIFY

@@ -112,9 +112,11 @@ public class Maze {
 		buildMaze();
 
 		// items
-		int itemNum = random.nextInt(GameRunner.MAZE_DIM / 5) * 2;
+		int swordNum = random.nextInt(GameRunner.MAZE_DIM / 5);
+		int medkitNum = random.nextInt(GameRunner.MAZE_DIM / 5) * 2;
+//		int itemNum = random.nextInt(GameRunner.MAZE_DIM / 5) * 2;
 
-		int bombNum = random.nextInt(GameRunner.MAZE_DIM / 5);
+		int bombNum = random.nextInt(GameRunner.MAZE_DIM / 4);
 
 		int helperNum = random.nextInt(GameRunner.MAZE_DIM / 10) * 2;
 		
@@ -126,8 +128,12 @@ public class Maze {
 			bombNum = 4;
 		}
 		
-		if (itemNum < 4) {
-			itemNum = 4;
+		if (swordNum < 4) {
+			swordNum = 4;
+		}
+		
+		if (medkitNum < 4) {
+			medkitNum = 4;
 		}
 
 		// 10'000 spaces in a 100 by 100 maze.
@@ -149,9 +155,9 @@ public class Maze {
 		int goalNumber = 1; // only one goal
 
 		// items
-		addFeature('s', 'f', itemNum);
+		addFeature('s', 'f', swordNum);
 		addFeature('b', 'f', bombNum);
-		addFeature('m', 'f', itemNum); // med kit
+		addFeature('m', 'f', medkitNum); // med kit
 
 		// quest items
 		addFeature('h', 'f', helperNum);

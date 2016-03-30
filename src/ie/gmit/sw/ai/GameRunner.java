@@ -47,9 +47,9 @@ public class GameRunner {
 			chooseEnemyAlgo();
 			chooseBGMusicOn();
 		} else {
-			MAZE_DIM = 75;
+			MAZE_DIM = 100;
 			BG_ON = true;
-			ZOOM_SCALE = 2;
+			ZOOM_SCALE = 0;
 			setZoomViews();
 			ZOOM_MOVE = false;
 			ENEMY_ALGO_NUM = 6;
@@ -81,7 +81,7 @@ public class GameRunner {
 		BG_KILL = true;
 		int playAgain = 1;
 		try {
-			playAgain = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Play agan?\n0: no\n1: yes", null,
+			playAgain = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Play again?\n0: no\n1: yes", null,
 					JOptionPane.INFORMATION_MESSAGE, null, null, "1"));
 		} catch (Exception e) {
 			playAgain = 1;

@@ -114,16 +114,20 @@ public class GameCtrl extends JPanel implements ActionListener {
 	private Color clrYellow = new Color(230, 230, 0);
 	private Color clrRed = new Color(204, 0, 0);
 	private Color clrExplosion = new Color(255, 128, 128);
+	private Color clrBurnt = new Color(118, 118, 162);
 
 	private int helperNum = 0;
-	InformedPathMarker helper = null; // only one helper at a time
-//	InformedPathMarker bomber = null; // only one bomber at a time (bomb wheres
+	private InformedPathMarker helper = null; // only one helper at a time
+	private InformedPathMarker bomber = null; // only one bomber at a time (bomb wheres
 										// off marks)
-	int bomberNum = 0;
-	int explosionStartTime = 0;
-	int explosionDuration = 5000;
-	boolean explosionOn = false;
+	private int bomberNum = 0;
+	private int explosionStartTime = 0;
+	private int explosionDuration = 2000;
+	private boolean explosionOn = false;
 	private Random random;
+	
+	private int zoomDamage = 5;
+	private int stepMultDamage = 5;
 
 	// set game up
 	public GameCtrl() {
@@ -221,7 +225,10 @@ public class GameCtrl extends JPanel implements ActionListener {
 		dieDur = 3000;
 		gameOverSeq = false;
 
-		medKitValue = 50;
+		// health kit
+		medKitValue = 20;
+		
+		
 
 		random = new Random();
 		helperNum = random.nextInt(4);
@@ -269,7 +276,10 @@ public class GameCtrl extends JPanel implements ActionListener {
 	public void toggleZoom() {
 		if (startDone && !haveWon) {
 			zoomedOut = !zoomedOut;
-			player.decHealth(1);
+			if (zoomedOut) {
+				player.decHealth(zoomDamage);
+			}
+			
 		}
 	}
 
@@ -361,11 +371,11 @@ public class GameCtrl extends JPanel implements ActionListener {
 						int newBombNum = bomberNum++ % 4;
 						bomberNum++;
 
-//						if (bomber != null) {
-//							bomber.unmarkPath();
-//						}
-
-						InformedPathMarker bomber = new InformedPathMarker(maze, player.getTileY(), player.getTileX(), maze.getGoalNode(),
+						if (bomber != null) {
+							bomber.unmarkPath();
+						}
+						// InformedPathMarker
+						bomber = new InformedPathMarker(maze, player.getTileY(), player.getTileX(), maze.getGoalNode(),
 								newBombNum, false);
 
 						SoundEffects.playBombExplode();
@@ -427,11 +437,11 @@ public class GameCtrl extends JPanel implements ActionListener {
 		playerImgPainter.incStepCount();
 		setWalk = getTime();
 		SoundEffects.playMove();
-		
-		if (player.getStepCount() % 10 == 0) {
+
+		if (player.getStepCount() % stepMultDamage == 0) {
 			player.decHealth(1);
 		}
-		
+
 		checkFight(); // checked when I or the enemy moves
 
 		checkTile();
@@ -471,26 +481,23 @@ public class GameCtrl extends JPanel implements ActionListener {
 			}
 		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("h")) { // helper
 			SoundEffects.playFoundHelp();
-			
+
 			int tempHelperNum = maze.getMazeArray()[player.getTileY()][player.getTileX()].getHelperNum();
-			
-//			if (helper != null) {
-//				helper.unmarkPath();
-//			} // TODO
-			
+
+			// if (helper != null) {
+			// helper.unmarkPath();
+			// } // TODO
+
 			if (tempHelperNum == -1) {
 				int newHelperNum = helperNum++ % 4;
 				maze.getMazeArray()[player.getTileY()][player.getTileX()].setHelperNum(newHelperNum);
 				helper = new InformedPathMarker(this.maze, player.getTileY(), player.getTileX(), maze.getGoalNode(),
 						newHelperNum, true); // TODO
 				System.out.println("newHelperNum: " + newHelperNum);
-			} else{
+			} else {
 				helper = new InformedPathMarker(this.maze, player.getTileY(), player.getTileX(), maze.getGoalNode(),
 						tempHelperNum, true);
 			}
-			
-
-
 
 			// helper.markPath();
 			// helper.printPath(); // TODO
@@ -510,9 +517,13 @@ public class GameCtrl extends JPanel implements ActionListener {
 	// check if won
 	public void actionPerformed(ActionEvent e) {
 		int timeElap = getTime() - setWin;
-		
 
+		if (getTime() - explosionStartTime > explosionDuration) { // explosion
+			// over
+			 explosionOn = false;
+		} else {
 
+		}
 		// if explosion, kill enemy
 		if (explosionOn) {
 			for (Enemy enemy : enemyList) {
@@ -746,17 +757,18 @@ public class GameCtrl extends JPanel implements ActionListener {
 				String element = maze.getPosElement(x, y); // gets element
 				boolean onHelperPath = maze.getMazeArray()[y][x].getHelperPath();
 				boolean onExplosionPath = maze.getMazeArray()[y][x].isExplosion();
+				boolean onBurntPath = maze.getMazeArray()[y][x].isBurnt();
 
 				// now we need to draw it relative to the view window.
 				// always have the center
 
-				drawTilesZoomed(g, yCount, xCount, element, x, y, onHelperPath, onExplosionPath);
+				drawTilesZoomed(g, yCount, xCount, element, x, y, onHelperPath, onExplosionPath, onBurntPath);
 			}
 		}
 	}
 
 	private void drawTilesZoomed(Graphics g, int yCount, int xCount, String element, int x, int y, boolean onHelperPath,
-			boolean onExplosionPath) {
+			boolean onExplosionPath, boolean onBurntPath) {
 		// relative
 		// tiles
 		if (element.equals("w")) { // wall
@@ -765,16 +777,18 @@ public class GameCtrl extends JPanel implements ActionListener {
 			g.setColor(clrOrange);
 		} else if (element.equals("g")) { // goal
 			g.setColor(clrPurple);
-		} else if (element.equals("b") || element.equals("s") || element.equals("m")) { // item
+		} else if (onExplosionPath && explosionOn) { // explosion
+			// road TODO
+			g.setColor(clrExplosion);
+		}else if (element.equals("b") || element.equals("s") || element.equals("m")) { // item
 			g.setColor(clrBlue);
 		} else if (element.equals("h")) { // helper
 			g.setColor(clrGreen);
 		} else if (onHelperPath) { // yellow brick
 			// road TODO
 			g.setColor(clrYellow);
-		} else if (onExplosionPath) { // yellow brick
-			// road TODO
-			g.setColor(clrExplosion);
+		}  else if (onBurntPath) {
+			g.setColor(clrBurnt);
 		} else { // floor
 			g.setColor(Color.LIGHT_GRAY);
 		} // end of if
@@ -837,7 +851,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 				// always have the center
 				boolean onHelperPath = maze.getMazeArray()[y][x].getHelperPath();
 				boolean onExplosionPath = maze.getMazeArray()[y][x].isExplosion();
-				drawTilesInView(g, yCount, xCount, element, onHelperPath, onExplosionPath); // TODO
+				boolean onBurntPath = maze.getMazeArray()[y][x].isBurnt();
+				drawTilesInView(g, yCount, xCount, element, onHelperPath, onExplosionPath, onBurntPath); // TODO
 				drawEnemiesInView(g, yCount, xCount);
 			}
 		}
@@ -860,7 +875,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 	}
 
 	private void drawTilesInView(Graphics g, int yCount, int xCount, String element, boolean onHelperPath,
-			boolean onExplosionPath) {
+			boolean onExplosionPath, boolean onBurntPath) {
 		// tiles
 		if (element.equals("w")) { // wall
 			g.drawImage(imgCtrl.getWall(), xCount * tileDim, yCount * tileDim, null);
@@ -871,24 +886,20 @@ public class GameCtrl extends JPanel implements ActionListener {
 			// g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount *
 			// tileDim, null);
 
-			if (onHelperPath) {
+			if (onExplosionPath && explosionOn) {
+
+				if (getTime() % 500 > 250) { // TODO
+					g.drawImage(imgCtrl.getExplosion(), xCount * tileDim, yCount * tileDim, null); // explosion
+				} else {
+					g.drawImage(imgCtrl.getExplosion2(), xCount * tileDim, yCount * tileDim, null); // explosion
+				}
+
+			} else if (onHelperPath) {
 				g.drawImage(imgCtrl.getPath(), xCount * tileDim, yCount * tileDim, null); // yellow
 																							// brick
 																							// road
-			} else if (onExplosionPath) {
-				if (getTime() - explosionStartTime > explosionDuration) { // explosion
-																			// over
-					g.drawImage(imgCtrl.getExplosion_over(), xCount * tileDim, yCount * tileDim, null);
-					explosionOn = false;
-				} else {
-					if (getTime() % 500 > 250) { // TODO
-						g.drawImage(imgCtrl.getExplosion(), xCount * tileDim, yCount * tileDim, null); // explosion
-					} else {
-						g.drawImage(imgCtrl.getExplosion2(), xCount * tileDim, yCount * tileDim, null); // explosion
-					}
-
-				}
-
+			}  else if (onBurntPath) {
+				g.drawImage(imgCtrl.getExplosion_over(), xCount * tileDim, yCount * tileDim, null);
 			} else {
 				g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount * tileDim, null);
 			}

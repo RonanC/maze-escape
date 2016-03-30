@@ -23,6 +23,8 @@ I have used every algorithm.
 I have implemented them in various ways.
 
 ### Uninformed Searches
+`ie.gmit.sw.ai.characters.EnemyBrain.java` is where these algorithms are implemented.  
+
 For the Random Walk and Brute Force DFS/BFS searches I get the co-ordinates for each iteration and pass it back to the enemy object to be painted.
 For the other algorithms I found it better to actually compute all the moves first, save them to a queue and then let the enemy object pop each co-ordinate position off this queue.
 
@@ -32,15 +34,16 @@ I could have had the enemies just go straight to you but I wanted to illustrate 
 For the breadth first search the enemy teleports around the map (as the search makes them do this).
 
 #### Heuristic Searches
+`ie.gmit.sw.ai.characters.InformedPathMarker.java` is where these algorithms are implemented.  
 For the informed searches I only save the output of the algorithm.  
 I save this to a FIFO queue.
 When you meet a helper(prisoner) he then lights up the path to your goal (up to N steps), which disappears after N time. 
 
 #### Custom player placement
 This algorithm works by setting the current node at the bottom left and the goal node at the top right.  
-We then calculate the hueuristic between each node and the actual in game goal.  
+We then calculate the heuristic between each node and the actual in game goal.  
 We keep track of the worst node, and place the player there.  
-We could check the other diagonal as well which might move us even a few more tiles further away.
+We could check the other diagonal as well which might move us even a few more tiles further away but then the player would always be able to guess where abouts the goal is, this way is it not exact, which is better for game-play.
 
 ### Fuzzy Logic
 Fuzzy logic is used for the fighting.  

@@ -87,6 +87,7 @@ public class InformedPathMarker {
 				mazeArray[pos[0]][pos[1]].setHelperPath(true);
 			} else{
 				mazeArray[pos[0]][pos[1]].setExplosion(true);
+				mazeArray[pos[0]][pos[1]].setBurnt(true);
 			}
 		}
 	}

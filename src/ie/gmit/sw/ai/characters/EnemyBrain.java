@@ -69,8 +69,10 @@ public class EnemyBrain extends Thread {
 
 	public void createEnemies(int enemyNum) {
 		killAllEnemies();
-
-		for (int i = 0; i <= Enemy.MAX_INTEL; i++) { // TODO
+		if (enemyNum < Enemy.MAX_INTEL) {
+			enemyNum = Enemy.MAX_INTEL;
+		}
+		for (int i = 0; i <= enemyNum; i++) { // TODO
 			enemyList.add(new Enemy(map, imgCtrl));
 		}
 		enemySpawned = true;
@@ -231,9 +233,9 @@ public class EnemyBrain extends Thread {
 
 			// if explosion, kill enemy (also checking in the action performed
 			// method, overkill but why not.)
-			if (this.map.getMazeArray()[enemy.getTileY()][enemy.getTileX()].isExplosion()) {
-				enemy.setHealth(-1);
-			}
+//			if (this.map.getMazeArray()[enemy.getTileY()][enemy.getTileX()].isExplosion() && ) {
+//				enemy.setHealth(-1);
+//			}
 
 			if (!enemy.isAlive()) {
 				System.out.println("You killed a level " + enemy.getIntelLvl() + " spider!");

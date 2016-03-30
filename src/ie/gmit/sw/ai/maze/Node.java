@@ -28,6 +28,7 @@ public class Node {
 	
 	private boolean helperPath = false;
 	private boolean explosion = false;
+	private boolean burnt = false;
 //	private InformedPathMarker helper;
 //	private boolean hasHelper = false;
 	private int helperNum = -1;
@@ -44,6 +45,16 @@ public class Node {
 
 	public void setGoal(boolean goal) {
 		this.goal = goal;
+	}
+
+
+
+	public boolean isBurnt() {
+		return burnt;
+	}
+
+	public void setBurnt(boolean burnt) {
+		this.burnt = burnt;
 	}
 
 

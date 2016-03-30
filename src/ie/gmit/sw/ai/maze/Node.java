@@ -28,18 +28,21 @@ public class Node {
 	
 	private boolean helperPath = false;
 	private boolean explosion = false;
-	private InformedPathMarker helper;
+//	private InformedPathMarker helper;
+//	private boolean hasHelper = false;
+	private int helperNum = -1;
+
+	public int getHelperNum() {
+		return helperNum;
+	}
+
+	public void setHelperNum(int helperNum) {
+		this.helperNum = helperNum;
+	}
 
 	// game
 	private char element;
-	
-	public InformedPathMarker getHelper() {
-		return helper;
-	}
 
-	public void setHelper(InformedPathMarker helper) {
-		this.helper = helper;
-	}
 
 	public char getElement() {
 		return element;

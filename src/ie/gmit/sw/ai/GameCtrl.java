@@ -117,7 +117,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 	private int helperNum = 0;
 	InformedPathMarker helper = null; // only one helper at a time
-	InformedPathMarker bomber = null; // only one bomber at a time (bomb wheres
+//	InformedPathMarker bomber = null; // only one bomber at a time (bomb wheres
 										// off marks)
 	int bomberNum = 0;
 	int explosionStartTime = 0;
@@ -147,9 +147,9 @@ public class GameCtrl extends JPanel implements ActionListener {
 		msgStart += "There are myths of a wizard\nwho once walked these lonesome halls.\n\n";
 		msgStart += "Legend says he left behind a potion\nwhich can free you of this place.\n\n";
 		msgStart += "\n\n\nPress the 'Enter' key to begin your quest.\n\n";
-		msgStart += "\n\nMovement:\tWASD";
+		msgStart += "\nMovement:\tWASD";
 		msgStart += "\nMap:\tM";
-		msgStart += "\nReset:\tR";
+		msgStart += "\nBomb:\tSpace";
 		msgStart += "\nMute BG Tunes:\tT";
 		msgStart += "\nReset:\tR";
 		msgStart += "\nQuit:\tESC";
@@ -269,6 +269,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 	public void toggleZoom() {
 		if (startDone && !haveWon) {
 			zoomedOut = !zoomedOut;
+			player.decHealth(1);
 		}
 	}
 
@@ -337,12 +338,13 @@ public class GameCtrl extends JPanel implements ActionListener {
 				}
 
 				if (e.getKeyCode() == KeyEvent.VK_R) { // reset
+					GameRunner.BG_KILL = true;
 					fullReset();
 				}
 
 				if (e.getKeyCode() == KeyEvent.VK_T) { // Mute music (T for
 														// Tunez)
-					
+
 					GameRunner.BG_ON = !GameRunner.BG_ON;
 					System.out.println("Tunes on: " + GameRunner.BG_ON);
 				}
@@ -359,11 +361,11 @@ public class GameCtrl extends JPanel implements ActionListener {
 						int newBombNum = bomberNum++ % 4;
 						bomberNum++;
 
-						if (bomber != null) {
-							bomber.unmarkPath();
-						}
+//						if (bomber != null) {
+//							bomber.unmarkPath();
+//						}
 
-						bomber = new InformedPathMarker(maze, player.getTileY(), player.getTileX(), maze.getGoalNode(),
+						InformedPathMarker bomber = new InformedPathMarker(maze, player.getTileY(), player.getTileX(), maze.getGoalNode(),
 								newBombNum, false);
 
 						SoundEffects.playBombExplode();
@@ -425,6 +427,11 @@ public class GameCtrl extends JPanel implements ActionListener {
 		playerImgPainter.incStepCount();
 		setWalk = getTime();
 		SoundEffects.playMove();
+		
+		if (player.getStepCount() % 10 == 0) {
+			player.decHealth(1);
+		}
+		
 		checkFight(); // checked when I or the enemy moves
 
 		checkTile();
@@ -464,15 +471,27 @@ public class GameCtrl extends JPanel implements ActionListener {
 			}
 		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("h")) { // helper
 			SoundEffects.playFoundHelp();
-			int newHelperNum = helperNum++ % 4;
+			
+			int tempHelperNum = maze.getMazeArray()[player.getTileY()][player.getTileX()].getHelperNum();
+			
+//			if (helper != null) {
+//				helper.unmarkPath();
+//			} // TODO
+			
+			if (tempHelperNum == -1) {
+				int newHelperNum = helperNum++ % 4;
+				maze.getMazeArray()[player.getTileY()][player.getTileX()].setHelperNum(newHelperNum);
+				helper = new InformedPathMarker(this.maze, player.getTileY(), player.getTileX(), maze.getGoalNode(),
+						newHelperNum, true); // TODO
+				System.out.println("newHelperNum: " + newHelperNum);
+			} else{
+				helper = new InformedPathMarker(this.maze, player.getTileY(), player.getTileX(), maze.getGoalNode(),
+						tempHelperNum, true);
+			}
+			
 
-			if (helper != null) {
-				helper.unmarkPath();
-			} // TODO
 
-			helper = new InformedPathMarker(this.maze, player.getTileY(), player.getTileX(), maze.getGoalNode(),
-					newHelperNum, true); // TODO
-			System.out.println("newHelperNum: " + newHelperNum);
+
 			// helper.markPath();
 			// helper.printPath(); // TODO
 			System.out.println(player.getPos());
@@ -491,6 +510,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 	// check if won
 	public void actionPerformed(ActionEvent e) {
 		int timeElap = getTime() - setWin;
+		
+
 
 		// if explosion, kill enemy
 		if (explosionOn) {

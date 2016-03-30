@@ -2,6 +2,7 @@ package ie.gmit.sw.ai.characters;
 
 import java.util.Deque;
 
+import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.maze.Maze;
 import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
@@ -18,6 +19,7 @@ public class InformedPathMarker {
 	
 	public InformedPathMarker(Maze map, int helperPosRow, int helperPosCol, Node goalNode, int algoNum, boolean helper) {
 		// init
+		int pathLen = GameRunner.MAZE_DIM / 2;
 		this.helper = helper;
 		this.maze = map;
 		int[] goalPos= {goalNode.getCol(), goalNode.getRow()};
@@ -50,7 +52,7 @@ public class InformedPathMarker {
 		}
 		
 		allPositions = traversator.getAllPositions();	// get positions
-		markPath();
+		markPath(pathLen);
 	}
 	
 	private void basicHillClimber(Maze map, int helperPosRow, int helperPosCol, int[] goalPos) {
@@ -73,15 +75,19 @@ public class InformedPathMarker {
 		traversator = new BeamTraversator(map.getMazeArrayClone(), helperPosRow, helperPosCol, goalPos, beamWidth);
 	}
 	
-	public void markPath(){
+	public void markPath(int pathLen){
 		System.out.println("Marking path");
+		int counter = 0;
 		for (int[] pos : allPositions) {
+			if (counter > pathLen) {
+				break;
+			}
+			counter++;
 			if (helper) {
 				mazeArray[pos[0]][pos[1]].setHelperPath(true);
 			} else{
 				mazeArray[pos[0]][pos[1]].setExplosion(true);
 			}
-			
 		}
 	}
 	

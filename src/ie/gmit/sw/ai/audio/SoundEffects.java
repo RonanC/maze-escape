@@ -1,9 +1,7 @@
 package ie.gmit.sw.ai.audio;
 
 import java.io.File;
-import java.net.URL;
 import java.util.Random;
-import java.util.Timer;
 
 import javax.sound.sampled.*;
 
@@ -28,7 +26,7 @@ public class SoundEffects {
 					clip.start();
 
 				} catch (Exception e) {
-					System.out.println("url: " + url);
+					System.out.print("url: " + url + "\t");
 					System.err.println(e.getMessage());
 				}
 			}
@@ -66,7 +64,7 @@ public class SoundEffects {
 					while (true) {
 //						System.out.println("BG ON");
 						if (GameRunner.BG_KILL) {
-							System.out.println("BG KILL");
+//							System.out.println("BG KILL");
 							clip.stop();
 							clip.close();
 							clip.drain();
@@ -85,10 +83,10 @@ public class SoundEffects {
 						if (GameRunner.BG_ON) {
 							// System.out.println(Board.getTime() % 100000);
 							if (GameCtrl.getTime() % 100000 > 99950) { 
-								System.out.println("new clip");
+//								System.out.println("new clip");
 								// song change every 100 seconds
 								String url = "resources/audio/" + chooseBg();
-								System.out.println(url);
+//								System.out.println(url);
 								File file = new File(url);
 								inputStream = AudioSystem.getAudioInputStream(file);
 

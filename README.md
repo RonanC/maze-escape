@@ -57,7 +57,19 @@ Everything in the game scales.
 When you change the size of the map, you get a different amount of enemies and items.  
 Each enemy has a different intellect level, which is spread out evenly.  
 The depth limit of the Depth limited DFS is also scaled to the size of the map.  
-As is everything where possible.
+As is everything where possible.  
+
+## Search Algorithms
+The enemies use the six different uninformed search algorithms (there are always at least 6 enemies).  
+The helpers (rats) use the informed heuristic searches to show you (half the map length) the way there.  
+
+Bombs do the same, a random heuristic algorithm is chosen and shows you half the map length towards the goal, 
+the difference is you can place it where you want and it will cause a firely blast that will kill enemies for N seconds.  
+
+We have all the positions for the search algorithms to the goal but we only show have the maze length amount of spaces.
+
+I have used every algorithm.  
+I have implemented them in various ways.
 
 ## Animations
 I created various different frames for the player and enemy.  
@@ -73,9 +85,13 @@ The game resets on end.
 I have added various keys for different functions:  
 Movement: WASD  
 Map: M  
-Reset: R  
 Bomb: Space  
+Mute BG Tunes:\tT
+Reset: R  
 Quit: ESC  
+
+## General Info
+Every time you make N amount of step or look at your map you lose health.  
 
 ## Packages
 I am using various packages to keep thing modular, encapsulated and well structured.

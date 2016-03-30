@@ -72,26 +72,26 @@ public class SteepestAscentHillClimbingTraversator extends Traversator {
 				break;
 			}
 
-			try { // Simulate processing each expanded node
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+//			try { // Simulate processing each expanded node
+//				Thread.sleep(1);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
 
 			// Sort the children of the current node in order of increasing h(n)
 			Node[] children = currentNode.children(mazeArray); // get 4 children
 			// It sorts all the children of the current node.....?
-			for (int i = 0; i < children.length; i++) {
-				System.out.print(children[i] + ",");
-			}
-			System.out.print("\t");
+//			for (int i = 0; i < children.length; i++) {
+//				System.out.print(children[i] + ",");
+//			}
+//			System.out.print("\t");
 
 			Collections.sort(Arrays.asList(children),
 					(Node current, Node next) -> next.getHeuristic(goal) - current.getHeuristic(goal)); // lambda
-			for (int i = 0; i < children.length; i++) {
-				System.out.print(children[i].toString() + ",");
-			}
-			System.out.println();
+//			for (int i = 0; i < children.length; i++) {
+//				System.out.print(children[i].toString() + ",");
+//			}
+//			System.out.println();
 			// Collections.sort takes in a list and a comparator
 			// we use the lambda as the comparator.
 			// the lambda is an anonymous throw away function

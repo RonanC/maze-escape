@@ -9,7 +9,7 @@ import ie.gmit.sw.ai.GameRunner;
 
 public class ImgCtrl {
 	// Images
-	private Image floor, wall, goal, path, explosion;
+	private Image floor, wall, goal, path, explosion, explosion2, explosion_over;
 	private Image helper;
 	private Image sword, bomb, medkit;
 	private Image player_stand, player_win, player_walk, player_walk2;
@@ -36,11 +36,13 @@ public class ImgCtrl {
 	private void initImages() throws Exception {
 		String url = "resources/img/";
 
-		tiles = new BufferedImage[4];
+		tiles = new BufferedImage[6];
 		tiles[0] = ImageIO.read(new java.io.File(url + "tiles/floor.png"));
 		tiles[1] = ImageIO.read(new java.io.File(url + "tiles/wall.png"));
 		tiles[2] = ImageIO.read(new java.io.File(url + "tiles/path_dark.png"));
 		tiles[3] = ImageIO.read(new java.io.File(url + "tiles/explosion.png"));
+		tiles[4] = ImageIO.read(new java.io.File(url + "tiles/explosion2.png"));
+		tiles[5] = ImageIO.read(new java.io.File(url + "tiles/explosion_over.png"));
 
 		items = new BufferedImage[5];
 		items[0] = ImageIO.read(new java.io.File(url + "items/goal.png"));
@@ -69,6 +71,8 @@ public class ImgCtrl {
 		wall = scaleImage(tiles[1]);
 		path = scaleImage(tiles[2]);
 		explosion = scaleImage(tiles[3]);
+		explosion2 = scaleImage(tiles[4]);
+		explosion_over = scaleImage(tiles[5]);
 
 		// items
 		goal = scaleImage(items[0]);
@@ -167,6 +171,15 @@ public class ImgCtrl {
 	public Image getExplosion() {
 		return explosion;
 	}
+
+	public Image getExplosion2() {
+		return explosion2;
+	}
+
+	public Image getExplosion_over() {
+		return explosion_over;
+	}
+	
 	
 	
 }

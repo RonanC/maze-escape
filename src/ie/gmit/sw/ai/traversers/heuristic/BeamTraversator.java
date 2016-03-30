@@ -100,11 +100,11 @@ public class BeamTraversator extends Traversator {
 						// bound is equal to the beam with
 				bound = beamWidth;
 			}
-			System.out.print("bound: " + bound + "\t");
+//			System.out.print("bound: " + bound + "\t");
 			// therefore the beam width will always be 4 or below
 
 			for (int i = 0; i < bound; i++) {
-				System.out.print("i" + children[i] + "\t");
+//				System.out.print("i" + children[i] + "\t");
 				// We only check either all children or less(bound)
 				// (children are sorted so we only check the best ones)
 				// however if one of the worse ones was 'pruned' then we may

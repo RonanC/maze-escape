@@ -27,12 +27,12 @@ public class DepthLimitedDFSTraversator extends Traversator {
 		dfs(currentNode, 1);
 		System.out.println("size: " + allPositions.size());
 		if (isComplete()) {
-			System.out.println("Failed to find goal node within a depth of " + limit);
+//			System.out.println("Failed to find goal node within a depth of " + limit);
 //			setComplete(false);
 //			keepRunning = false;
 			
 		} else {
-			System.out.println("Found Goal node");
+//			System.out.println("Found Goal node");
 		}
 		setComplete(false);
 	}

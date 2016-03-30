@@ -7,26 +7,50 @@ import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.heuristic.*;
 
-public class Helper {
+public class InformedPathMarker {
 	private Traversator traversator;
 	private Maze maze;
 	int beamWidth = 2;
+	boolean helper;
 	
 	protected Deque<int[]> allPositions;
 	Node[][] mazeArray;
 	
-	public Helper(Maze map, int helperPosRow, int helperPosCol, Node goalNode) {
+	public InformedPathMarker(Maze map, int helperPosRow, int helperPosCol, Node goalNode, int algoNum, boolean helper) {
 		// init
+		this.helper = helper;
 		this.maze = map;
 		int[] goalPos= {goalNode.getCol(), goalNode.getRow()};
 		mazeArray = maze.getMazeArray();
 		
-//		basicHillClimber(map, helperPosRow, helperPosCol, goalPos);
-//		steepestAscentHillClimber(map, helperPosRow, helperPosCol, goalPos);
-//		bestFirstTraversator(map, helperPosRow, helperPosCol, goalPos);
-		beamTraversator(map, helperPosRow, helperPosCol, goalPos, beamWidth);
+		if (allPositions != null) {
+			unmarkPath();
+		}
+		
+		switch (algoNum) {
+		case 0:
+			basicHillClimber(map, helperPosRow, helperPosCol, goalPos);
+			break;
+			
+		case 1:
+			steepestAscentHillClimber(map, helperPosRow, helperPosCol, goalPos);
+			break;
+			
+		case 2:
+			bestFirstTraversator(map, helperPosRow, helperPosCol, goalPos);
+			break;
+			
+		case 3:
+			beamTraversator(map, helperPosRow, helperPosCol, goalPos, beamWidth);
+			break;
+
+		default:
+			basicHillClimber(map, helperPosRow, helperPosCol, goalPos);
+			break;
+		}
 		
 		allPositions = traversator.getAllPositions();	// get positions
+		markPath();
 	}
 	
 	private void basicHillClimber(Maze map, int helperPosRow, int helperPosCol, int[] goalPos) {
@@ -51,15 +75,18 @@ public class Helper {
 	
 	public void markPath(){
 		System.out.println("Marking path");
-//		Node[][] mazeArray = maze.getMazeArray();
 		for (int[] pos : allPositions) {
-			mazeArray[pos[0]][pos[1]].setHelperPath(true);	// y for yellow brick road
+			if (helper) {
+				mazeArray[pos[0]][pos[1]].setHelperPath(true);
+			} else{
+				mazeArray[pos[0]][pos[1]].setExplosion(true);
+			}
+			
 		}
 	}
 	
 	public void printPath(){
 		System.out.println("Printing path");
-//		Node[][] mazeArray = maze.getMazeArray();
 		for (int[] pos : allPositions) {
 			System.out.println("row: " + pos[0] + ", col: " + pos[1]);
 		}
@@ -67,9 +94,12 @@ public class Helper {
 	
 	public void unmarkPath(){
 		System.out.println("Unmarking path");
-//		Node[][] mazeArray = maze.getMazeArray();
 		for (int[] pos : allPositions) {
-			mazeArray[pos[0]][pos[1]].setHelperPath(false);	// y for yellow brick road
+			if (helper) {
+				mazeArray[pos[0]][pos[1]].setHelperPath(false);	
+			} else{
+				mazeArray[pos[0]][pos[1]].setExplosion(false);	
+			}
 		}
 	}
 }

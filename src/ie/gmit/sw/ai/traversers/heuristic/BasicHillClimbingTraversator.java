@@ -64,12 +64,12 @@ public class BasicHillClimbingTraversator extends Traversator {
 				TraversatorStats.printStats(currentNode, time, visitCount);
 				break;
 			}
-
-			try { // Simulate processing each expanded node
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+//
+//			try { // Simulate processing each expanded node
+//				Thread.sleep(10);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
 
 			Node[] children = currentNode.children(mazeArray);	// get all children
 			// we are getting the children of that specific node. (passing the maze each time seems over the top, might be better to have a that globally available)
@@ -78,7 +78,7 @@ public class BasicHillClimbingTraversator extends Traversator {
 				if (children[i].getHeuristic(goal) < fnext) {	// if distance to goal is less then previous distance
 					next = children[i];	// get child node
 					fnext = next.getHeuristic(goal);	// set the heuristic to be the distance from the child node to the goal
-					System.out.println(fnext);
+//					System.out.println(fnext);
 				} 
 			}
 			if(fnext == Integer.MAX_VALUE){

@@ -144,7 +144,6 @@ public class GameRunner {
 			mazeSize = 100;
 		}
 
-		System.out.println("ans: " + mazeSize);
 
 		if (mazeSize < 20) {
 			mazeSize = 20;

@@ -118,8 +118,16 @@ public class Maze {
 
 		int helperNum = random.nextInt(GameRunner.MAZE_DIM / 10) * 2;
 		
-		if (helperNum < 3) {
-			helperNum = 3;
+		if (helperNum < 4) {
+			helperNum = 4;
+		}
+		
+		if (bombNum < 4) {
+			bombNum = 4;
+		}
+		
+		if (itemNum < 4) {
+			itemNum = 4;
 		}
 
 		// 10'000 spaces in a 100 by 100 maze.

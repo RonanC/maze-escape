@@ -3,13 +3,14 @@ package ie.gmit.sw.ai;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.*;
 import javax.swing.*;
 
 import ie.gmit.sw.ai.audio.*;
 import ie.gmit.sw.ai.characters.Enemy;
 import ie.gmit.sw.ai.characters.EnemyBrain;
-import ie.gmit.sw.ai.characters.Helper;
+import ie.gmit.sw.ai.characters.InformedPathMarker;
 import ie.gmit.sw.ai.characters.Player;
 import ie.gmit.sw.ai.characters.PlayerImgPainter;
 import ie.gmit.sw.ai.fight.FightCtrl;
@@ -106,18 +107,29 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 	private int medKitValue;
 
-	Color clrPurple = new Color(204, 0, 255);
-	Color clrBlue = new Color(102, 163, 255);
-	Color clrGreen = new Color(51, 204, 51);
-	Color clrOrange = new Color(255, 153, 0);
-	Color clrYellow = new Color(230, 230, 0);
-	Color clrRed = new Color(204, 0, 0);
-	Color clrExplosion = new Color(255, 128, 128);
+	private Color clrPurple = new Color(204, 0, 255);
+	private Color clrBlue = new Color(102, 163, 255);
+	private Color clrGreen = new Color(51, 204, 51);
+	private Color clrOrange = new Color(255, 153, 0);
+	private Color clrYellow = new Color(230, 230, 0);
+	private Color clrRed = new Color(204, 0, 0);
+	private Color clrExplosion = new Color(255, 128, 128);
+
+	private int helperNum = 0;
+	InformedPathMarker helper = null; // only one helper at a time
+	InformedPathMarker bomber = null; // only one bomber at a time (bomb wheres
+										// off marks)
+	int bomberNum = 0;
+	int explosionStartTime = 0;
+	int explosionDuration = 5000;
+	boolean explosionOn = false;
+	private Random random;
 
 	// set game up
 	public GameCtrl() {
 		this.tileDim = GameRunner.TILE_DIM;
 		zoomDim = GameRunner.ZOOM_DIM;
+
 		timer = new Timer(frameRate, this); // action performed every 25 Ms
 		init();
 
@@ -208,6 +220,10 @@ public class GameCtrl extends JPanel implements ActionListener {
 		gameOverSeq = false;
 
 		medKitValue = 50;
+
+		random = new Random();
+		helperNum = random.nextInt(4);
+		bomberNum = random.nextInt(4);
 	}
 
 	// get time in millis
@@ -326,6 +342,27 @@ public class GameCtrl extends JPanel implements ActionListener {
 					System.exit(0);
 				}
 
+				if (e.getKeyCode() == KeyEvent.VK_SPACE) { // reset // TODO
+					if (player.getBombStatus()) {
+						explosionOn = true;
+						explosionStartTime = getTime();
+						player.setBombStatus(false);
+						int newBombNum = bomberNum++ % 4;
+						bomberNum++;
+
+						if (bomber != null) {
+							bomber.unmarkPath();
+						}
+
+						bomber = new InformedPathMarker(maze, player.getTileY(), player.getTileX(), maze.getGoalNode(),
+								newBombNum, false);
+
+						SoundEffects.playBombExplode();
+
+						System.out.println("bombsDropped: " + bomberNum);
+					}
+				}
+
 				// NB
 				if (!haveWon && startDone && !player.isInFight()) {
 					// if (!zoomedOut)// turn off to test maze
@@ -417,9 +454,17 @@ public class GameCtrl extends JPanel implements ActionListener {
 			}
 		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("h")) { // helper
 			SoundEffects.playFoundHelp();
-			Helper helper = new Helper(this.maze, player.getTileY(), player.getTileX(), maze.getGoalNode()); // TODO
-			helper.markPath();
-//			helper.printPath(); // TODO
+			int newHelperNum = helperNum++ % 4;
+
+			if (helper != null) {
+				helper.unmarkPath();
+			} // TODO
+
+			helper = new InformedPathMarker(this.maze, player.getTileY(), player.getTileX(), maze.getGoalNode(),
+					newHelperNum, true); // TODO
+			System.out.println("newHelperNum: " + newHelperNum);
+			// helper.markPath();
+			// helper.printPath(); // TODO
 			System.out.println(player.getPos());
 		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("g")) { // goal
 			maze.setTileItem(player.getTileX(), player.getTileY(), 'f');
@@ -436,6 +481,15 @@ public class GameCtrl extends JPanel implements ActionListener {
 	// check if won
 	public void actionPerformed(ActionEvent e) {
 		int timeElap = getTime() - setWin;
+
+		// if explosion, kill enemy
+		if (explosionOn) {
+			for (Enemy enemy : enemyList) {
+				if (maze.getMazeArray()[enemy.getTileY()][enemy.getTileX()].isExplosion()) {
+					enemy.setHealth(-1);
+				}
+			}
+		}
 
 		if (haveWon) {
 			zoomedOut = false;
@@ -670,13 +724,13 @@ public class GameCtrl extends JPanel implements ActionListener {
 		}
 	}
 
-	private void drawTilesZoomed(Graphics g, int yCount, int xCount, String element, int x, int y,
-			boolean onHelperPath, boolean onExplosionPath) {
+	private void drawTilesZoomed(Graphics g, int yCount, int xCount, String element, int x, int y, boolean onHelperPath,
+			boolean onExplosionPath) {
 		// relative
 		// tiles
 		if (element.equals("w")) { // wall
 			g.setColor(Color.DARK_GRAY);
-		}  else if (String.format("%s,%s", x, y).equals(player.getPos())) {	// player
+		} else if (String.format("%s,%s", x, y).equals(player.getPos())) { // player
 			g.setColor(clrOrange);
 		} else if (element.equals("g")) { // goal
 			g.setColor(clrPurple);
@@ -690,7 +744,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		} else if (onExplosionPath) { // yellow brick
 			// road TODO
 			g.setColor(clrExplosion);
-		}else { // floor
+		} else { // floor
 			g.setColor(Color.LIGHT_GRAY);
 		} // end of if
 
@@ -752,7 +806,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 				// always have the center
 				boolean onHelperPath = maze.getMazeArray()[y][x].getHelperPath();
 				boolean onExplosionPath = maze.getMazeArray()[y][x].isExplosion();
-				drawTilesInView(g, yCount, xCount, element, onHelperPath, onExplosionPath);	// TODO
+				drawTilesInView(g, yCount, xCount, element, onHelperPath, onExplosionPath); // TODO
 				drawEnemiesInView(g, yCount, xCount);
 			}
 		}
@@ -774,34 +828,61 @@ public class GameCtrl extends JPanel implements ActionListener {
 		}
 	}
 
-	private void drawTilesInView(Graphics g, int yCount, int xCount, String element, boolean onHelperPath, boolean onExplosionPath) {
+	private void drawTilesInView(Graphics g, int yCount, int xCount, String element, boolean onHelperPath,
+			boolean onExplosionPath) {
 		// tiles
 		if (element.equals("w")) { // wall
 			g.drawImage(imgCtrl.getWall(), xCount * tileDim, yCount * tileDim, null);
-		} else if (element.equals("f")) { // floor // TODO
+		} else if (element.equals("f")) { // floor
 			// using default background color
-			// TODO
+			//
 
-//			g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount * tileDim, null);
+			// g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount *
+			// tileDim, null);
 
 			if (onHelperPath) {
-				g.drawImage(imgCtrl.getPath(), xCount * tileDim, yCount * tileDim, null);	// yellow brick road
-			}else if (onExplosionPath) {
-				g.drawImage(imgCtrl.getExplosion(), xCount * tileDim, yCount * tileDim, null);	// explosion
+				g.drawImage(imgCtrl.getPath(), xCount * tileDim, yCount * tileDim, null); // yellow
+																							// brick
+																							// road
+			} else if (onExplosionPath) {
+				if (getTime() - explosionStartTime > explosionDuration) { // explosion
+																			// over
+					g.drawImage(imgCtrl.getExplosion_over(), xCount * tileDim, yCount * tileDim, null);
+					explosionOn = false;
+				} else {
+					if (getTime() % 500 > 250) { // TODO
+						g.drawImage(imgCtrl.getExplosion(), xCount * tileDim, yCount * tileDim, null); // explosion
+					} else {
+						g.drawImage(imgCtrl.getExplosion2(), xCount * tileDim, yCount * tileDim, null); // explosion
+					}
+
+				}
+
 			} else {
 				g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount * tileDim, null);
 			}
-			
 
 		} else {
 			if (onHelperPath) {
-				g.drawImage(imgCtrl.getPath(), xCount * tileDim, yCount * tileDim, null);	// yellow brick road
-			}else if (onExplosionPath) {
-				g.drawImage(imgCtrl.getExplosion(), xCount * tileDim, yCount * tileDim, null);	// explosion
-			}else{
+				g.drawImage(imgCtrl.getPath(), xCount * tileDim, yCount * tileDim, null); // yellow
+																							// brick
+																							// road
+			} else if (onExplosionPath) {
+				if (getTime() - explosionStartTime > explosionDuration) { // explosion
+																			// over
+					g.drawImage(imgCtrl.getExplosion_over(), xCount * tileDim, yCount * tileDim, null); // explosion
+					explosionOn = false;
+				} else {
+					if (getTime() % 500 > 250) {
+						g.drawImage(imgCtrl.getExplosion(), xCount * tileDim, yCount * tileDim, null); // explosion
+					} else {
+						g.drawImage(imgCtrl.getExplosion2(), xCount * tileDim, yCount * tileDim, null); // explosion
+					}
+
+				}
+			} else {
 				g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount * tileDim, null);
 			}
-			
 
 			// items
 			// inner if is for flipping the image (basic

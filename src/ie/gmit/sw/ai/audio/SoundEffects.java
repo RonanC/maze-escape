@@ -226,6 +226,10 @@ public class SoundEffects {
 	public static void playEnemyAttack() {
 		playSound("fight/Slime-SoundBible.com-803762203.wav");
 	}
+	
+	public static void playBombExplode() {
+		playSound("items/explosion_x.wav");
+	}
 
 	public static String chooseBg() {
 		String location = "bg/";

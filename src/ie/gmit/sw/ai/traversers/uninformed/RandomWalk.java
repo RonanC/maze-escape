@@ -21,7 +21,7 @@ public class RandomWalk extends Traversator {
 	private void initCustom() {
 		complete = false;
 		steps = (int) Math.pow(mazeArray.length, 2) * 2;
-		System.out.println("Number of steps allowed: " + steps);
+//		System.out.println("Number of steps allowed: " + steps);
 	}
 
 	public int[] findNextMove() { // traverse one step through the algorithm at a time
@@ -51,7 +51,7 @@ public class RandomWalk extends Traversator {
 				try {
 					currentNode = children[choice];
 				} catch (Exception e) {
-					System.out.println("error:" + e.getMessage());
+//					System.out.println("error:" + e.getMessage());
 				}
 				newPos[0] = choice;
 				return newPos; // 0, 1, 2, 3

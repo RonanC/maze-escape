@@ -34,7 +34,7 @@ public class EnemyBrain extends Thread {
 
 		enemySpawned = false;
 		enemyTasks = new ArrayList<EnemyTask>();
-		
+
 		depthLimit = GameRunner.MAZE_DIM / 2;
 	}
 
@@ -47,18 +47,18 @@ public class EnemyBrain extends Thread {
 			enemyCount++;
 			if (GameRunner.ENEMY_ALGO_NUM != 6) {
 				System.out.println("\nenemy #" + enemyCount + ", with intel level of: " + GameRunner.ENEMY_ALGO_NUM);
-			}else{
+			} else {
 				System.out.println("\nenemy #" + enemyCount + ", with intel level of: " + intelCount);
 			}
-			
+
 			// lvl1 enemy
 			randomPos(enemy);
 			if (GameRunner.ENEMY_ALGO_NUM != 6) {
 				enemy.setIntelLvl(GameRunner.ENEMY_ALGO_NUM);
-			}else{
+			} else {
 				enemy.setIntelLvl(intelCount); // intelCount // TODO
 			}
-			
+
 			EnemyTask enemyTask = new EnemyTask(map.getMazeArrayClone(), enemy, player);
 			enemyTasks.add(enemyTask);
 			// schedule the start for every second
@@ -70,7 +70,7 @@ public class EnemyBrain extends Thread {
 	public void createEnemies(int enemyNum) {
 		killAllEnemies();
 
-		for (int i = 0; i <= Enemy.MAX_INTEL; i++) {	// TODO
+		for (int i = 0; i <= Enemy.MAX_INTEL; i++) { // TODO
 			enemyList.add(new Enemy(map, imgCtrl));
 		}
 		enemySpawned = true;
@@ -143,24 +143,21 @@ public class EnemyBrain extends Thread {
 			setTraversor(enemy, player);
 		}
 
-		
 		public int getSleepDur() {
 			return sleepDur;
 		}
-
 
 		public void setSleepDur(int sleepDur) {
 			this.sleepDur = sleepDur;
 		}
 
-
 		private void setTraversor(Enemy enemy, Player player) {
 			boolean dfs;
-
+			System.out.print("Spider with: ");
 			switch (enemy.getIntelLvl()) {
-			case 0:	// random walk
+			case 0: // random walk
 				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
-				System.out.println("random walk created");
+				System.out.println("random walk setup");
 				break;
 
 			case 1: // brute force: DFS
@@ -172,13 +169,13 @@ public class EnemyBrain extends Thread {
 																				// player
 																				// original
 																				// position
-				System.out.print("brute force ");
+				// System.out.print("brute force ");
 				if (dfs) {
 					System.out.print("DFS");
 				} else {
 					System.out.print("BFS");
 				}
-				System.out.println(" traversator created.");
+				System.out.println(" traversator setup.");
 				break;
 
 			case 2: // brute force: BFS
@@ -196,39 +193,47 @@ public class EnemyBrain extends Thread {
 				} else {
 					System.out.print("BFS");
 				}
-				System.out.println(" traversator created.");
-				break;
-				
-			case 3:	// Recursive DFS 
-				setSleepDur(500);
-				traversator = new RecursiveDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
-				System.out.println("recursive DFS created");
-				break;
-				
-			case 4:	// Depth Limited DFS
-				setSleepDur(500);
-				
-				traversator = new DepthLimitedDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player, depthLimit);
-				System.out.println("depth limited DFS created");
-				break;
-				
-			case 5:	// Depth Limited DFS
-				setSleepDur(500);
-				
-				traversator = new IDDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
-				System.out.println("iterative deepening DFS created");
+				System.out.println(" traversator setup.");
 				break;
 
-			default:  // TODO
+			case 3: // Recursive DFS
+				setSleepDur(500);
+				traversator = new RecursiveDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(),
+						player);
+				System.out.println("recursive DFS setup");
+				break;
+
+			case 4: // Depth Limited DFS
+				setSleepDur(500);
+
+				traversator = new DepthLimitedDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(),
+						enemy.getTileX(), player, depthLimit);
+				System.out.println("depth limited DFS setup");
+				break;
+
+			case 5: // Depth Limited DFS
+				setSleepDur(500);
+
+				traversator = new IDDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
+				System.out.println("iterative deepening DFS setup");
+				break;
+
+			default: // TODO
 				System.out.println("default");
 				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
-				System.out.println("random walk created");
+				System.out.println("random walk setup");
 				break;
 			}
 		}
 
 		@Override
 		public void run() {
+
+			// if explosion, kill enemy (also checking in the action performed
+			// method, overkill but why not.)
+			if (this.map.getMazeArray()[enemy.getTileY()][enemy.getTileX()].isExplosion()) {
+				enemy.setHealth(-1);
+			}
 
 			if (!enemy.isAlive()) {
 				System.out.println("You killed a level " + enemy.getIntelLvl() + " spider!");
@@ -253,23 +258,29 @@ public class EnemyBrain extends Thread {
 						if (newPos[1] == -1) {
 							// setCurrentGoal();
 							if (newPos[0] == 4) {
-								System.out.println("Found player location.");
+								// System.out.println("Found player location.");
 								enemy.setPos(traversator.getGoalNode().getCol(), traversator.getGoalNode().getRow());
-//								System.out.println("row: " + traversator.getGoalNode().getRow());
-//								System.out.println("col: " + traversator.getGoalNode().getCol());
+								// System.out.println("row: " +
+								// traversator.getGoalNode().getRow());
+								// System.out.println("col: " +
+								// traversator.getGoalNode().getCol());
 							} else if (newPos[0] == 5) {
-								System.out.println("Could not find player location.");
+								// System.out.println("Could not find player
+								// location.");
 							} else {
-								System.out.println("Error, out of moves perhaps?"); 
+								// System.out.println("Error, out of moves
+								// perhaps?");
 								// searching for new enemy location...
 							}
-							System.out.println(
-									"player location, row: " + player.getTileY() + ", col: " + player.getTileX());
-							System.out.println("enemy goal, row:" + traversator.getGoalNode().getRow() + ", col: "
-									+ traversator.getGoalNode().getCol() + "\n");
-//							traversator.resetAndSetGoal();
+							// System.out.println(
+							// "player location, row: " + player.getTileY() + ",
+							// col: " + player.getTileX());
+							// System.out.println("enemy goal, row:" +
+							// traversator.getGoalNode().getRow() + ", col: "
+							// + traversator.getGoalNode().getCol() + "\n");
+							// traversator.resetAndSetGoal();
 							setTraversor(enemy, player);
-							
+
 						} else {
 							enemy.setPos(newPos[1], newPos[0]);
 						}
@@ -330,12 +341,12 @@ public class EnemyBrain extends Thread {
 				}
 
 			case 4: // Found Goal Node
-				System.out.println("EnemyBrain: Found Goal Node");
+				// System.out.println("EnemyBrain: Found Goal Node");
 				setCurrentGoal();
 				return false;
 
 			case 5: // Could not find goal Node
-				System.out.println("EnemyBrain: Could not find goal Node");
+				// System.out.println("EnemyBrain: Could not find goal Node");
 				setCurrentGoal();
 				return false;
 

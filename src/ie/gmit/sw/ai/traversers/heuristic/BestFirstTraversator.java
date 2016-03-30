@@ -89,7 +89,7 @@ public class BestFirstTraversator extends Traversator {
 			// Sort the whole queue. Effectively a priority queue, first in,
 			// best out
 			Collections.sort(queue, (Node node1, Node node2) -> node1.getHeuristic(goal) - node2.getHeuristic(goal));
-			System.out.println("queue: " + queue.toString());
+//			System.out.println("queue: " + queue.toString());
 			// sort the whole queue by the closest heuristic (from the current
 			// and chosen child/next node), this allows us to backtrack.
 			

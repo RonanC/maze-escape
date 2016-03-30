@@ -112,6 +112,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 	Color clrOrange = new Color(255, 153, 0);
 	Color clrYellow = new Color(230, 230, 0);
 	Color clrRed = new Color(204, 0, 0);
+	Color clrExplosion = new Color(255, 128, 128);
 
 	// set game up
 	public GameCtrl() {
@@ -418,7 +419,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 			SoundEffects.playFoundHelp();
 			Helper helper = new Helper(this.maze, player.getTileY(), player.getTileX(), maze.getGoalNode()); // TODO
 			helper.markPath();
-			helper.printPath();
+//			helper.printPath(); // TODO
 			System.out.println(player.getPos());
 		} else if (maze.getPosElement(player.getTileX(), player.getTileY()).equals("g")) { // goal
 			maze.setTileItem(player.getTileX(), player.getTileY(), 'f');
@@ -659,33 +660,37 @@ public class GameCtrl extends JPanel implements ActionListener {
 				// get element // row
 				String element = maze.getPosElement(x, y); // gets element
 				boolean onHelperPath = maze.getMazeArray()[y][x].getHelperPath();
+				boolean onExplosionPath = maze.getMazeArray()[y][x].isExplosion();
 
 				// now we need to draw it relative to the view window.
 				// always have the center
 
-				drawTilesZoomed(g, yCount, xCount, element, x, y, onHelperPath);
+				drawTilesZoomed(g, yCount, xCount, element, x, y, onHelperPath, onExplosionPath);
 			}
 		}
 	}
 
 	private void drawTilesZoomed(Graphics g, int yCount, int xCount, String element, int x, int y,
-			boolean onHelperPath) {
+			boolean onHelperPath, boolean onExplosionPath) {
 		// relative
 		// tiles
 		if (element.equals("w")) { // wall
 			g.setColor(Color.DARK_GRAY);
 		}  else if (String.format("%s,%s", x, y).equals(player.getPos())) {	// player
 			g.setColor(clrOrange);
-		}else if (onHelperPath) { // yellow brick
-			// road TODO
-			g.setColor(clrYellow);
 		} else if (element.equals("g")) { // goal
 			g.setColor(clrPurple);
 		} else if (element.equals("b") || element.equals("s") || element.equals("m")) { // item
 			g.setColor(clrBlue);
 		} else if (element.equals("h")) { // helper
 			g.setColor(clrGreen);
-		} else { // floor
+		} else if (onHelperPath) { // yellow brick
+			// road TODO
+			g.setColor(clrYellow);
+		} else if (onExplosionPath) { // yellow brick
+			// road TODO
+			g.setColor(clrExplosion);
+		}else { // floor
 			g.setColor(Color.LIGHT_GRAY);
 		} // end of if
 
@@ -746,7 +751,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 				// now we need to draw it relative to the view window.
 				// always have the center
 				boolean onHelperPath = maze.getMazeArray()[y][x].getHelperPath();
-				drawTilesInView(g, yCount, xCount, element, onHelperPath);	// TODO
+				boolean onExplosionPath = maze.getMazeArray()[y][x].isExplosion();
+				drawTilesInView(g, yCount, xCount, element, onHelperPath, onExplosionPath);	// TODO
 				drawEnemiesInView(g, yCount, xCount);
 			}
 		}
@@ -768,7 +774,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		}
 	}
 
-	private void drawTilesInView(Graphics g, int yCount, int xCount, String element, boolean onHelperPath) {
+	private void drawTilesInView(Graphics g, int yCount, int xCount, String element, boolean onHelperPath, boolean onExplosionPath) {
 		// tiles
 		if (element.equals("w")) { // wall
 			g.drawImage(imgCtrl.getWall(), xCount * tileDim, yCount * tileDim, null);
@@ -780,7 +786,9 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 			if (onHelperPath) {
 				g.drawImage(imgCtrl.getPath(), xCount * tileDim, yCount * tileDim, null);	// yellow brick road
-			}else{
+			}else if (onExplosionPath) {
+				g.drawImage(imgCtrl.getExplosion(), xCount * tileDim, yCount * tileDim, null);	// explosion
+			} else {
 				g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount * tileDim, null);
 			}
 			
@@ -788,6 +796,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 		} else {
 			if (onHelperPath) {
 				g.drawImage(imgCtrl.getPath(), xCount * tileDim, yCount * tileDim, null);	// yellow brick road
+			}else if (onExplosionPath) {
+				g.drawImage(imgCtrl.getExplosion(), xCount * tileDim, yCount * tileDim, null);	// explosion
 			}else{
 				g.drawImage(imgCtrl.getFloor(), xCount * tileDim, yCount * tileDim, null);
 			}

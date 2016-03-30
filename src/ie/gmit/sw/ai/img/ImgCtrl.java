@@ -9,7 +9,7 @@ import ie.gmit.sw.ai.GameRunner;
 
 public class ImgCtrl {
 	// Images
-	private Image floor, wall, goal, path;
+	private Image floor, wall, goal, path, explosion;
 	private Image helper;
 	private Image sword, bomb, medkit;
 	private Image player_stand, player_win, player_walk, player_walk2;
@@ -36,10 +36,11 @@ public class ImgCtrl {
 	private void initImages() throws Exception {
 		String url = "resources/img/";
 
-		tiles = new BufferedImage[3];
+		tiles = new BufferedImage[4];
 		tiles[0] = ImageIO.read(new java.io.File(url + "tiles/floor.png"));
 		tiles[1] = ImageIO.read(new java.io.File(url + "tiles/wall.png"));
 		tiles[2] = ImageIO.read(new java.io.File(url + "tiles/path_dark.png"));
+		tiles[3] = ImageIO.read(new java.io.File(url + "tiles/explosion.png"));
 
 		items = new BufferedImage[5];
 		items[0] = ImageIO.read(new java.io.File(url + "items/goal.png"));
@@ -67,7 +68,7 @@ public class ImgCtrl {
 		floor = scaleImage(tiles[0]);
 		wall = scaleImage(tiles[1]);
 		path = scaleImage(tiles[2]);
-		
+		explosion = scaleImage(tiles[3]);
 
 		// items
 		goal = scaleImage(items[0]);
@@ -162,5 +163,10 @@ public class ImgCtrl {
 	public Image getPath() {
 		return path;
 	}
+
+	public Image getExplosion() {
+		return explosion;
+	}
+	
 	
 }

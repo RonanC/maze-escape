@@ -5,7 +5,7 @@ import java.util.Deque;
 import ie.gmit.sw.ai.maze.Maze;
 import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
-import ie.gmit.sw.ai.traversers.heuristic.BasicHillClimbingTraversator;
+import ie.gmit.sw.ai.traversers.heuristic.*;
 
 public class Helper {
 	private Traversator traversator;
@@ -15,12 +15,25 @@ public class Helper {
 	Node[][] mazeArray;
 	
 	public Helper(Maze map, int helperPosRow, int helperPosCol, Node goalNode) {
+		// init
 		this.maze = map;
-		int[] goalPos= {goalNode.getRow(), goalNode.getCol()};
-		traversator = new BasicHillClimbingTraversator(map.getMazeArrayClone(), helperPosRow, helperPosCol, goalPos);
-		allPositions = traversator.getAllPositions();	// get positions
+		int[] goalPos= {goalNode.getCol(), goalNode.getRow()};
 		mazeArray = maze.getMazeArray();
-		System.out.println("Basic Hill Climbing Traversal Helper.");
+		
+		basicHillClimber(map, helperPosRow, helperPosCol, goalPos);
+//		steepestAscentHillClimber(map, helperPosRow, helperPosCol, goalPos);
+		
+		allPositions = traversator.getAllPositions();	// get positions
+	}
+	
+	private void basicHillClimber(Maze map, int helperPosRow, int helperPosCol, int[] goalPos) {
+		System.out.println("\nBasic Hill Climbing Traversal Helper.");
+		traversator = new BasicHillClimbingTraversator(map.getMazeArrayClone(), helperPosRow, helperPosCol, goalPos);
+	}
+
+	private void steepestAscentHillClimber(Maze map, int helperPosRow, int helperPosCol, int[] goalPos) {
+		System.out.println("\nSteepest Ascent Hill Climbing Traversal Helper.");
+		traversator = new SteepestAscentHillClimbingTraversator(map.getMazeArrayClone(), helperPosRow, helperPosCol, goalPos);
 	}
 	
 	public void markPath(){

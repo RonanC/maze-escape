@@ -25,6 +25,7 @@ public class Node {
 	private int distance;
 	
 	private boolean helperPath = false;
+	private boolean explosion = false;
 
 	// game
 	private char element;
@@ -44,6 +45,14 @@ public class Node {
 	
 	public boolean getHelperPath(){
 		return helperPath;
+	}
+
+	public boolean isExplosion() {
+		return explosion;
+	}
+
+	public void setExplosion(boolean explosion) {
+		this.explosion = explosion;
 	}
 
 	public Node(int row, int col) {

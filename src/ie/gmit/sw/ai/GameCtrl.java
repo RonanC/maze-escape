@@ -150,6 +150,8 @@ public class GameCtrl extends JPanel implements ActionListener {
 		msgStart += "\n\nMovement:\tWASD";
 		msgStart += "\nMap:\tM";
 		msgStart += "\nReset:\tR";
+		msgStart += "\nMute BG Tunes:\tT";
+		msgStart += "\nReset:\tR";
 		msgStart += "\nQuit:\tESC";
 
 		int fontSize = 16;
@@ -272,7 +274,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 	// full reset
 	public void fullReset() {
-
+		GameRunner.BG_KILL = true;
 		// go to start screen
 		startDone = false;
 
@@ -297,7 +299,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 	// full reset
 	public void choosePlayAgain() {
-
+		GameRunner.BG_KILL = true;
 		// go to start screen
 		startDone = false;
 
@@ -338,11 +340,18 @@ public class GameCtrl extends JPanel implements ActionListener {
 					fullReset();
 				}
 
-				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) { // reset
+				if (e.getKeyCode() == KeyEvent.VK_T) { // Mute music (T for
+														// Tunez)
+					
+					GameRunner.BG_ON = !GameRunner.BG_ON;
+					System.out.println("Tunes on: " + GameRunner.BG_ON);
+				}
+
+				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) { // quit
 					System.exit(0);
 				}
 
-				if (e.getKeyCode() == KeyEvent.VK_SPACE) { // reset // TODO
+				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 					if (player.getBombStatus()) {
 						explosionOn = true;
 						explosionStartTime = getTime();
@@ -365,8 +374,9 @@ public class GameCtrl extends JPanel implements ActionListener {
 
 				// NB
 				if (!haveWon && startDone && !player.isInFight()) {
-					// if (!zoomedOut)// turn off to test maze
-					keycode = e.getKeyCode();
+					if (!zoomedOut || GameRunner.ZOOM_MOVE) {
+						keycode = e.getKeyCode();
+					}
 				}
 
 				if (keycode == KeyEvent.VK_W) { // N

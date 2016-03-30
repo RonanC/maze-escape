@@ -9,13 +9,14 @@ public class GameRunner {
 	public static int ZOOM_DIM;
 	public static int SCREEN_DIM;
 	public static boolean BG_ON;
+	public static boolean BG_KILL;
 	public static int ZOOM_MULT;
 	private static int ZOOM_SCALE;
-	private static boolean ZOOM_MOVE;
+	public static boolean ZOOM_MOVE;
 	private static int titleHeight;
 	private static int infoBar;
 	private static JFrame f;
-	
+
 	public static int ENEMY_ALGO_NUM;
 
 	public static void main(String[] args) {
@@ -27,20 +28,34 @@ public class GameRunner {
 	}
 
 	public static void reset() {
+		BG_KILL = true;
 		f.dispose();
 		f.removeAll();
 		init();
 	}
 
 	public static void init() {
+		BG_KILL = false;
 		f = new JFrame();
 
-		chooseMazeSize();
-		chooseBGMusicOn();
-		chooseZoomScale();
-		chooseZoomMove();
-		chooseEnemyAlgo();
+		int choice = chooseUseDefaults();
 
+		if (choice == 0) {
+			chooseMazeSize();
+			chooseBGMusicOn();
+			chooseZoomScale();
+			chooseZoomMove();
+			chooseEnemyAlgo();
+		} else {
+			MAZE_DIM = 100;
+			BG_ON = true;
+			ZOOM_SCALE = 0;
+			setZoomViews();
+			ZOOM_MOVE = false;
+			ENEMY_ALGO_NUM = 6;
+		}
+		
+		
 		TILE_DIM = 64 * 2; // scale of tiles
 		VIEW_DIM = 5; // 5 * 5
 		SCREEN_DIM = TILE_DIM * VIEW_DIM; // real co-ordinates
@@ -48,6 +63,8 @@ public class GameRunner {
 		titleHeight = 22;
 
 		frameConfig(f);
+		
+		
 	}
 
 	private static void frameConfig(JFrame f) {
@@ -61,6 +78,7 @@ public class GameRunner {
 	}
 
 	public static void choosePlayAgain() {
+		BG_KILL = true;
 		int playAgain = 1;
 		try {
 			playAgain = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Play agan?\n0: no\n1: yes", null,
@@ -82,10 +100,11 @@ public class GameRunner {
 	}
 
 	public static void chooseZoomScale() {
+		ZOOM_SCALE = 0;
 		try {
 			ZOOM_SCALE = Integer
 					.parseInt((String) JOptionPane.showInputDialog(f, "Zoom Scale?\n0: normal\n1: closer\n2: farther",
-							null, JOptionPane.INFORMATION_MESSAGE, null, null, "2"));
+							null, JOptionPane.INFORMATION_MESSAGE, null, null, "0"));
 		} catch (Exception e) {
 			ZOOM_SCALE = 0;
 		}
@@ -119,10 +138,15 @@ public class GameRunner {
 	}
 
 	public static void chooseBGMusicOn() {
-		int bg;
+		int bg = 1;
 		try {
 			bg = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Music on?\n0: off\n1: on", null,
-					JOptionPane.INFORMATION_MESSAGE, null, null, "0")); // TODO: change back to 1 when finishing
+					JOptionPane.INFORMATION_MESSAGE, null, null, "1")); // TODO:
+																		// change
+																		// back
+																		// to 1
+																		// when
+																		// finishing
 		} catch (Exception e) {
 			bg = 1;
 		}
@@ -139,11 +163,10 @@ public class GameRunner {
 		int mazeSize = 0;
 		try {
 			mazeSize = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Maze Size?", null,
-					JOptionPane.INFORMATION_MESSAGE, null, null, "40"));
+					JOptionPane.INFORMATION_MESSAGE, null, null, "100"));
 		} catch (Exception e) {
 			mazeSize = 100;
 		}
-
 
 		if (mazeSize < 20) {
 			mazeSize = 20;
@@ -158,14 +181,14 @@ public class GameRunner {
 	}
 
 	public static void chooseZoomMove() {
-		int zoomMove = 1;
+		int zoomMove = 0;
 		boolean zoomMoveBool = true;
 		try {
 			zoomMove = Integer
 					.parseInt((String) JOptionPane.showInputDialog(f, "Allow movement during zoom?\n0: false\n1: true",
-							null, JOptionPane.INFORMATION_MESSAGE, null, null, "1"));
+							null, JOptionPane.INFORMATION_MESSAGE, null, null, "0"));
 		} catch (Exception e) {
-			zoomMove = 1;
+			zoomMove = 0;
 		}
 
 		System.out.println("zoomMove: " + zoomMove);
@@ -175,13 +198,12 @@ public class GameRunner {
 		} else if (zoomMove == 0) {
 			zoomMoveBool = false;
 		} else {
-			zoomMoveBool = true;
+			zoomMoveBool = false;
 		}
 
-		// size of maze
 		ZOOM_MOVE = zoomMoveBool;
 	}
-	
+
 	public static void chooseEnemyAlgo() {
 		String menuQuestion = "";
 		menuQuestion += "Choose an enemy algorithm:\n";
@@ -192,12 +214,10 @@ public class GameRunner {
 		menuQuestion += "4: Depth Limited DFS\n";
 		menuQuestion += "5: Iterative Deepening DFS\n";
 		menuQuestion += "6: mixture of all algorithms\n";
-		
-		
+
 		try {
-			ENEMY_ALGO_NUM = Integer
-					.parseInt((String) JOptionPane.showInputDialog(f, menuQuestion,
-							null, JOptionPane.INFORMATION_MESSAGE, null, null, "6"));
+			ENEMY_ALGO_NUM = Integer.parseInt((String) JOptionPane.showInputDialog(f, menuQuestion, null,
+					JOptionPane.INFORMATION_MESSAGE, null, null, "6"));
 		} catch (Exception e) {
 			ENEMY_ALGO_NUM = 6;
 		}
@@ -205,5 +225,26 @@ public class GameRunner {
 		if (ENEMY_ALGO_NUM < 0 || ENEMY_ALGO_NUM > 6) {
 			ENEMY_ALGO_NUM = 6;
 		}
+	}
+
+	public static int chooseUseDefaults() {
+		String menuQuestion = "";
+		menuQuestion += "Use default settings?:\n";
+		menuQuestion += "0: No\n";
+		menuQuestion += "1: Yes\n";
+		int useDefaults = 1;
+
+		try {
+			useDefaults = Integer.parseInt((String) JOptionPane.showInputDialog(f, menuQuestion, null,
+					JOptionPane.INFORMATION_MESSAGE, null, null, "1"));
+		} catch (Exception e) {
+			useDefaults = 1;
+		}
+
+		if (useDefaults < 0 || useDefaults > 1) {
+			useDefaults = 1;
+		}
+
+		return useDefaults;
 	}
 }

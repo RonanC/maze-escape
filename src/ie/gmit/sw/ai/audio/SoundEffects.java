@@ -8,6 +8,7 @@ import java.util.Timer;
 import javax.sound.sampled.*;
 
 import ie.gmit.sw.ai.GameCtrl;
+import ie.gmit.sw.ai.GameRunner;
 
 public class SoundEffects {
 
@@ -58,21 +59,43 @@ public class SoundEffects {
 													// decibels.
 
 					clip.loop(Clip.LOOP_CONTINUOUSLY);
+//					clip.start();
 
+					boolean flipped = false;
+					
 					while (true) {
-						// System.out.println(Board.getTime() % 100000);
-						if (GameCtrl.getTime() % 100000 > 99950) { // song
-																	// change
-																	// every 100
-																	// seconds
-							String url = "resources/audio/" + chooseBg();
-							System.out.println(url);
-							File file = new File(url);
-							inputStream = AudioSystem.getAudioInputStream(file);
-
+//						System.out.println("BG ON");
+						if (GameRunner.BG_KILL) {
+							System.out.println("BG KILL");
+							clip.stop();
 							clip.close();
-							clip.open(inputStream);
-							clip.loop(Clip.LOOP_CONTINUOUSLY);
+							clip.drain();
+						}
+						
+						if (!GameRunner.BG_ON) {
+							clip.stop();
+							flipped = true;
+						}
+						
+						if (GameRunner.BG_ON && flipped == true) {
+							flipped = false;
+							clip.start();
+						}
+
+						if (GameRunner.BG_ON) {
+							// System.out.println(Board.getTime() % 100000);
+							if (GameCtrl.getTime() % 100000 > 99950) { 
+								System.out.println("new clip");
+								// song change every 100 seconds
+								String url = "resources/audio/" + chooseBg();
+								System.out.println(url);
+								File file = new File(url);
+								inputStream = AudioSystem.getAudioInputStream(file);
+
+								clip.close();
+								clip.open(inputStream);
+								clip.loop(Clip.LOOP_CONTINUOUSLY);
+							}
 						}
 					}
 
@@ -119,7 +142,7 @@ public class SoundEffects {
 	public static void playWonFight() {
 		playSound("fight/terminated.wav");
 	}
-	
+
 	public static void playEat() {
 		playSound("items/food/eat2.wav");
 	}
@@ -175,10 +198,8 @@ public class SoundEffects {
 		// } catch (Exception e) {
 		// System.out.println("unable to load: " + location);
 		// }
-//		System.out.println("no sound");
+		// System.out.println("no sound");
 	}
-	
-	
 
 	public static void playFoundHelp() {
 		String location = "helper/";
@@ -210,7 +231,7 @@ public class SoundEffects {
 		}
 
 	}
-	
+
 	public static void playGameOver() {
 		playSound("fight/game_over.wav");
 	}
@@ -226,7 +247,7 @@ public class SoundEffects {
 	public static void playEnemyAttack() {
 		playSound("fight/Slime-SoundBible.com-803762203.wav");
 	}
-	
+
 	public static void playBombExplode() {
 		playSound("items/explosion_x.wav");
 	}

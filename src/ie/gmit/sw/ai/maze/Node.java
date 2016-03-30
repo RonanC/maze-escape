@@ -2,6 +2,8 @@ package ie.gmit.sw.ai.maze;
 
 import java.awt.Color;
 
+import ie.gmit.sw.ai.characters.InformedPathMarker;
+
 // this class should inherit from Nodable (currently it is a god class).
 public class Node {
 	private static final int MAX_EXITS = 4; // NS EW
@@ -26,9 +28,18 @@ public class Node {
 	
 	private boolean helperPath = false;
 	private boolean explosion = false;
+	private InformedPathMarker helper;
 
 	// game
 	private char element;
+	
+	public InformedPathMarker getHelper() {
+		return helper;
+	}
+
+	public void setHelper(InformedPathMarker helper) {
+		this.helper = helper;
+	}
 
 	public char getElement() {
 		return element;

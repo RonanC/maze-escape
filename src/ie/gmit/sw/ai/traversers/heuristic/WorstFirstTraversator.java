@@ -104,11 +104,11 @@ public class WorstFirstTraversator extends Traversator {
 		while (!queue.isEmpty()) { // while not empty
 			currentNode = queue.poll(); // take from front
 			if (currentNode.getHeuristic(oldGoal) > worstNode.getHeuristic(oldGoal)) {
-				System.out.println(
-						"curr: " + currentNode.getHeuristic(oldGoal) + "\tworst: " + worstNode.getHeuristic(oldGoal));
+//				System.out.println(
+//						"curr: " + currentNode.getHeuristic(oldGoal) + "\tworst: " + worstNode.getHeuristic(oldGoal));
 				worstNode = currentNode;
-				System.out.println("Starting pos, row: " + worstNode.getRow() + ", col: " + worstNode.getCol());
-				System.out.println();
+//				System.out.println("Starting pos, row: " + worstNode.getRow() + ", col: " + worstNode.getCol());
+//				System.out.println();
 
 			}
 

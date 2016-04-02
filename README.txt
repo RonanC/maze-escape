@@ -63,7 +63,13 @@ The preprocessing for the iterative deepening algorithm caused my program to cra
 
 ## Game Flow
 I spent a lot of time making sure the game is challenging.  
-I did user testing and with the feedback I
+I did user testing and with the feedback I received I continuously updated and tweaked the game engine.  
+Things like:
+- The damage in combat, walking, and from map usage
+- How long the bombs burn for
+- How long the bombs and helpers length should be
+- How many of each item there should be
+- The look of the menu system at the start for the options
 
 ## Assets
 I created all the image assets myself.  

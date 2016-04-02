@@ -18,6 +18,8 @@ Legend says he left behind a potion which can free you of this place.
 
 [Official Project Brief](aiAssignment2016.pdf).
 
+[Runnable (Jar) Game](https://www.dropbox.com/s/tqyv7856g5f5e24/maze-escape.zip?dl=0)
+
 ### initial game images
 ![maze](https://github.com/RonanC/maze-escape/blob/master/screen-shots/maze.png "maze")
 ![win](https://github.com/RonanC/maze-escape/blob/master/screen-shots/win.png "win")
@@ -89,12 +91,17 @@ This decides which search algorithm they are given and also affects their outcom
 There are six enemies generated.  
 One for each algorithm.
 
-### Scalability
+## Scalability
 Everything in the game scales.  
 When you change the size of the map, you get a different amount of enemies and items.  
 Each enemy has a different intellect level, which is spread out evenly.  
 The depth limit of the Depth limited DFS is also scaled to the size of the map.  
 As is everything where possible.  
+
+## Efficiency
+There is a lot of painting and logic occurring a few times a second.   
+This causes the game to use as much CPU as possible.  
+I'm also using many threads, for audio and enemy timer tasks.
 
 ## Animations
 I created various different frames for the player and enemy.  

@@ -13,6 +13,9 @@ Ronan Connolly
 G00274374
 `2nd April 2016`
 
+Full readme located here:  
+https://github.com/RonanC/maze-escape/blob/master/README.md
+
 ## Github Url  
 Download the project from here:  
 https://github.com/RonanC/maze-escape
@@ -20,6 +23,7 @@ https://github.com/RonanC/maze-escape
 ## Dropbox URL
 Alternatively you can download the zipped jar from dropbox here:  
 https://www.dropbox.com/s/tqyv7856g5f5e24/maze-escape.zip?dl=0
+
 
 ## Instructions to run
 From within the git home directory (or dropbox zip), in the terminal run `java -jar maze-escape.jar`.   

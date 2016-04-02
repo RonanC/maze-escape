@@ -20,10 +20,11 @@ public class RandomWalk extends Traversator {
 
 	public RandomWalk(Node[][] maze, int row, int col, Player player) {
 		super(maze, row, col, player);
-		initCustom();
+//		initCustom();
 	}
 	
-	private void initCustom() {
+	@Override
+	protected void initCustom() {
 		complete = false;
 		steps = (int) Math.pow(mazeArray.length, 2) * 2;
 //		System.out.println("Number of steps allowed: " + steps);

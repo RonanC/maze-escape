@@ -14,47 +14,57 @@ public class IDDFSTraversator extends Traversator {
 	// iterative deepening DFS
 	// frontier moves after each depth has being checked.
 	// this saves on memory.
-	
+
 	public IDDFSTraversator(Node[][] maze, int row, int col, Player player) {
 		super(maze, row, col, player);
 		setComplete(true);
-		initCustom();
+		
 	}
 
-	public void initCustom() {
+//	@Override
+//	public void run() {
+//		if (!shouldStop) {
+//			initCustom();
+//			shouldStop= true;
+//		}
+//	}
+
+	@Override
+	protected void initCustom() {
 		int limit = 1;
 
 		while (keepRunning) {
-			dfs(currentNode, 0, limit); // recursive call with depth of 0 initially
+			dfs(currentNode, 0, limit); // recursive call with depth of 0
+										// initially
 
 			if (keepRunning) { // return increase limit and unvisit
 				limit++; // increase frontier
 				unvisit(); // remove all parents and visited nodes (aka RESET)
 			}
 		}
-		
+
 		setComplete(false);
 	}
-	
+
 	@Override
 	public int[] findNextMove() { // let the enemy select one move at a time
 									// from the list
 
 		if (!allPositions.isEmpty()) {
-//			System.out.print("pop\t");
+			// System.out.print("pop\t");
 			newPos = allPositions.pop();
-//			System.out.println(newPos[0] + ", " + newPos[1]);
+			// System.out.println(newPos[0] + ", " + newPos[1]);
 		} else {
-//			System.out.println("not ready");
+			// System.out.println("not ready");
 			resetNewPos();
 		}
-		
+
 		try { // Simulate processing each expanded node
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		return newPos;
 	}
 
@@ -96,4 +106,5 @@ public class IDDFSTraversator extends Traversator {
 			}
 		}
 	}
+
 }

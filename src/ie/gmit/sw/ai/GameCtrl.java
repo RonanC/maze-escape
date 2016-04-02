@@ -137,7 +137,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 	private SoundEffects soundEffMisc;
 	
 	private int startTime;
-	private int loadingTime = 3000;
+	private int loadingTime = 1000;
 
 	// set game up
 	public GameCtrl() {
@@ -223,7 +223,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		// spawnEnemies(false);
 		enemyBrain = new EnemyBrain(maze, enemyList, player, imgCtrl, fightCtrl);
 		// enemyBrain.run();
-		enemyNum = GameRunner.MAZE_DIM / 2;
+		enemyNum = GameRunner.MAZE_DIM / 4;
 
 		// animations
 		animHelperDur = 2000;

@@ -73,7 +73,7 @@ public class GameRunner {
 			chooseEnemyAlgo();
 			chooseBGMusicOn();
 		} else {
-			MAZE_DIM = 100;
+			MAZE_DIM = 60;
 			BG_ON = true;
 			ZOOM_SCALE = 0;
 			setZoomViews();
@@ -180,7 +180,7 @@ public class GameRunner {
 		int mazeSize = 0;
 		try {
 			mazeSize = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Maze Size?", null,
-					JOptionPane.INFORMATION_MESSAGE, null, null, "75"));
+					JOptionPane.INFORMATION_MESSAGE, null, null, "60"));
 		} catch (Exception e) {
 			mazeSize = 100;
 		}

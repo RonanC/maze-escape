@@ -23,6 +23,10 @@ public class BasicHillClimbingTraversator extends Traversator {
 		super(maze, row, col, null);
 		setComplete(false);
 		setGoalNode(goalPos[1], goalPos[0]);
+	}
+	
+	@Override
+	protected void initCustom() {
 		traverse();	// fill up allPositions queue.
 	}
 	
@@ -90,4 +94,8 @@ public class BasicHillClimbingTraversator extends Traversator {
 			
 		}
 	}
+
+
+
+
 }

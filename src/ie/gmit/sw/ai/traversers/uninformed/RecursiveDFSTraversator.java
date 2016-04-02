@@ -20,9 +20,10 @@ public class RecursiveDFSTraversator extends Traversator {
 
 		setComplete(true); // we want to wait until this is complete before
 							// letting the enemy use it. It is reversed.
-		initCustom();
+//		initCustom();
 	}
 
+	@Override
 	public void initCustom() {
 		// dfs(currentNode);
 //		allPositions = new LinkedList<int[]>();

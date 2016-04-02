@@ -20,22 +20,23 @@ public class DepthLimitedDFSTraversator extends Traversator {
 		super(maze, row, col, player);
 		this.limit = limit;
 		setComplete(true);
-		initCustom();
+//		initCustom();
 	}
 
-	public void initCustom() {
+	@Override
+	protected void initCustom() {
 		// dfs(currentNode);
 //		keepRunning = true;
 		dfs(currentNode, 1);
-		System.out.println("size: " + allPositions.size());
-		if (isComplete()) {
-//			System.out.println("Failed to find goal node within a depth of " + limit);
-//			setComplete(false);
-//			keepRunning = false;
-			
-		} else {
-//			System.out.println("Found Goal node");
-		}
+//		System.out.println("size: " + allPositions.size());
+//		if (isComplete()) {
+////			System.out.println("Failed to find goal node within a depth of " + limit);
+////			setComplete(false);
+////			keepRunning = false;
+//			
+//		} else {
+////			System.out.println("Found Goal node");
+//		}
 		setComplete(false);
 	}
 	

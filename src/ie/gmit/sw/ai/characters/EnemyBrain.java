@@ -193,6 +193,7 @@ public class EnemyBrain extends Thread {
 			switch (enemy.getIntelLvl()) {
 			case 0: // random walk
 				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
+				traversator.run();
 				System.out.println("Random Walk setup");
 				break;
 
@@ -201,8 +202,9 @@ public class EnemyBrain extends Thread {
 				dfs = true; // random.nextBoolean();
 				traversator = new BruteForceTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(),
 						dfs, player);
-				traversator.setGoalNode(player.getTileY(), player.getTileX());
-//				 chase player original position
+				traversator.run();
+//				traversator.setGoalNode(player.getTileY(), player.getTileX());
+				// chase player original position
 				System.out.println("Brute Force DFS traversator setup.");
 				break;
 
@@ -211,8 +213,9 @@ public class EnemyBrain extends Thread {
 				dfs = false; // random.nextBoolean();
 				traversator = new BruteForceTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(),
 						dfs, player);
-				traversator.setGoalNode(player.getTileY(), player.getTileX());
-//				 chase player original position
+				traversator.run();
+//				traversator.setGoalNode(player.getTileY(), player.getTileX());
+				// chase player original position
 				System.out.println("Brute Force BFS traversator setup.");
 				break;
 
@@ -220,6 +223,7 @@ public class EnemyBrain extends Thread {
 				setSleepDur(500);
 				traversator = new RecursiveDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(),
 						player);
+				traversator.run();
 				System.out.println("Recursive DFS setup");
 				break;
 
@@ -228,14 +232,24 @@ public class EnemyBrain extends Thread {
 
 				traversator = new DepthLimitedDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(),
 						enemy.getTileX(), player, depthLimit);
+				traversator.run();
 				System.out.println("Depth Limited DFS setup");
 				break;
 
 			case 5: // Iterative Deepening DFS
 				setSleepDur(500);
-
+				// try {
 				traversator = new IDDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
+				traversator.run();
 				System.out.println("Iterative Deepening DFS setup");
+				// } catch (Exception e) {
+				// traversator = new
+				// DepthLimitedDFSTraversator(map.getMazeArrayClone(),
+				// enemy.getTileY(),
+				// enemy.getTileX(), player, depthLimit);
+				// System.out.println("Depth Limited DFS setup");
+				// }
+
 				break;
 
 			default:

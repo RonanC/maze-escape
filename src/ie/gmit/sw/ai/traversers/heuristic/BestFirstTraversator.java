@@ -29,8 +29,13 @@ public class BestFirstTraversator extends Traversator {
 		super(maze, row, col, null);
 		setComplete(false);
 		setGoalNode(goalPos[1], goalPos[0]);
+	}
+	
+	@Override
+	protected void initCustom() {
 		traverse();	// fill up allPositions queue.
 	}
+	
 	
 	@Override
 	public int[] findNextMove() { // let the helper select one move at a time

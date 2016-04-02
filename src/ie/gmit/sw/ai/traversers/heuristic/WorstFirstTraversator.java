@@ -58,6 +58,12 @@ public class WorstFirstTraversator extends Traversator {
 		// setGoal(startPos);
 		// traverse();
 	}
+	
+	@Override
+	protected void initCustom() {
+//		traverse();	// fill up allPositions queue.
+	}
+	
 
 	public Node getWorstNode() {
 		return worstNode;

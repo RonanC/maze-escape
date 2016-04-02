@@ -1,10 +1,12 @@
 package ie.gmit.sw.ai.traversers.uninformed;
 
+
 import ie.gmit.sw.ai.characters.Player;
 import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
 
+import java.awt.Component;
 import java.util.*;
 
 /**
@@ -12,7 +14,7 @@ import java.util.*;
  * 
  * @author Ronan
  */
-public class BruteForceTraversator extends Traversator {
+public class tempBrute extends Traversator {
 	/*
 	 * Option: BFS or DFS gets all children, either adds them to the front (BFS)
 	 * or end (DFS) of the dequeue. then polls the queue no intelligence here,
@@ -35,7 +37,7 @@ public class BruteForceTraversator extends Traversator {
 	private boolean dfs = false;
 	Deque<Node> queue;
 	
-	public BruteForceTraversator(Node[][] maze, int row, int col, boolean depthFirst, Player player) {
+	public tempBrute(Node[][] maze, int row, int col, boolean depthFirst, Player player) {
 		super(maze, row, col, player);
 		complete = false;
 		this.dfs = depthFirst;
@@ -44,19 +46,44 @@ public class BruteForceTraversator extends Traversator {
 	
 	@Override
 	protected void initCustom() {
-//		this.dfs = depthFirst;
-		
-		// create a double ended queue of Nodes
-		queue = new LinkedList<Node>();
-		queue.offer(currentNode); // adds element to the end of the queue (starting
-							// node added)
+		traverse();
+		setComplete(false);
 	}
 	
-	public int[] findNextMove() { // traverse one step through the algorithm at a time
-		resetNewPos();
-		if (!queue.isEmpty()) { // while the queue is not empty
+	@Override
+	public int[] findNextMove() { // let the enemy select one move at a time
+									// from the list
+
+		if (!allPositions.isEmpty()) {
+//			System.out.print("pop\t");
+			newPos = allPositions.pop();
+//			System.out.println(newPos[0] + ", " + newPos[1]);
+		} else {
+//			System.out.println("not ready");
+			resetNewPos();
+		}
+		
+		try { // Simulate processing each expanded node
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return newPos;
+	}
+	
+	public void traverse() {
+		// Start the clock
+		long time = System.currentTimeMillis();
+		int visitCount = 0;
+
+		// create a double ended queue of Nodes
+		Deque<Node> queue = new LinkedList<Node>();
+		queue.offer(currentNode); // adds element to the end of the queue (starting
+							// node added)
+
+		while (!queue.isEmpty()) { // while the queue is not empty
+			allPositions.add(new int[] { currentNode.getRow(), currentNode.getCol() });
 //			System.out.println("queue: " + queue.toString());
-			
 			currentNode = queue.poll(); // take from the head
 
 			// same as other algorithms
@@ -67,13 +94,19 @@ public class BruteForceTraversator extends Traversator {
 			if (currentNode.isGoalNode()) {
 				time = System.currentTimeMillis() - time; // Stop the clock
 				TraversatorStats.printStats(currentNode, time, visitCount);
-//				setGoalNodeRand();// reset goal node
-				newPos[0] = 4;
-				setComplete(true);
-				queue.clear();
-				resetGraph();
-				return newPos;
+				break;
 			}
+
+//			try { // Simulate processing each expanded node
+//				if (dfs) {
+//					Thread.sleep(4);
+//				}else{
+//					Thread.sleep(10);
+//				}
+//				
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
 
 			// actual algorithm
 			Node[] children = currentNode.children(mazeArray); // get child nodes available
@@ -102,16 +135,6 @@ public class BruteForceTraversator extends Traversator {
 					}
 				}
 			}
-			newPos[0] = currentNode.getRow(); // return node co-ordinates	// Y
-			newPos[1] = currentNode.getCol();								// X
-			return newPos;
-		} else{
-			// queue empty, did not find node
-			setComplete(true);
-			newPos[0] = 5;
-			queue.clear();
-			resetGraph();
-			return newPos;
 		}
 	}
 }

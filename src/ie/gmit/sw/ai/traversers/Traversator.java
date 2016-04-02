@@ -12,7 +12,7 @@ import ie.gmit.sw.ai.maze.Node;
  * 
  * @author Ronan
  */
-public abstract class Traversator {
+public abstract class Traversator implements Runnable {
 	protected long time;
 	protected int visitCount;
 	protected int steps;
@@ -26,8 +26,13 @@ public abstract class Traversator {
 	protected boolean keepRunning;
 	protected Deque<int[]> allPositions;
 
+	// run search algorithm in different thread
+	protected final Thread t;
+	protected volatile boolean shouldStop = false;
+
 	public Traversator(Node[][] maze, int row, int col, Player player) {
 		this.player = player;
+		t = new Thread(this, "IDDFS Thread");
 
 		// create deep copy of nodes so that different enemies do not disturb
 		// each others nodes.
@@ -36,11 +41,26 @@ public abstract class Traversator {
 			for (int j = 0; j < newMaze.length; j++) {
 				newMaze[i][j] = new Node(i, j);
 				newMaze[i][j].setElement(maze[i][j].getElement());
-				;
 			}
 		}
 
 		init(newMaze, row, col);
+	}
+	
+	public void init(Node[][] maze, int row, int col) {
+		this.mazeArray = maze;
+		this.currentNode = mazeArray[row][col];
+		allPositions = new LinkedList<int[]>();
+		keepRunning = true;
+		time = System.currentTimeMillis();
+		visitCount = 0;
+		// complete = false;
+		// setGoalNodeRand();
+		if (player != null) {
+			setPlayerAsGoal(); // only for enemies
+		}
+
+		newPos = new int[2];
 	}
 
 	public Node getCurrentNode() {
@@ -59,21 +79,7 @@ public abstract class Traversator {
 		this.currentNode = currentNode;
 	}
 
-	public void init(Node[][] maze, int row, int col) {
-		this.mazeArray = maze;
-		this.currentNode = mazeArray[row][col];
-		allPositions = new LinkedList<int[]>();
-		keepRunning = true;
-		time = System.currentTimeMillis();
-		visitCount = 0;
-		// complete = false;
-		// setGoalNodeRand();
-		if (player != null) {
-			setPlayerAsGoal(); // only for enemies
-		}
 
-		newPos = new int[2];
-	}
 
 	public Deque<int[]> getAllPositions() {
 		return allPositions;
@@ -142,4 +148,14 @@ public abstract class Traversator {
 	public Node getGoalNode() {
 		return goal;
 	}
+
+	@Override
+	public void run() {
+		if (!shouldStop) {
+			initCustom();
+			shouldStop = true;
+		}
+	}
+
+	protected abstract void initCustom();
 }

@@ -36,9 +36,13 @@ public class BeamTraversator extends Traversator {
 		this.beamWidth = beamWidth;
 		setComplete(false);
 		setGoalNode(goalPos[1], goalPos[0]);
-		traverse();	// fill up allPositions queue.
-
 	}
+	
+	@Override
+	protected void initCustom() {
+		traverse();	// fill up allPositions queue.
+	}
+	
 	
 	@Override
 	public int[] findNextMove() { // let the helper select one move at a time

@@ -58,7 +58,7 @@ public class InformedPathMarker {
 			basicHillClimber(map, helperPosRow, helperPosCol, goalPos);
 			break;
 		}
-		
+		traversator.run(); // starts the thread
 		allPositions = traversator.getAllPositions();	// get positions
 		markPath(pathLen);
 	}

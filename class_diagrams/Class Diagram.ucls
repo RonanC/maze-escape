@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.9" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="false" router="FAN">  
+  <class id="1" language="java" name="ie.gmit.sw.ai.traversers.uninformed.RecursiveDFSTraversator" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/traversers/uninformed/RecursiveDFSTraversator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1151" y="663"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="ie.gmit.sw.ai.maze.InformedPathMarker" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/maze/InformedPathMarker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="162" x="701" y="227"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="ie.gmit.sw.ai.traversers.heuristic.BeamTraversator" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/traversers/heuristic/BeamTraversator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="446" y="751"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="ie.gmit.sw.ai.GameCtrl" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/GameCtrl.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="98" x="523" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="ie.gmit.sw.ai.GameRunner" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/GameRunner.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="113" x="226" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="ie.gmit.sw.ai.characters.EnemyBrain" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/characters/EnemyBrain.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="117" x="364" y="132"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="ie.gmit.sw.ai.traversers.uninformed.BruteForceTraversator" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/traversers/uninformed/BruteForceTraversator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="931" y="660"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="ie.gmit.sw.ai.audio.SoundEffects" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/audio/SoundEffects.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="117" x="965" y="322"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="ie.gmit.sw.ai.traversers.heuristic.BestFirstTraversator" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/traversers/heuristic/BestFirstTraversator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="140" y="672"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <enumeration id="10" language="java" name="ie.gmit.sw.ai.maze.Node.NodeType" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/maze/Node.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="137" x="626" y="712"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </enumeration>  
+  <class id="11" language="java" name="ie.gmit.sw.ai.traversers.TraversatorStats" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/traversers/TraversatorStats.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="137" x="45" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="ie.gmit.sw.ai.characters.PlayerImgPainter" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/characters/PlayerImgPainter.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="139" x="62" y="132"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="ie.gmit.sw.ai.traversers.heuristic.SteepestAscentHillClimbingTraversator" 
+    project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/traversers/heuristic/SteepestAscentHillClimbingTraversator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="204" y="750"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="ie.gmit.sw.ai.traversers.heuristic.WorstFirstTraversator" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/traversers/heuristic/WorstFirstTraversator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="55" width="173" x="687" y="512"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="ie.gmit.sw.ai.fight.FuzzyScore" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/fight/FuzzyScore.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="103" x="801" y="322"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="ie.gmit.sw.ai.GameCtrl.AcLis" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/GameCtrl.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="98" x="382" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="ie.gmit.sw.ai.characters.Character" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/characters/Character.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="117" x="123" y="227"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="ie.gmit.sw.ai.traversers.uninformed.IDDFSTraversator" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/traversers/uninformed/IDDFSTraversator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1164" y="596"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="ie.gmit.sw.ai.traversers.Traversator" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/traversers/Traversator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="114" x="647" y="322"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="ie.gmit.sw.ai.img.ImgCtrl" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/img/ImgCtrl.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="98" x="184" y="322"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="ie.gmit.sw.ai.characters.Player" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/characters/Player.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="117" x="186" y="417"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="ie.gmit.sw.ai.fight.FightCtrl" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/fight/FightCtrl.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="98" x="563" y="227"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="ie.gmit.sw.ai.traversers.heuristic.BasicHillClimbingTraversator" 
+    project="maze-escape" file="/maze-escape/src/ie/gmit/sw/ai/traversers/heuristic/BasicHillClimbingTraversator.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="409" y="668"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="ie.gmit.sw.ai.characters.EnemyBrain.EnemyTask" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/characters/EnemyBrain.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="117" x="364" y="227"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="ie.gmit.sw.ai.maze.Node" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/maze/Node.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="98" x="626" y="607"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="ie.gmit.sw.ai.maze.Maze" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/maze/Maze.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="98" x="324" y="512"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" name="ie.gmit.sw.ai.characters.Enemy" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/characters/Enemy.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="117" x="406" y="322"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="28" language="java" name="ie.gmit.sw.ai.traversers.uninformed.DepthLimitedDFSTraversator" 
+    project="maze-escape" file="/maze-escape/src/ie/gmit/sw/ai/traversers/uninformed/DepthLimitedDFSTraversator.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="952" y="736"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="29" language="java" name="ie.gmit.sw.ai.traversers.uninformed.RandomWalk" project="maze-escape" 
+    file="/maze-escape/src/ie/gmit/sw/ai/traversers/uninformed/RandomWalk.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1170" y="733"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <association id="30">    
+    <bendpoint x="635" y="417"/>    
+    <bendpoint x="635" y="512"/>    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="31" name="mazeArray"/>      
+      <multiplicity id="32" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="33">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="34" name="goal"/>      
+      <multiplicity id="35" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="36">    
+    <bendpoint x="525" y="512"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="37" name="queue"/>      
+      <multiplicity id="38" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <generalization id="39">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <association id="40">    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="41" name="enemy"/>      
+      <multiplicity id="42" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="27" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="43">    
+    <bendpoint x="621" y="132"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="44" name="bomber"/>      
+      <multiplicity id="45" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="46">    
+    <bendpoint x="291" y="227"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="47" name="imgCtrl"/>      
+      <multiplicity id="48" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="49">    
+    <bendpoint x="956" y="132"/>    
+    <bendpoint x="956" y="227"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="50" name="soundEffBGMusic"/>      
+      <multiplicity id="51" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="52">    
+    <bendpoint x="375" y="322"/>    
+    <bendpoint x="354" y="417"/>    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="53" name="map"/>      
+      <multiplicity id="54" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="55">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="56" name="traversator"/>      
+      <multiplicity id="57" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="58">    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="59" name="player"/>      
+      <multiplicity id="60" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <generalization id="61">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="17"/>  
+  </generalization>  
+  <association id="62">    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="63" name="traversator"/>      
+      <multiplicity id="64" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="65">    
+    <bendpoint x="614" y="417"/>    
+    <bendpoint x="614" y="512"/>    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="66" name="goal"/>      
+      <multiplicity id="67" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <generalization id="68">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <association id="69">    
+    <bendpoint x="92" y="322"/>    
+    <bendpoint x="92" y="417"/>    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="70" name="mazeGlobal"/>      
+      <multiplicity id="71" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="72">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="73" name="mazeArray"/>      
+      <multiplicity id="74" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <generalization id="75">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <generalization id="76">    
+    <bendpoint x="153" y="322"/>    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="17"/>  
+  </generalization>  
+  <association id="77">    
+    <bendpoint x="31" y="132"/>    
+    <bendpoint x="31" y="227"/>    
+    <bendpoint x="31" y="322"/>    
+    <bendpoint x="31" y="417"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="78" name="maze"/>      
+      <multiplicity id="79" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="80">    
+    <end type="SOURCE" refId="25" navigable="false">      
+      <attribute id="81" name="parent"/>      
+      <multiplicity id="82" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <generalization id="83">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <generalization id="84">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <generalization id="85">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <association id="86">    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="87" name="maze"/>      
+      <multiplicity id="88" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="89">    
+    <bendpoint x="656" y="417"/>    
+    <bendpoint x="656" y="512"/>    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="90" name="currentNode"/>      
+      <multiplicity id="91" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="92">    
+    <bendpoint x="71" y="227"/>    
+    <bendpoint x="71" y="322"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="93" name="player"/>      
+      <multiplicity id="94" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="95">    
+    <bendpoint x="553" y="132"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="96" name="fightCtrl"/>      
+      <multiplicity id="97" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="98">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="99" name="playerImgPainter"/>      
+      <multiplicity id="100" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="101">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="102" name="worstNode"/>      
+      <multiplicity id="103" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="104">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="105" name="soundEffFight"/>      
+      <multiplicity id="106" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="107">    
+    <bendpoint x="354" y="322"/>    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="108" name="player"/>      
+      <multiplicity id="109" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="110">    
+    <bendpoint x="312" y="227"/>    
+    <bendpoint x="312" y="322"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="111" name="player"/>      
+      <multiplicity id="112" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <generalization id="113">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <association id="114">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="115" name="enemyBrain"/>      
+      <multiplicity id="116" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="117">    
+    <bendpoint x="333" y="227"/>    
+    <bendpoint x="333" y="322"/>    
+    <bendpoint x="333" y="417"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="118" name="map"/>      
+      <multiplicity id="119" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="120">    
+    <bendpoint x="511" y="227"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="121" name="enemyList"/>      
+      <multiplicity id="122" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="27" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="123">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="124" name="maze"/>      
+      <multiplicity id="125" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <generalization id="126">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <association id="127">    
+    <bendpoint x="893" y="227"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="128" name="soundEffEnemy"/>      
+      <multiplicity id="129" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="130">    
+    <bendpoint x="553" y="322"/>    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="131" name="player"/>      
+      <multiplicity id="132" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="133">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="134" name="fightCtrl"/>      
+      <multiplicity id="135" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="136">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="137" name="enemy"/>      
+      <multiplicity id="138" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="27" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <generalization id="139">    
+    <bendpoint x="677" y="417"/>    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <association id="140">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="141" name="oldGoal"/>      
+      <multiplicity id="142" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="143">    
+    <bendpoint x="935" y="132"/>    
+    <bendpoint x="935" y="227"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="144" name="soundEffPlayerMove"/>      
+      <multiplicity id="145" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="146">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="147" name="imgCtrl"/>      
+      <multiplicity id="148" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="149">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="150" name="fuzzyScore"/>      
+      <multiplicity id="151" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <generalization id="152">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <association id="153">    
+    <bendpoint x="574" y="322"/>    
+    <bendpoint x="375" y="417"/>    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="154" name="maze"/>      
+      <multiplicity id="155" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="156">    
+    <end type="SOURCE" refId="25" navigable="false">      
+      <attribute id="157" name="type"/>      
+      <multiplicity id="158" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="159">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="160" name="enemyTasks"/>      
+      <multiplicity id="161" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="162">    
+    <bendpoint x="231" y="132"/>    
+    <bendpoint x="92" y="227"/>    
+    <bendpoint x="113" y="322"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="163" name="player"/>      
+      <multiplicity id="164" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="165">    
+    <bendpoint x="532" y="132"/>    
+    <bendpoint x="532" y="227"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="166" name="enemyList"/>      
+      <multiplicity id="167" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="27" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="168">    
+    <bendpoint x="270" y="132"/>    
+    <bendpoint x="270" y="227"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="169" name="imgCtrl"/>      
+      <multiplicity id="170" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="171">    
+    <bendpoint x="914" y="132"/>    
+    <bendpoint x="914" y="227"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="172" name="soundEffMisc"/>      
+      <multiplicity id="173" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="false" package="false" protected="false" private="false" static="false"/>    
+    <operations public="false" package="false" protected="false" private="false" static="false"/>  
+  </classifier-display>  
+  <association-display labels="false" multiplicity="false"/>
+</class-diagram>

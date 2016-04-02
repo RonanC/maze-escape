@@ -132,6 +132,7 @@ Each audio object is on its own thread.
 
 ## Class Diagram
 Below is a class diagram:
+![win](https://github.com/RonanC/maze-escape/blob/master/class_diagrams/Class\ Diagram.png "class diagrams")
 
 ## Java Docs
 I have documented every method, class and package.

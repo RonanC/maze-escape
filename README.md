@@ -16,11 +16,15 @@ You are falsely imprisoned by the evil king to endlessly wander the prison maze.
 There are myths of a wizard who once walked these lonesome halls.  
 Legend says he left behind a potion which can free you of this place.  
 
+[Official Project Brief](aiAssignment2016.pdf).
+
+### initial game images
 ![maze](https://github.com/RonanC/maze-escape/blob/master/screen-shots/maze.png "maze")
 ![win](https://github.com/RonanC/maze-escape/blob/master/screen-shots/win.png "win")
 
-[Official Project Brief](aiAssignment2016.pdf).
-
+### final game images
+![maze](https://github.com/RonanC/maze-escape/blob/master/screen-shots/view.png "view")
+![win](https://github.com/RonanC/maze-escape/blob/master/screen-shots/map.png "map")
 
 ## Search Algorithms
 The enemies use the six different uninformed search algorithms (there are always at least 6 enemies).  
@@ -151,7 +155,7 @@ This video tutorial series set the framework up for me to expand upon:
 https://www.youtube.com/watch?v=I1qTZaUcFX0
                                                                    
                                                                    
-                                                                   
+```
                                     @@                             
                                     @@                             
                                     @@@@      @@                   
@@ -208,3 +212,4 @@ https://www.youtube.com/watch?v=I1qTZaUcFX0
                    @@::..::@@             @@,,..@@@@               
                    @@,,....@@             @@,,..::@@               
                    @@,,....@@             @@,,..::@@               
+```

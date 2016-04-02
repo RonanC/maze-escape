@@ -1,7 +1,7 @@
 ```
   __  __                          ______                                     
  |  \/  |                        |  ____|                                    
- | \  / |   __ _   ____   ___    | |__     ___    ___    __ _   _ __     ___ 
+ | \  / |   __ _   ____   ___    | |__     ___    ___    __ _   _ __     ___
  | |\/| |  / _` | |_  /  / _ \   |  __|   / __|  / __|  / _` | | '_ \   / _ \
  | |  | | | (_| |  / /  |  __/   | |____  \__ \ | (__  | (_| | | |_) | |  __/
  |_|  |_|  \__,_| /___|  \___|   |______| |___/  \___|  \__,_| | .__/   \___|
@@ -102,7 +102,7 @@ For the breadth first search the enemy teleports around the map (as the search m
 `ie.gmit.sw.ai.maze.InformedPathMarker.java` is where these algorithms are implemented.  
 For the informed searches I only save the output of the algorithm.  
 I save this to a FIFO queue.  
-When you meet a helper(prisoner) he then lights up the path to your goal (up to N steps), which disappears after N time. 
+When you meet a helper(prisoner) he then lights up the path to your goal (up to N steps), which disappears after N time.
 
 ### Custom player placement
 This algorithm works by setting the current node at the bottom left and the goal node at the top right.  
@@ -174,9 +174,9 @@ http://www.playonloop.com/music-loops-category/videogame/8-bit/
 
 ### References
 This video tutorial series set the framework up for me to expand upon:   
-https://www.youtube.com/watch?v=I1qTZaUcFX0
-                                                                   
-                                                                   
+https://www.youtube.com/watch?v=64V8CC7nSok
+
+
 ```
                                     @@                             
                                     @@                             

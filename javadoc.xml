@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="private" author="true" classpath="lib:lib/jFuzzyLogic.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="ie.gmit.sw.ai.traversers.heuristic,ie.gmit.sw.ai.characters,ie.gmit.sw.ai.fight,ie.gmit.sw.ai.img,ie.gmit.sw.ai.traversers.uninformed,ie.gmit.sw.ai.audio,ie.gmit.sw.ai,ie.gmit.sw.ai.traversers,ie.gmit.sw.ai.maze" source="1.8" sourcepath="src" splitindex="true" use="true" version="true"/>
+    </target>
+</project>

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="Create Runnable Jar for Project maze-escape">
+<project default="javadoc" name="Create Runnable Jar for Project maze-escape">
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <!--define folder properties-->
     <property name="dir.buildfile" value="."/>
     <property name="dir.workspace" value="${dir.buildfile}/.."/>
     <property name="dir.jarfile" value="${dir.buildfile}"/>
+
     <target name="create_run_jar">
         <jar destfile="${dir.jarfile}/maze-escape.jar" filesetmanifest="mergewithoutmain">
             <manifest>
@@ -14,5 +15,9 @@
             </manifest>
             <fileset dir="${dir.jarfile}/bin"/>
         </jar>
+    </target>
+
+    <target name="javadoc" depends="create_run_jar">
+        <javadoc access="private" author="true" classpath="lib:lib/jFuzzyLogic.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="ie.gmit.sw.ai.traversers.heuristic,ie.gmit.sw.ai.characters,ie.gmit.sw.ai.fight,ie.gmit.sw.ai.img,ie.gmit.sw.ai.traversers.uninformed,ie.gmit.sw.ai.audio,ie.gmit.sw.ai,ie.gmit.sw.ai.traversers,ie.gmit.sw.ai.maze" source="1.8" sourcepath="src" splitindex="true" use="true" version="true"/>
     </target>
 </project>

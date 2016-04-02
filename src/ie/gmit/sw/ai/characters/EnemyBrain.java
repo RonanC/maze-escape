@@ -58,19 +58,16 @@ public class EnemyBrain extends Thread {
 		int intelCount = 0;
 		for (Enemy enemy : enemyList) {
 			enemyCount++;
-			if (GameRunner.ENEMY_ALGO_NUM != 6) {
-				System.out.println("\nenemy #" + enemyCount + ", with intel level of: " + GameRunner.ENEMY_ALGO_NUM);
-			} else {
-				System.out.println("\nenemy #" + enemyCount + ", with intel level of: " + intelCount);
-			}
 
 			// lvl1 enemy
 			randomPos(enemy);
 			if (GameRunner.ENEMY_ALGO_NUM != 6) {
 				enemy.setIntelLvl(GameRunner.ENEMY_ALGO_NUM);
 			} else {
-				enemy.setIntelLvl(intelCount); // intelCount
+				enemy.setIntelLvl(intelCount % (Enemy.MAX_INTEL + 1)); // intelCount
 			}
+
+			System.out.println("\nenemy #" + enemyCount + ", with intel level of: " + enemy.getIntelLvl());
 
 			EnemyTask enemyTask = new EnemyTask(map.getMazeArrayClone(), enemy, player);
 			enemyTasks.add(enemyTask);
@@ -196,7 +193,7 @@ public class EnemyBrain extends Thread {
 			switch (enemy.getIntelLvl()) {
 			case 0: // random walk
 				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
-				System.out.println("random walk setup");
+				System.out.println("Random Walk setup");
 				break;
 
 			case 1: // brute force: DFS
@@ -204,17 +201,9 @@ public class EnemyBrain extends Thread {
 				dfs = true; // random.nextBoolean();
 				traversator = new BruteForceTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(),
 						dfs, player);
-				traversator.setGoalNode(player.getTileY(), player.getTileX());// chase
-																				// player
-																				// original
-																				// position
-				// System.out.print("brute force ");
-				if (dfs) {
-					System.out.print("DFS");
-				} else {
-					System.out.print("BFS");
-				}
-				System.out.println(" traversator setup.");
+				traversator.setGoalNode(player.getTileY(), player.getTileX());
+//				 chase player original position
+				System.out.println("Brute Force DFS traversator setup.");
 				break;
 
 			case 2: // brute force: BFS
@@ -222,24 +211,16 @@ public class EnemyBrain extends Thread {
 				dfs = false; // random.nextBoolean();
 				traversator = new BruteForceTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(),
 						dfs, player);
-				traversator.setGoalNode(player.getTileY(), player.getTileX());// chase
-																				// player
-																				// original
-																				// position
-				System.out.print("brute force ");
-				if (dfs) {
-					System.out.print("DFS");
-				} else {
-					System.out.print("BFS");
-				}
-				System.out.println(" traversator setup.");
+				traversator.setGoalNode(player.getTileY(), player.getTileX());
+//				 chase player original position
+				System.out.println("Brute Force BFS traversator setup.");
 				break;
 
 			case 3: // Recursive DFS
 				setSleepDur(500);
 				traversator = new RecursiveDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(),
 						player);
-				System.out.println("recursive DFS setup");
+				System.out.println("Recursive DFS setup");
 				break;
 
 			case 4: // Depth Limited DFS
@@ -247,20 +228,20 @@ public class EnemyBrain extends Thread {
 
 				traversator = new DepthLimitedDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(),
 						enemy.getTileX(), player, depthLimit);
-				System.out.println("depth limited DFS setup");
+				System.out.println("Depth Limited DFS setup");
 				break;
 
-			case 5: // Depth Limited DFS
+			case 5: // Iterative Deepening DFS
 				setSleepDur(500);
 
 				traversator = new IDDFSTraversator(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
-				System.out.println("iterative deepening DFS setup");
+				System.out.println("Iterative Deepening DFS setup");
 				break;
 
 			default:
 				System.out.println("default");
 				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
-				System.out.println("random walk setup");
+				System.out.println("Random Walk setup (default)");
 				break;
 			}
 		}

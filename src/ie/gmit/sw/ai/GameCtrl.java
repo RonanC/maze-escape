@@ -135,6 +135,9 @@ public class GameCtrl extends JPanel implements ActionListener {
 	private SoundEffects soundEffPlayerMove;
 	private SoundEffects soundEffBGMusic;
 	private SoundEffects soundEffMisc;
+	
+	private int startTime;
+	private int loadingTime = 3000;
 
 	// set game up
 	public GameCtrl() {
@@ -249,6 +252,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 		helperNum = random.nextInt(4);
 		bomberNum = random.nextInt(4);
 
+		startTime = getTime();
 	}
 
 	/**
@@ -361,14 +365,19 @@ public class GameCtrl extends JPanel implements ActionListener {
 			if (!keyDown) {
 				keyDown = true;
 				int keycode = 0;
-
-				if (e.getKeyCode() == KeyEvent.VK_ENTER && startDone == false) {
+				
+				if (!startDone) {
+					System.out.println("Loading, " + (loadingTime - (getTime() - startTime)) + " milliseconds left.");
+				}
+				
+				// START GAME (ONLY ALLOW AFTER 3 SECONDS, allows everything to load)
+				if (e.getKeyCode() == KeyEvent.VK_ENTER && startDone == false && getTime() - startTime > loadingTime) {
 					startDone = true;
 					enemyBrain.createEnemies(enemyNum); // create enemies calls
 														// spawn
 				}
 
-				if (e.getKeyCode() == KeyEvent.VK_M) { // zoom into MAP
+				if (e.getKeyCode() == KeyEvent.VK_M && !gameOverSeq) { // zoom into MAP
 					toggleZoom();
 					player.isAlive();
 				}
@@ -411,7 +420,7 @@ public class GameCtrl extends JPanel implements ActionListener {
 				}
 
 				// NB
-				if (!haveWon && startDone && !player.isInFight()) {
+				if (!haveWon && startDone && !player.isInFight() && !gameOverSeq) {
 					if (!zoomedOut || GameRunner.ZOOM_MOVE) {
 						keycode = e.getKeyCode();
 					}

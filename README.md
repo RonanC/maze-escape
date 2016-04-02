@@ -19,6 +19,8 @@ Legend says he left behind a potion which can free you of this place.
 ![maze](https://github.com/RonanC/maze-escape/blob/master/screen-shots/maze.png "maze")
 ![win](https://github.com/RonanC/maze-escape/blob/master/screen-shots/win.png "win")
 
+[Official Project Brief](aiAssignment2016.pdf).
+
 
 ## Search Algorithms
 The enemies use the six different uninformed search algorithms (there are always at least 6 enemies).  

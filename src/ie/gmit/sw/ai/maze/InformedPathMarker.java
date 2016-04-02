@@ -6,6 +6,16 @@ import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.heuristic.*;
 
+/**
+ * Used to generate various informed (heuristic) search algorithms.
+ * Generates all moves from the player to the goal node.
+ * This can then be used to mark the path on the map up to N spaces.
+ * This class is used by the helper rats.
+ * 
+ * Algorithms: basicHillClimber, steepestAscentHillClimber, bestFirstTraversator and beamTraversator.
+ * 
+ * @author Ronan
+ */
 public class InformedPathMarker {
 	private Traversator traversator;
 	private Maze maze;
@@ -73,6 +83,11 @@ public class InformedPathMarker {
 		traversator = new BeamTraversator(map.getMazeArrayClone(), helperPosRow, helperPosCol, goalPos, beamWidth);
 	}
 	
+	/**
+	 * Marks the coordinates on the map to be lit up.
+	 * 
+	 * @param pathLen
+	 */
 	public void markPath(int pathLen){
 		System.out.println("Marking path");
 		int counter = 0;
@@ -90,6 +105,9 @@ public class InformedPathMarker {
 		}
 	}
 	
+	/**
+	 * Prints the path coordinates.
+	 */
 	public void printPath(){
 		System.out.println("Printing path");
 		for (int[] pos : allPositions) {
@@ -97,6 +115,9 @@ public class InformedPathMarker {
 		}
 	}
 	
+	/**
+	 * removes the marks on the coordinates on the map to be lit up.
+	 */
 	public void unmarkPath(){
 		System.out.println("Unmarking path");
 		for (int[] pos : allPositions) {

@@ -1,13 +1,16 @@
 package ie.gmit.sw.ai.traversers.heuristic;
 
-import ie.gmit.sw.ai.*;
 import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
 
-import java.awt.Component;
 import java.util.*;
 
+/**
+ * Implementation of the Best First search algorithm.
+ * 
+ * @author Ronan
+ */
 public class BestFirstTraversator extends Traversator {
 	/*
 	 * adds all children to queue
@@ -70,11 +73,6 @@ public class BestFirstTraversator extends Traversator {
 				break;
 			}
 
-//			try { // Simulate processing each expanded node
-//				Thread.sleep(10);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
 
 			Node[] children = currentNode.children(mazeArray); // get children
 			for (int i = 0; i < children.length; i++) { // iterate through

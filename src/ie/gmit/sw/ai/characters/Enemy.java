@@ -5,13 +5,19 @@ import java.awt.Image;
 import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.img.ImgCtrl;
 import ie.gmit.sw.ai.maze.Maze;
-import ie.gmit.sw.ai.maze.Node;
-import ie.gmit.sw.ai.traversers.Traversator;
 
 /*
  * STATS:
  * Health
  * Intelligence
+ * Luck
+ */
+
+/**
+ * Contains enemy specific methods and variables.
+ * Extends the Character super class.
+ * 
+ * @author Ronan
  */
 public class Enemy extends Character {
 	public static int MAX_HEALTH = 50;
@@ -23,36 +29,9 @@ public class Enemy extends Character {
 	// stats
 	private int intelLvl;
 	
-	// traversal stuff
-//	private int traversatorNum;
-//	private Traversator traversator;
-
-	
-	
 	public int getIntelLvl() {
 		return intelLvl;
 	}
-//
-//	public int getTraversatorNum() {
-//		return traversatorNum;
-//	}
-//
-//	public Traversator getTraversator() {
-//		return traversator;
-//	}
-//
-//
-//
-//	public void setTraversatorNum(int traversatorNum) {
-//		this.traversatorNum = traversatorNum;
-//	}
-//
-//	public void setTraversator(Traversator traversator) {
-//		this.traversator = traversator;
-//	}
-
-
-
 
 	public Enemy(Maze map, ImgCtrl imgCtrl) {
 		super(map, imgCtrl);

@@ -1,14 +1,17 @@
 package ie.gmit.sw.ai.traversers.uninformed;
 
-import ie.gmit.sw.ai.*;
 import ie.gmit.sw.ai.characters.Player;
 import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
 
-import java.awt.*;
 import java.util.*;
 
+/**
+ * Implementation of the Brute Force DFS/BFS search algorithm.
+ * 
+ * @author Ronan
+ */
 public class BruteForceTraversator extends Traversator {
 	/*
 	 * Option: BFS or DFS gets all children, either adds them to the front (BFS)
@@ -68,12 +71,6 @@ public class BruteForceTraversator extends Traversator {
 				queue.clear();
 				resetGraph();
 				return newPos;
-			}
-
-			try { // let painter paint screen
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 
 			// actual algorithm

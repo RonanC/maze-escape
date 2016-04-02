@@ -7,6 +7,11 @@ import javax.imageio.ImageIO;
 
 import ie.gmit.sw.ai.GameRunner;
 
+/**
+ * Loads in all the images and makes them available through getters.
+ * 
+ * @author Ronan
+ */
 public class ImgCtrl {
 	// Images
 	private Image floor, wall, goal, path, explosion, explosion2, explosion_over;

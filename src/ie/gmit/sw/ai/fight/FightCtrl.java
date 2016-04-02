@@ -1,12 +1,17 @@
 package ie.gmit.sw.ai.fight;
 
 import java.util.Random;
-import java.util.Timer;
 
 import ie.gmit.sw.ai.GameCtrl;
 import ie.gmit.sw.ai.audio.SoundEffects;
 import ie.gmit.sw.ai.characters.*;
 
+/**
+ * Manages the fighting between a player and an enemy.
+ * Uses FuzzyScore class in order to take use of fuzzy logic.
+ * 
+ * @author Ronan
+ */
 public class FightCtrl {
 	private Player player;
 	private Enemy enemy;
@@ -29,6 +34,8 @@ public class FightCtrl {
 	
 	// fuzzy scoring
 	private FuzzyScore fuzzyScore;
+	
+	private SoundEffects soundEffFight;
 
 	// damage
 	// private int enemyMaxDamage = 40;
@@ -40,6 +47,8 @@ public class FightCtrl {
 		this.scoreMax = 20;
 		this.fightInProgress = false;
 		this.fightDur = 2000;
+		
+		soundEffFight = new SoundEffects();
 		
 		fuzzyScore = new FuzzyScore();
 	}
@@ -75,8 +84,8 @@ public class FightCtrl {
 //		System.out.println(enemyRawStatsToString());
 		
 		System.out.println("Dual!");
-		SoundEffects.playPlayerAttack();
-		SoundEffects.playEnemyAttack();
+		soundEffFight.playPlayerAttack();
+		soundEffFight.playEnemyAttack();
 
 		// generate scores
 //		genScores(); // gets various scores from stats and sums them
@@ -213,7 +222,6 @@ public class FightCtrl {
 	public void setFightStartTime(int fightStartTime) {
 		this.fightStartTime = fightStartTime;
 	}
-
 
 
 	public void setFightDur(int fightDur) {

@@ -4,7 +4,12 @@ import java.awt.Graphics;
 
 import ie.gmit.sw.ai.GameCtrl;
 
-// draws the player in various directions and animations.
+// 
+/**
+ * Paints the player in various directions and animations.
+ * 
+ * @author Ronan
+ */
 public class PlayerImgPainter {
 	private Player player;
 	private int tileDim;
@@ -20,8 +25,6 @@ public class PlayerImgPainter {
 	
 	// fight
 	public void fight(Graphics g){
-		
-		
 		if (GameCtrl.getTime() % 2000 > 500 && GameCtrl.getTime() % 2000 < 1000) {
 			g.drawImage(player.getPunch1(), zoomInPos, zoomInPos + (tileDim / 8), tileDim, tileDim, null);
 		} else if (GameCtrl.getTime() % 2000 > 1500) {
@@ -33,9 +36,6 @@ public class PlayerImgPainter {
 		} else{
 			g.drawImage(player.getPlayer(), zoomInPos, zoomInPos, tileDim, tileDim, null);
 		}
-		
-
-		
 	}
 
 	// left draw
@@ -47,20 +47,6 @@ public class PlayerImgPainter {
 	public void lookRight(Graphics g) {
 		g.drawImage(player.getPlayer(), zoomInPos, zoomInPos, tileDim, tileDim, null);
 	}
-
-	// // left draw
-	// public void lookLeft(Graphics g) {
-	// g.drawImage(player.getPlayer(), player.getTileX() * tileDim + tileDim,
-	// player.getTileY() * tileDim, -tileDim,
-	// tileDim, null);
-	// }
-	//
-	// // right draw
-	// public void lookRight(Graphics g) {
-	// g.drawImage(player.getPlayer(), player.getTileX() * tileDim,
-	// player.getTileY() * tileDim, tileDim, tileDim,
-	// null);
-	// }
 
 	// walk draw
 	public void walk(Graphics g) {
@@ -79,31 +65,6 @@ public class PlayerImgPainter {
 		}
 	}
 
-	// // walk draw
-	// public void walk(Graphics g) {
-	// if (getPlayerLookH() == 'l') {
-	// if (stepCount % 2 == 0) {
-	// g.drawImage(player.getPlayerWalk(), player.getTileX() * tileDim +
-	// tileDim, player.getTileY() * tileDim,
-	// -tileDim, tileDim, null);
-	// } else {
-	// g.drawImage(player.getPlayerWalk2(), player.getTileX() * tileDim +
-	// tileDim, player.getTileY() * tileDim,
-	// -tileDim, tileDim, null);
-	// }
-	// } else if (getPlayerLookH() == 'r') {
-	// if (stepCount % 2 == 0) {
-	// g.drawImage(player.getPlayerWalk(), player.getTileX() * tileDim,
-	// player.getTileY() * tileDim, tileDim,
-	// tileDim, null);
-	// } else {
-	// g.drawImage(player.getPlayerWalk2(), player.getTileX() * tileDim,
-	// player.getTileY() * tileDim, tileDim,
-	// tileDim, null);
-	// }
-	// }
-	// }
-
 	// win draw
 	public void win(Graphics g) {
 		if (getPlayerLookH() == 'l') {
@@ -120,32 +81,7 @@ public class PlayerImgPainter {
 			}
 		}
 	}
-
-	// win draw
-	// public void win(Graphics g) {
-	// if (getPlayerLookH() == 'l') {
-	// if (Board.getTime() % 1000 > 0 && Board.getTime() % 1000 < 500) {
-	// g.drawImage(player.getPlayerWin(), player.getTileX() * tileDim + tileDim,
-	// player.getTileY() * tileDim,
-	// -tileDim, tileDim, null);
-	// } else {
-	// g.drawImage(player.getPlayer(), player.getTileX() * tileDim + tileDim,
-	// player.getTileY() * tileDim,
-	// -tileDim, tileDim, null);
-	// }
-	// } else if (getPlayerLookH() == 'r') {
-	// if (Board.getTime() % 1000 > 0 && Board.getTime() % 1000 < 500) {
-	// g.drawImage(player.getPlayerWin(), player.getTileX() * tileDim,
-	// player.getTileY() * tileDim, tileDim,
-	// tileDim, null);
-	// } else {
-	// g.drawImage(player.getPlayer(), player.getTileX() * tileDim,
-	// player.getTileY() * tileDim, tileDim,
-	// tileDim, null);
-	// }
-	// }
-	// }
-
+	
 	// misc
 	public void incStepCount() {
 		player.incStepCount();

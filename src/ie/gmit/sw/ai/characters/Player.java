@@ -2,7 +2,6 @@ package ie.gmit.sw.ai.characters;
 
 import java.awt.*;
 import java.util.Deque;
-import java.util.Iterator;
 import java.util.Random;
 
 import ie.gmit.sw.ai.GameRunner;
@@ -13,8 +12,15 @@ import ie.gmit.sw.ai.traversers.heuristic.WorstFirstTraversator;
 /*
  * STATS:
  * Health
- * Steps
+ * Steps/Luck
  * Sword
+ */
+
+/**
+ * Contains player specific methods and variables.
+ * Extends the Character super class.
+ * 
+ * @author Ronan
  */
 public class Player extends Character {
 	public static int MAX_HEALTH = 100;
@@ -27,6 +33,7 @@ public class Player extends Character {
 	private int stepCount;
 
 	// when enemy dead gain xp
+	// not used at the moment
 	private int xp;
 
 	// items
@@ -68,7 +75,7 @@ public class Player extends Character {
 	}
 
 	public void setFarAwayPos() {
-		char element = 'w';
+//		char element = 'w';
 		int rowSave = 5;
 		int colSave = 5;
 		// starting node for algo
@@ -160,13 +167,8 @@ public class Player extends Character {
 			y = random.nextInt(mazeDim - 2) + 1;
 			// System.out.printf("x: %d, y: %d\t", x, y);
 			// avoid walls and player
-			if (!mazeGlobal.getPosElement(x, y).equals("w")) { // we spawn
-																// before enemy
-																// so we don't
-																// nede to worry
-																// about
-																// spawning on
-																// them
+			if (!mazeGlobal.getPosElement(x, y).equals("w")) { 
+//				 we spawn before enemy so we don't nede to worry about spawning on them
 				System.out.println(mazeGlobal.getPosElement(x, y));
 				player.setPos(x, y);
 				notPlaced = false;
@@ -237,4 +239,13 @@ public class Player extends Character {
 		stepCount++;
 	}
 
+	public int getXp() {
+		return xp;
+	}
+
+	public void setXp(int xp) {
+		this.xp = xp;
+	}
+
+	
 }

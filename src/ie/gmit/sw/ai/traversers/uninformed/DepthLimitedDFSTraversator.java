@@ -5,9 +5,11 @@ import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
 
-import java.awt.Component;
-import java.util.LinkedList;
-
+/**
+ * Implementation of the Depth Limited DFS search algorithm.
+ * 
+ * @author Ronan
+ */
 public class DepthLimitedDFSTraversator extends Traversator {
 	/*
 	 * same as DFS but limited.
@@ -58,17 +60,6 @@ public class DepthLimitedDFSTraversator extends Traversator {
 		return newPos;
 	}
 
-//	public void traverse(Node[][] maze, Node node, Component viewer) {
-//
-//		dfs(node, 1);
-//
-//		if (keepRunning) {
-//			System.out.println("Failed to find goal node within a depth of " + limit);
-//		} else {
-//			System.out.println("Found Goal node");
-//		}
-//	}
-
 	private void dfs(Node node, int depth) {
 		allPositions.add(new int[] { node.getRow(), node.getCol() });
 		resetNewPos();
@@ -91,12 +82,6 @@ public class DepthLimitedDFSTraversator extends Traversator {
 			setComplete(false);
 			return;
 		}
-
-//		try { // Simulate processing each expanded node
-//			Thread.sleep(10);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 
 		Node[] children = node.children(mazeArray);
 		for (int i = 0; i < children.length; i++) {

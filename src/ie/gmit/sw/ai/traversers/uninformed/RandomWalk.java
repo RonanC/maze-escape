@@ -5,6 +5,11 @@ import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
 
+/**
+ * Implementation of the Random Walk search algorithm.
+ * 
+ * @author Ronan
+ */
 public class RandomWalk extends Traversator {
 	/*
 	 * Sets the current node to visited, then chooses a random child node and

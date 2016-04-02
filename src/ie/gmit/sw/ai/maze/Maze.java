@@ -5,8 +5,13 @@ import java.util.*;
 
 import ie.gmit.sw.ai.GameRunner;
 
+/**
+ * Generates the maze (making sure there is always a path to the goal.
+ * Adds all the items and features to the maze.
+ * 
+ * @author Ronan
+ */
 public class Maze {
-
 	private Scanner input;
 	private Node[][] maze;
 	private Random random;
@@ -72,6 +77,10 @@ public class Maze {
 		// System.out.println(toString());
 	}
 
+	/**
+	 * Reads in a map via a text file.
+	 */
+	@SuppressWarnings("unused")
 	private void readInMap() {
 		initMaze('w');
 
@@ -81,6 +90,9 @@ public class Maze {
 		closeFile();
 	}
 
+	/**
+	 * Places walls around the perimeter (thickness of two).
+	 */
 	private void placeOuterWalls() {
 		for (int row = 0; row < maze.length; row++) {
 			// rows
@@ -105,6 +117,9 @@ public class Maze {
 		}
 	}
 
+	/**
+	 * Generates a random maze with features.
+	 */
 	private void genRandomMaze() {
 		initMaze('x');
 
@@ -114,7 +129,6 @@ public class Maze {
 		// items
 		int swordNum = random.nextInt(GameRunner.MAZE_DIM / 5);
 		int medkitNum = random.nextInt(GameRunner.MAZE_DIM / 5) * 2;
-//		int itemNum = random.nextInt(GameRunner.MAZE_DIM / 5) * 2;
 
 		int bombNum = random.nextInt(GameRunner.MAZE_DIM / 4);
 
@@ -136,21 +150,6 @@ public class Maze {
 			medkitNum = 4;
 		}
 
-		// 10'000 spaces in a 100 by 100 maze.
-
-		// int goalNum;
-		// try {
-		// goalNum = random.nextInt(GameRunner.MAZE_DIM / 50); // 2
-		// } catch (Exception e) {
-		// goalNum = 1;
-		// }
-		//
-		// if (goalNum < 1) {
-		// goalNum = 1;
-		// }
-		//
-		// int goalNumber = goalNum;
-
 		// quest items
 		int goalNumber = 1; // only one goal
 
@@ -161,7 +160,7 @@ public class Maze {
 
 		// quest items
 		addFeature('h', 'f', helperNum);
-		addFeature('g', 'f', 1);
+		addFeature('g', 'f', goalNumber);
 
 		// rest of x's should be walls
 		addWalls();
@@ -169,6 +168,9 @@ public class Maze {
 		// System.out.println(toString());
 	}
 
+	/**
+	 * Adds walls to outer perimeter.
+	 */
 	private void addWalls() {
 		for (int row = 0; row < maze.length; row++) {
 			for (int col = 0; col < maze[row].length - 1; col++) {
@@ -180,6 +182,9 @@ public class Maze {
 	}
 
 	// https://www.youtube.com/watch?v=IjLmUT_is8g
+	/**
+	 * Builds the maze.
+	 */
 	private void buildMaze() {
 		// spaces work as well as f (floor)
 		// floor is cleaner IMO
@@ -196,10 +201,8 @@ public class Maze {
 
 				// half the time this happens
 				// changes the next column to a floor
-				if (num >= 5 && col + 1 < maze[row].length - 1) { // Change
-																	// West
-																	// (break
-																	// wall)
+				if (num >= 5 && col + 1 < maze[row].length - 1) { 
+//					 Change West (break wall)
 					// changes X to floor
 					maze[row][col + 1].setElement('f');
 					// continue; // use else instead of continue
@@ -213,6 +216,7 @@ public class Maze {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void buildMazeV1() {
 		// spaces work as well as f (floor)
 		// floor is cleaner IMO
@@ -246,7 +250,13 @@ public class Maze {
 		}
 	}
 
-	// private void addFeature(char feature, char replace, int number) {
+	/**
+	 * Adds the features (items) to the maze.
+	 * 
+	 * @param feature
+	 * @param replace
+	 * @param number
+	 */
 	private void addFeature(char feature, char replace, int number) {
 
 		// randomely adds features

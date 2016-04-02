@@ -1,7 +1,22 @@
+/*
+  __  __                          ______                                     
+ |  \/  |                        |  ____|                                    
+ | \  / |   __ _   ____   ___    | |__     ___    ___    __ _   _ __     ___ 
+ | |\/| |  / _` | |_  /  / _ \   |  __|   / __|  / __|  / _` | | '_ \   / _ \
+ | |  | | | (_| |  / /  |  __/   | |____  \__ \ | (__  | (_| | | |_) | |  __/
+ |_|  |_|  \__,_| /___|  \___|   |______| |___/  \___|  \__,_| | .__/   \___|
+                                                               | |           
+                                                               |_|           
+ */
 package ie.gmit.sw.ai;
 
 import javax.swing.*;
 
+/**
+ * Sets the game window and basic game attributes up.
+ * 
+ * @author Ronan
+ */
 public class GameRunner {
 	public static int MAZE_DIM;
 	public static int TILE_DIM;
@@ -19,10 +34,10 @@ public class GameRunner {
 
 	public static int ENEMY_ALGO_NUM;
 	
-	private static GameRunner gr = null;
+//	private static GameRunner gr = null;
 
 	public static void main(String[] args) {
-		gr = new GameRunner();
+		new GameRunner();
 	}
 
 	public GameRunner() {
@@ -35,7 +50,6 @@ public class GameRunner {
 //		try {
 //			gr.finalize();
 //		} catch (Throwable e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //		gr = new GameRunner();
@@ -52,7 +66,7 @@ public class GameRunner {
 
 		int choice = chooseUseDefaults();
 
-		if (choice == 0) {
+		if (choice != 0) {
 			chooseMazeSize();
 			chooseZoomScale();
 			chooseZoomMove();
@@ -152,19 +166,9 @@ public class GameRunner {
 
 	public static void chooseBGMusicOn() {
 		int bg = 1;
-		try {
-			bg = Integer.parseInt((String) JOptionPane.showInputDialog(f, "Music on?\n0: off\n1: on", null,
-					JOptionPane.INFORMATION_MESSAGE, null, null, "1")); // TODO:
-																		// change
-																		// back
-																		// to 1
-																		// when
-																		// finishing
-		} catch (Exception e) {
-			bg = 1;
-		}
+		bg = JOptionPane.showConfirmDialog(f, "Music on?");
 
-		if (bg == 0) {
+		if (bg != 0) {
 			BG_ON = false;
 		} else {
 			BG_ON = true;
@@ -196,17 +200,11 @@ public class GameRunner {
 	public static void chooseZoomMove() {
 		int zoomMove = 0;
 		boolean zoomMoveBool = true;
-		try {
-			zoomMove = Integer
-					.parseInt((String) JOptionPane.showInputDialog(f, "Allow movement during zoom?\n0: false\n1: true",
-							null, JOptionPane.INFORMATION_MESSAGE, null, null, "0"));
-		} catch (Exception e) {
-			zoomMove = 0;
-		}
+		zoomMove = JOptionPane.showConfirmDialog(f, "Allow movement during zoom?");
 
 		System.out.println("zoomMove: " + zoomMove);
 
-		if (zoomMove == 1) {
+		if (zoomMove == 0) {
 			zoomMoveBool = true;
 		} else if (zoomMove == 0) {
 			zoomMoveBool = false;
@@ -242,17 +240,10 @@ public class GameRunner {
 
 	public static int chooseUseDefaults() {
 		String menuQuestion = "";
-		menuQuestion += "Use default settings?:\n";
-		menuQuestion += "0: No\n";
-		menuQuestion += "1: Yes\n";
+		menuQuestion += "Use default settings?:";
 		int useDefaults = 1;
-
-		try {
-			useDefaults = Integer.parseInt((String) JOptionPane.showInputDialog(f, menuQuestion, null,
-					JOptionPane.INFORMATION_MESSAGE, null, null, "1"));
-		} catch (Exception e) {
-			useDefaults = 1;
-		}
+		
+		useDefaults = JOptionPane.showConfirmDialog(f, menuQuestion);
 
 		if (useDefaults < 0 || useDefaults > 1) {
 			useDefaults = 1;
@@ -264,9 +255,8 @@ public class GameRunner {
 	public static void chooseGameOver() {
 		String menuQuestion = "";
 		menuQuestion += "Thank you, come again.";
-		int useDefaults = 1;
 		
-		int option = JOptionPane.showConfirmDialog(f, menuQuestion); 
+		JOptionPane.showConfirmDialog(f, menuQuestion); 
 		System.exit(0);
 	}
 }

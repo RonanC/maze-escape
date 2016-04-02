@@ -5,116 +5,113 @@ import java.util.Random;
 
 import javax.sound.sampled.*;
 
-import ie.gmit.sw.ai.GameCtrl;
-import ie.gmit.sw.ai.GameRunner;
+/**
+ * Deals with background music and sound effects.
+ * Extends the Thread super class.
+ * 
+ * @author Ronan
+ */
+public class SoundEffects extends Thread {
 
-public class SoundEffects {
+	@Override
+	public void run() {
+		super.run();
 
-	public static synchronized void playSound(final String audioName) {
+	}
+
+	public void playSound(final String audioName) {
 		String url = "resources/audio/" + audioName;
 		File file = new File(url);
 
-		new Thread(new Runnable() {
-			// The wrapper thread is unnecessary, unless it blocks on the
-			// Clip finishing; see comments.
-			public void run() {
-				try {
-					Clip clip = AudioSystem.getClip();
+		try {
+			Clip clip = AudioSystem.getClip();
 
-					AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
-					clip.open(inputStream);
-					clip.start();
+			AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
+			clip.open(inputStream);
+			clip.start();
 
-				} catch (Exception e) {
-					System.out.print("url: " + url + "\t");
-					System.err.println(e.getMessage());
-				}
-			}
-		}).start();
+		} catch (Exception e) {
+			System.out.print("url: " + url + "\t");
+			System.err.println(e.getMessage());
+		}
 	}
 
-	public static synchronized void playBGLoop() {
-		// int frameRate = 1000; // every second run timer
-		// Timer timer = new Timer(frameRate, this);
+	public synchronized void playBGLoop() {
 
 		String url = "resources/audio/" + chooseBg();
 		File file = new File(url);
 
-		new Thread(new Runnable() {
-			// The wrapper thread is unnecessary, unless it blocks on the
-			// Clip finishing; see comments.
-			public void run() {
-				try {
-					int count = 0;
-					Clip clip = AudioSystem.getClip();
+		try {
+//			int count = 0;
+			Clip clip = AudioSystem.getClip();
 
-					AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
-					clip.open(inputStream);
+			AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
+			clip.open(inputStream);
 
-					// volume
-					FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-					gainControl.setValue(-10.0f); // Reduce volume by 10
-													// decibels.
+			// volume
+			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-10.0f); // Reduce volume by 10
+											// decibels.
 
-					clip.loop(Clip.LOOP_CONTINUOUSLY);
-//					clip.start();
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
+			
+			// // CHANGE SONGS:
+			// clip.start();
 
-//					boolean flipped = false;
-//					
-//					while (true) {
-////						System.out.println("BG ON");
-//						if (GameRunner.BG_KILL) {
-////							System.out.println("BG KILL");
-//							clip.stop();
-//							clip.close();
-//							clip.drain();
-//						}
-//						
-//						if (!GameRunner.BG_ON) {
-//							clip.stop();
-//							flipped = true;
-//						}
-//						
-//						if (GameRunner.BG_ON && flipped == true) {
-//							flipped = false;
-//							clip.start();
-//						}
-//
-//						if (GameRunner.BG_ON) {
-//							// System.out.println(Board.getTime() % 100000);
-//							if (GameCtrl.getTime() % 100000 > 99950) { 
-////								System.out.println("new clip");
-//								// song change every 100 seconds
-//								String url = "resources/audio/" + chooseBg();
-////								System.out.println(url);
-//								File file = new File(url);
-//								inputStream = AudioSystem.getAudioInputStream(file);
-//
-//								clip.close();
-//								clip.open(inputStream);
-//								clip.loop(Clip.LOOP_CONTINUOUSLY);
-//							}
-//						}
-//					}
+			// boolean flipped = false;
+			//
+			// while (true) {
+			//// System.out.println("BG ON");
+			// if (GameRunner.BG_KILL) {
+			//// System.out.println("BG KILL");
+			// clip.stop();
+			// clip.close();
+			// clip.drain();
+			// }
+			//
+			// if (!GameRunner.BG_ON) {
+			// clip.stop();
+			// flipped = true;
+			// }
+			//
+			// if (GameRunner.BG_ON && flipped == true) {
+			// flipped = false;
+			// clip.start();
+			// }
+			//
+			// if (GameRunner.BG_ON) {
+			// // System.out.println(Board.getTime() % 100000);
+			// if (GameCtrl.getTime() % 100000 > 99950) {
+			//// System.out.println("new clip");
+			// // song change every 100 seconds
+			// String url = "resources/audio/" + chooseBg();
+			//// System.out.println(url);
+			// File file = new File(url);
+			// inputStream = AudioSystem.getAudioInputStream(file);
+			//
+			// clip.close();
+			// clip.open(inputStream);
+			// clip.loop(Clip.LOOP_CONTINUOUSLY);
+			// }
+			// }
+			// }
 
-				} catch (Exception e) {
-					System.out.print("Sound Effects: \t");
-					System.out.print("url: " + url + "\t");
-					System.err.println(e.getMessage());
-				}
-			}
-		}).start();
+		} catch (Exception e) {
+			System.out.print("Sound Effects: \t");
+			System.out.print("url: " + url + "\t");
+			System.err.println(e.getMessage());
+		}
 	}
 
-	public static void playGO() {
+	public void playGO() {
 		playSound("win");
 	}
 
-	public static void playMove() {
+	public void playMove() {
 		playSound("move");
 	}
 
-	public static void playPlayerAttack() {
+	public void playPlayerAttack() {
 		String location = "fight/";
 
 		Random random = new Random();
@@ -137,24 +134,24 @@ public class SoundEffects {
 		playSound(location);
 	}
 
-	public static void playWonFight() {
+	public void playWonFight() {
 		playSound("fight/terminated.wav");
 	}
 
-	public static void playEat() {
+	public void playEat() {
 		playSound("items/food/eat2.wav");
 	}
 
-	public static void playEnemyDeath() {
+	public void playEnemyDeath() {
 		playWonFight();
 		playEnemyAttack();
 	}
 
-	public static void playPlayerDeath() {
+	public void playPlayerDeath() {
 		playSound("fight/cry.wav");
 	}
 
-	public static void playFoundItem() {
+	public void playFoundItem() {
 		String location = "items/pickup/";
 
 		Random random = new Random();
@@ -176,30 +173,7 @@ public class SoundEffects {
 		}
 	}
 
-	public static void playFoundItemNoPickup() {
-		// String location = "items/noPickup/";
-		//
-		// Random random = new Random();
-		// int num = random.nextInt(1);
-		//
-		// switch (num) { // add more insults
-		// case 0:
-		// location += "boring.wav";
-		// break;
-		//
-		// default:
-		// location += "boring.wav";
-		// break;
-		// }
-		// try {
-		// playSound(location);
-		// } catch (Exception e) {
-		// System.out.println("unable to load: " + location);
-		// }
-		// System.out.println("no sound");
-	}
-
-	public static void playFoundHelp() {
+	public void playFoundHelp() {
 		String location = "helper/";
 
 		Random random = new Random();
@@ -230,27 +204,23 @@ public class SoundEffects {
 
 	}
 
-	public static void playGameOver() {
+	public void playGameOver() {
 		playSound("fight/game_over.wav");
 	}
 
-	public static void playWin() {
+	public void playWin() {
 		playSound("win/Brave5.wav");
 	}
 
-	public static void playIntro() {
-		// playSound("pacman_intro.wav");
-	}
-
-	public static void playEnemyAttack() {
+	public void playEnemyAttack() {
 		playSound("fight/Slime-SoundBible.com-803762203.wav");
 	}
 
-	public static void playBombExplode() {
+	public void playBombExplode() {
 		playSound("items/explosion_x.wav");
 	}
 
-	public static String chooseBg() {
+	public String chooseBg() {
 		String location = "bg/";
 
 		Random random = new Random();

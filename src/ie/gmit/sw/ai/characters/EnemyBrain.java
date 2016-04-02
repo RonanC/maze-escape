@@ -9,6 +9,11 @@ import ie.gmit.sw.ai.maze.*;
 import ie.gmit.sw.ai.traversers.*;
 import ie.gmit.sw.ai.traversers.uninformed.*;
 
+/**
+ * This is where the enemies are created, killed and managed.
+ * 
+ * @author Ronan
+ */
 public class EnemyBrain extends Thread {
 	private ArrayList<Enemy> enemyList;
 	private int mazeDim = GameRunner.MAZE_DIM;
@@ -23,6 +28,8 @@ public class EnemyBrain extends Thread {
 	private FightCtrl fightCtrl;
 	private ArrayList<EnemyTask> enemyTasks;
 
+	private SoundEffects soundEffEnemy;
+
 	public EnemyBrain(Maze map, ArrayList<Enemy> enemyList, Player player, ImgCtrl imgCtrl, FightCtrl fightCtrl) {
 		this.imgCtrl = imgCtrl;
 		this.player = player;
@@ -30,7 +37,10 @@ public class EnemyBrain extends Thread {
 		this.enemyList = enemyList;
 		this.fightCtrl = fightCtrl;
 		random = new Random();
+		// creates a background thread that all tasks will share
 		timer = new Timer();
+
+		soundEffEnemy = new SoundEffects();
 
 		enemySpawned = false;
 		enemyTasks = new ArrayList<EnemyTask>();
@@ -38,6 +48,9 @@ public class EnemyBrain extends Thread {
 		depthLimit = GameRunner.MAZE_DIM / 2;
 	}
 
+	/**
+	 * Enemies are given an intelligence level and allocated tasks here.
+	 */
 	public void spawn() {
 		System.out.println("spawning enemies");
 		// create enemy tasks
@@ -56,7 +69,7 @@ public class EnemyBrain extends Thread {
 			if (GameRunner.ENEMY_ALGO_NUM != 6) {
 				enemy.setIntelLvl(GameRunner.ENEMY_ALGO_NUM);
 			} else {
-				enemy.setIntelLvl(intelCount); // intelCount // TODO
+				enemy.setIntelLvl(intelCount); // intelCount
 			}
 
 			EnemyTask enemyTask = new EnemyTask(map.getMazeArrayClone(), enemy, player);
@@ -67,12 +80,17 @@ public class EnemyBrain extends Thread {
 		}
 	}
 
+	/**
+	 * Enemies are created here.
+	 * 
+	 * @param enemyNum
+	 */
 	public void createEnemies(int enemyNum) {
 		killAllEnemies();
 		if (enemyNum < Enemy.MAX_INTEL) {
 			enemyNum = Enemy.MAX_INTEL;
 		}
-		for (int i = 0; i <= enemyNum; i++) { // TODO
+		for (int i = 0; i <= enemyNum; i++) {
 			enemyList.add(new Enemy(map, imgCtrl));
 		}
 		enemySpawned = true;
@@ -87,6 +105,9 @@ public class EnemyBrain extends Thread {
 		enemySpawned = spawned;
 	}
 
+	/**
+	 * Resets all enemy positions.
+	 */
 	public void resetAllPos() {
 		for (Enemy enemy : enemyList) {
 			randomPos(enemy);
@@ -102,6 +123,11 @@ public class EnemyBrain extends Thread {
 		}
 	}
 
+	/**
+	 * Sets the current enemies position to a random position in the maze.
+	 * 
+	 * @param enemy
+	 */
 	public void randomPos(Enemy enemy) {
 		// placed somewhere random
 		int x = random.nextInt(mazeDim - 2) + 1;// don't want to choose edges
@@ -121,14 +147,19 @@ public class EnemyBrain extends Thread {
 		}
 	}
 
-	// Single enemy
+	/**
+	 * Each enemy has a task attached to it. The task moves the enemy and
+	 * determines if it's fighting or alive. The traversal algorithm is called
+	 * from this class.
+	 * 
+	 * @author Ronan
+	 */
 	public class EnemyTask extends TimerTask {
 		// this enemy has a form, is in a place and knows that there is a
 		// player.
 		private Maze map;
 		private Enemy enemy;
 		private Player player;
-		private Random random;
 		private Traversator traversator;
 		private int sleepDur;
 
@@ -139,8 +170,6 @@ public class EnemyBrain extends Thread {
 			this.enemy = enemy;
 			this.player = player;
 			random = new Random();
-			// int intel = 2;//random.nextInt(Enemy.MAX_INTEL);
-			// enemy.setIntelLvl(intel);
 
 			setTraversor(enemy, player);
 		}
@@ -153,6 +182,14 @@ public class EnemyBrain extends Thread {
 			this.sleepDur = sleepDur;
 		}
 
+		/**
+		 * Sets which traversal algorithm will be used. This is based on what
+		 * intelligence level the enemy is. The intelligence levels are spread
+		 * out evenly.
+		 * 
+		 * @param enemy
+		 * @param player
+		 */
 		private void setTraversor(Enemy enemy, Player player) {
 			boolean dfs;
 			System.out.print("Spider with: ");
@@ -220,7 +257,7 @@ public class EnemyBrain extends Thread {
 				System.out.println("iterative deepening DFS setup");
 				break;
 
-			default: // TODO
+			default:
 				System.out.println("default");
 				traversator = new RandomWalk(map.getMazeArrayClone(), enemy.getTileY(), enemy.getTileX(), player);
 				System.out.println("random walk setup");
@@ -231,16 +268,10 @@ public class EnemyBrain extends Thread {
 		@Override
 		public void run() {
 
-			// if explosion, kill enemy (also checking in the action performed
-			// method, overkill but why not.)
-//			if (this.map.getMazeArray()[enemy.getTileY()][enemy.getTileX()].isExplosion() && ) {
-//				enemy.setHealth(-1);
-//			}
-
 			if (!enemy.isAlive()) {
 				System.out.println("You killed a level " + enemy.getIntelLvl() + " spider!");
 				enemyList.remove(enemy);
-				SoundEffects.playEnemyDeath();
+				soundEffEnemy.playEnemyDeath();
 				player.incXp(enemy.getXpWorth());
 				cancel(); // kills task
 			} else if (!enemy.isInFight()) {
@@ -251,21 +282,12 @@ public class EnemyBrain extends Thread {
 						move(choice);
 					} else if (enemy.getIntelLvl() > 0) {
 						int newPos[] = traversator.findNextMove();
-						// try {
-						// Thread.sleep(1000);
-						// } catch (InterruptedException e) {
-						// e.printStackTrace();
-						// }
 
 						if (newPos[1] == -1) {
 							// setCurrentGoal();
 							if (newPos[0] == 4) {
-								// System.out.println("Found player location.");
 								enemy.setPos(traversator.getGoalNode().getCol(), traversator.getGoalNode().getRow());
-								// System.out.println("row: " +
-								// traversator.getGoalNode().getRow());
-								// System.out.println("col: " +
-								// traversator.getGoalNode().getCol());
+
 							} else if (newPos[0] == 5) {
 								// System.out.println("Could not find player
 								// location.");
@@ -274,13 +296,7 @@ public class EnemyBrain extends Thread {
 								// perhaps?");
 								// searching for new enemy location...
 							}
-							// System.out.println(
-							// "player location, row: " + player.getTileY() + ",
-							// col: " + player.getTileX());
-							// System.out.println("enemy goal, row:" +
-							// traversator.getGoalNode().getRow() + ", col: "
-							// + traversator.getGoalNode().getCol() + "\n");
-							// traversator.resetAndSetGoal();
+
 							setTraversor(enemy, player);
 
 						} else {
@@ -293,20 +309,12 @@ public class EnemyBrain extends Thread {
 			}
 		}
 
-		// V4 - depth first (need to create node graph)
-
-		// V3 - breadth first (need to create node graph)
-
-		// V2 - pick only a move which is not a wall
-		// public void v2AlwaysMove() {
-		// int choice = random.nextInt(4); // N, S, E, W
-		// boolean moveChoice = false;
-		// while (moveChoice == false) {
-		// choice = random.nextInt(4);
-		// moveChoice = move(choice);
-		// }
-		// }
-
+		/**
+		 * Moves the player in a certain direction.
+		 * 
+		 * @param choice
+		 * @return
+		 */
 		public boolean move(int choice) {
 			switch (choice) {
 			case 0: // N
@@ -358,22 +366,9 @@ public class EnemyBrain extends Thread {
 		}
 
 		public void setCurrentGoal() {
-			traversator.setGoalNode(player.getTileY(), player.getTileX());// chase
-																			// player
-																			// original
-																			// position
+			traversator.setGoalNode(player.getTileY(), player.getTileX());
+			// chase player original position
 		}
-
-		// // V1 - random move (may even walk into a wall)
-		// public void v1RandomMove() {
-		// int choice = random.nextInt(4); // N, S, E, W
-		// move(choice);
-		// }
-		//
-		// // ran every valid keypress
-		// public void moveCommon() {
-		//
-		// }
 
 		public void checkFight() {
 			if (player.getPos().equals(enemy.getPos())) {
@@ -386,17 +381,4 @@ public class EnemyBrain extends Thread {
 			fightCtrl.fight(enemy);
 		}
 	}
-
-	// @Override
-	// public synchronized void start() {
-	// super.start();
-	// System.out.println("start");
-	// }
-	//
-	// @Override
-	// public void run() {
-	// super.run();
-	// System.out.println("run");
-	// }
-
 }

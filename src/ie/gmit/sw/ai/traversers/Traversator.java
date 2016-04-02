@@ -7,6 +7,11 @@ import java.util.Random;
 import ie.gmit.sw.ai.characters.Player;
 import ie.gmit.sw.ai.maze.Node;
 
+/**
+ * Abstract super class for the search algorithms.
+ * 
+ * @author Ronan
+ */
 public abstract class Traversator {
 	protected long time;
 	protected int visitCount;
@@ -17,50 +22,42 @@ public abstract class Traversator {
 	protected Node goal;
 	protected int[] newPos;
 	protected Player player;
-	
+
 	protected boolean keepRunning;
 	protected Deque<int[]> allPositions;
 
 	public Traversator(Node[][] maze, int row, int col, Player player) {
 		this.player = player;
-		
-		// create deep copy of nodes so that different enemies do not disturb each others nodes.
+
+		// create deep copy of nodes so that different enemies do not disturb
+		// each others nodes.
 		Node[][] newMaze = new Node[maze.length][maze[0].length];
 		for (int i = 0; i < newMaze.length; i++) {
 			for (int j = 0; j < newMaze.length; j++) {
 				newMaze[i][j] = new Node(i, j);
-				newMaze[i][j].setElement(maze[i][j].getElement());;
+				newMaze[i][j].setElement(maze[i][j].getElement());
+				;
 			}
 		}
-		
+
 		init(newMaze, row, col);
 	}
-	
-	
-	
+
 	public Node getCurrentNode() {
 		return currentNode;
 	}
-
-
 
 	public Node getGoal() {
 		return goal;
 	}
 
-
-
 	public void setGoal(Node goal) {
 		this.goal = goal;
 	}
 
-
-
 	public void setCurrentNode(Node currentNode) {
 		this.currentNode = currentNode;
 	}
-
-
 
 	public void init(Node[][] maze, int row, int col) {
 		this.mazeArray = maze;
@@ -69,26 +66,26 @@ public abstract class Traversator {
 		keepRunning = true;
 		time = System.currentTimeMillis();
 		visitCount = 0;
-//		complete = false;
-//		setGoalNodeRand();
+		// complete = false;
+		// setGoalNodeRand();
 		if (player != null) {
-			setPlayerAsGoal();	// only for enemies
+			setPlayerAsGoal(); // only for enemies
 		}
-		
+
 		newPos = new int[2];
 	}
-	
+
 	public Deque<int[]> getAllPositions() {
 		return allPositions;
 	}
 
-	public int[] getPos(){
+	public int[] getPos() {
 		int[] position = new int[2];
 		position[0] = currentNode.getRow();
 		position[1] = currentNode.getCol();
 		return newPos;
 	}
-	
+
 	public boolean isComplete() {
 		return complete;
 	}
@@ -97,16 +94,13 @@ public abstract class Traversator {
 		this.complete = complete;
 	}
 
-
-	
-
-	public void resetAndSetGoal(){
+	public void resetAndSetGoal() {
 		resetGraph();
 		setComplete(false);
 		setPlayerAsGoal();
 	}
-	
-	public void resetGraph(){
+
+	public void resetGraph() {
 		for (Node[] nodes : mazeArray) {
 			for (Node node : nodes) {
 				node.setParent(null);
@@ -114,22 +108,17 @@ public abstract class Traversator {
 			}
 		}
 	}
-	
-	public void setPlayerAsGoal(){
+
+	public void setPlayerAsGoal() {
 		setGoalNode(player.getTileY(), player.getTileX());
 	}
-	
 
 	public abstract int[] findNextMove();
 
-
-	
-	public void resetNewPos(){
+	public void resetNewPos() {
 		newPos[0] = -1;
 		newPos[1] = -1;
 	}
-	
-
 
 	// Pick a goal node
 	public void setGoalNodeRand() {

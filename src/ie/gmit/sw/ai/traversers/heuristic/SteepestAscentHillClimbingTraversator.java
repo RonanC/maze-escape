@@ -1,13 +1,16 @@
 package ie.gmit.sw.ai.traversers.heuristic;
 
-import java.awt.*;
 import java.util.*;
 
-import ie.gmit.sw.ai.*;
 import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
 
+/**
+ * Implementation of the Steepest Ascent Hill Climbing search algorithm.
+ * 
+ * @author Ronan
+ */
 public class SteepestAscentHillClimbingTraversator extends Traversator {
 	/*
 	 * Similar to Hill Climbing. Has queue. Checks every single child before
@@ -71,12 +74,6 @@ public class SteepestAscentHillClimbingTraversator extends Traversator {
 				TraversatorStats.printStats(currentNode, time, visitCount);
 				break;
 			}
-
-//			try { // Simulate processing each expanded node
-//				Thread.sleep(1);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
 
 			// Sort the children of the current node in order of increasing h(n)
 			Node[] children = currentNode.children(mazeArray); // get 4 children

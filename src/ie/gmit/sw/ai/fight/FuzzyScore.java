@@ -1,19 +1,20 @@
 package ie.gmit.sw.ai.fight;
 
 import net.sourceforge.jFuzzyLogic.*;
-import net.sourceforge.jFuzzyLogic.plot.*;
 import net.sourceforge.jFuzzyLogic.rule.*;
 
+/**
+ * Uses the JFuzzyLogic library to generate fight scores.
+ * Takes statistics as input and generates an output.
+ * The output score is used as damage to the opposing character.
+ * 
+ * @author Ronan
+ */
 public class FuzzyScore {
-
-//	public static void main(String[] args) {
-//		new FuzzyScore();
-//	}
-//	
-//	public FuzzyScore() {
-//		test();
-//	}
 	
+	/**
+	 * Test class to check that different values make sense.
+	 */
 	public void test() {
 		// low
 		getCharScore(0, 0, 0);

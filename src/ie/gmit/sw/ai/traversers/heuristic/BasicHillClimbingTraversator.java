@@ -1,12 +1,14 @@
 package ie.gmit.sw.ai.traversers.heuristic;
 
-import ie.gmit.sw.ai.characters.Player;
 import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
 
-import java.awt.Component;
-
+/**
+ * Implementation of the Basic Hill Climbing search algorithm.
+ * 
+ * @author Ronan
+ */
 public class BasicHillClimbingTraversator extends Traversator {
 	/*
 	 * Checks which child has the shortest distance (heuristic) to the goal.
@@ -16,7 +18,6 @@ public class BasicHillClimbingTraversator extends Traversator {
 	 * 
 	 * Chooses the best node and if there is no better it stops.
 	 */
-//	private Node goal;
 
 	public BasicHillClimbingTraversator(Node[][] maze, int row, int col, int[] goalPos) {
 		super(maze, row, col, null);
@@ -46,8 +47,6 @@ public class BasicHillClimbingTraversator extends Traversator {
 		
 		return newPos;
 	}
-	
-	
 
 	public void traverse() {
 		long time = System.currentTimeMillis();
@@ -64,12 +63,6 @@ public class BasicHillClimbingTraversator extends Traversator {
 				TraversatorStats.printStats(currentNode, time, visitCount);
 				break;
 			}
-//
-//			try { // Simulate processing each expanded node
-//				Thread.sleep(10);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
 
 			Node[] children = currentNode.children(mazeArray);	// get all children
 			// we are getting the children of that specific node. (passing the maze each time seems over the top, might be better to have a that globally available)

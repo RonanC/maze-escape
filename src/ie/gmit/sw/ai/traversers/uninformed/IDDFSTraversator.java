@@ -5,8 +5,11 @@ import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
 
-import java.awt.Component;
-
+/**
+ * Implementation of the Iterative Deepening DFS search algorithm.
+ * 
+ * @author Ronan
+ */
 public class IDDFSTraversator extends Traversator {
 	// iterative deepening DFS
 	// frontier moves after each depth has being checked.
@@ -75,12 +78,6 @@ public class IDDFSTraversator extends Traversator {
 			keepRunning = false;
 			return;
 		}
-
-//		try { // Simulate processing each expanded node
-//			Thread.sleep(10);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 
 		Node[] children = node.children(mazeArray);
 		for (int i = 0; i < children.length; i++) {

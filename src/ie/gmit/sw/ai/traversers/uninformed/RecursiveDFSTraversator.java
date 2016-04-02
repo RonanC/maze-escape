@@ -5,9 +5,11 @@ import ie.gmit.sw.ai.maze.Node;
 import ie.gmit.sw.ai.traversers.Traversator;
 import ie.gmit.sw.ai.traversers.TraversatorStats;
 
-import java.awt.Component;
-import java.util.*;
-
+/**
+ * Implementation of the Recursive DFS search algorithm.
+ * 
+ * @author Ronan
+ */
 public class RecursiveDFSTraversator extends Traversator {
 	/*
 	 * keeps traversing through first child no queue
@@ -68,12 +70,6 @@ public class RecursiveDFSTraversator extends Traversator {
 			setComplete(false);
 			return;
 		}
-
-		// try { // Simulate processing each expanded node
-		// Thread.sleep(1);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
 
 		Node[] children = nodeTemp.children(mazeArray);
 		for (int i = 0; i < children.length; i++) { // go through each child

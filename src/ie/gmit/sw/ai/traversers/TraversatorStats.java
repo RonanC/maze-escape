@@ -1,14 +1,29 @@
 package ie.gmit.sw.ai.traversers;
 
 import java.awt.Color;
-
-import ie.gmit.sw.ai.*;
 import ie.gmit.sw.ai.maze.Node;
+
+
+/**
+ * Prints the statistics for the search once complete.
+ * 
+ * @author Ronan
+ */
 public class TraversatorStats {
+	
+	/**
+	 * Prints the statistics for the search once complete.
+	 * 
+	 * @param node
+	 * @param time
+	 * @param visitCount
+	 */
 	public static void printStats(Node node, long time, int visitCount){
+		// uncomment to turn on
 //		print(node, time, visitCount);    
 	}
 
+	@SuppressWarnings("unused")
 	private static void print(Node node, long time, int visitCount) {
 		double depth = 0;
 		

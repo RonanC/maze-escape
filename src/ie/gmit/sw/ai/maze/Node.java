@@ -2,7 +2,17 @@ package ie.gmit.sw.ai.maze;
 
 import java.awt.Color;
 
-// this class should inherit from Nodable (currently it is a god class).
+/**
+ * There is a node for every space on the game board. Keeps track of what item
+ * is on a this coordinate.
+ * 
+ * Also keeps track of various other things like if it's on bomb fire or was on
+ * bomb fire, or is lit up via a helper.
+ * 
+ * Used for search algorithms to set parent and set visited.
+ * 
+ * @author Ronan
+ */
 public class Node {
 	private static final int MAX_EXITS = 4; // NS EW
 
@@ -10,26 +20,21 @@ public class Node {
 		Wall, Passage
 	};
 
-//	public enum NodePassage {
-//		North, South, East, West, None
-//	};
-
 	private Node parent;
 	private Color color = Color.BLACK; // black color
 	private NodeType type = NodeType.Wall; // default is wall
-//	private NodePassage passage = NodePassage.None;
 	public boolean visited = false;
 	public boolean goal;
 	private int row = -1;
 	private int col = -1;
 	private int distance;
-	
+
 	private boolean helperPath = false;
 	private boolean explosion = false;
 	private boolean burnt = false;
-//	private InformedPathMarker helper;
-//	private boolean hasHelper = false;
 	private int helperNum = -1;
+
+	private char element; // feature
 
 	public int getHelperNum() {
 		return helperNum;
@@ -38,14 +43,10 @@ public class Node {
 	public void setHelperNum(int helperNum) {
 		this.helperNum = helperNum;
 	}
-	
-	
 
 	public void setGoal(boolean goal) {
 		this.goal = goal;
 	}
-
-
 
 	public boolean isBurnt() {
 		return burnt;
@@ -55,12 +56,6 @@ public class Node {
 		this.burnt = burnt;
 	}
 
-
-
-	// game
-	private char element;
-
-
 	public char getElement() {
 		return element;
 	}
@@ -68,13 +63,12 @@ public class Node {
 	public void setElement(char element) {
 		this.element = element;
 	}
-	
-	
-	public void setHelperPath(boolean onPath){
+
+	public void setHelperPath(boolean onPath) {
 		this.helperPath = onPath;
 	}
-	
-	public boolean getHelperPath(){
+
+	public boolean getHelperPath() {
 		return helperPath;
 	}
 
@@ -121,9 +115,13 @@ public class Node {
 		this.color = color;
 	}
 
-	public Node[] children(Node[][] maze) { // pass the maze in, get a Node
-											// array back.
-
+	/**
+	 * Pass the maze in, get a Node array back.
+	 * 
+	 * @param maze
+	 * @return
+	 */
+	public Node[] children(Node[][] maze) {
 		// Gets all four children available.
 		Node[] children = new Node[MAX_EXITS];
 		if (col - 1 >= 0 && maze[row][col - 1].getElement() != 'w')
@@ -162,14 +160,6 @@ public class Node {
 		this.type = type;
 	}
 
-//	public NodePassage getPassage() {
-//		return passage;
-//	}
-//
-//	public void setPassage(NodePassage passage) {
-//		this.passage = passage;
-//	}
-
 	public boolean isVisited() {
 		return visited;
 	}
@@ -187,8 +177,13 @@ public class Node {
 		this.goal = goal;
 	}
 
-	public int getHeuristic(Node goal) { // gets the distance between where we
-											// are and where the goal is
+	/**
+	 * Gets the distance between where we are and where the goal is.
+	 * 
+	 * @param goal
+	 * @return
+	 */
+	public int getHeuristic(Node goal) {
 		double x1 = this.col;
 		double y1 = this.row;
 		double x2 = goal.getCol();
@@ -203,12 +198,4 @@ public class Node {
 	public void setPathCost(int distance) {
 		this.distance = distance;
 	}
-
-//	public String toString() {
-//		if (passage == NodePassage.North) {
-//			return "N ";
-//		} else {
-//			return "W ";
-//		}
-//	}
 }

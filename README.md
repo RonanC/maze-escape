@@ -20,6 +20,11 @@ Legend says he left behind a potion which can free you of this place.
 
 [Runnable (Jar) Game](https://www.dropbox.com/s/tqyv7856g5f5e24/maze-escape.zip?dl=0)
 
+Youtube Video: https://www.youtube.com/watch?v=3r1qVz7-Eb8  
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=3r1qVz7-Eb8
+" target="_blank"><img src="http://img.youtube.com/vi/3r1qVz7-Eb8/0.jpg" 
+alt="maze-escape" width="480" height="360" border="10" /></a>
+
 ### initial game images
 ![maze](https://github.com/RonanC/maze-escape/blob/master/screen-shots/maze.png "maze")
 ![win](https://github.com/RonanC/maze-escape/blob/master/screen-shots/win.png "win")

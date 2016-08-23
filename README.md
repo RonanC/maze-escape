@@ -18,7 +18,10 @@ Legend says he left behind a potion which can free you of this place.
 
 [Official Project Brief](aiAssignment2016.pdf).
 
-[Runnable (Jar) Game](https://www.dropbox.com/s/tqyv7856g5f5e24/maze-escape.zip?dl=0)
+[Runnable (Jar) Game](https://www.dropbox.com/s/tqyv7856g5f5e24/maze-escape.zip?dl=0)  
+Two ways to run:  
+-Double click .jar file  
+-From command line: `java -jar maze-escape.jar`
 
 Youtube Video: https://www.youtube.com/watch?v=3r1qVz7-Eb8  
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=3r1qVz7-Eb8
